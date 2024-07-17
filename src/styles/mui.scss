@@ -1,0 +1,7 @@
+//穿透更改mui样式
+.pagination-dark .MuiButtonBase-root {
+  color: white;
+}
+.pagination-light .MuiPagination-text {
+  color: black;
+}

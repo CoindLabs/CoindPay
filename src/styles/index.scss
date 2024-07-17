@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'preflight';
+@import 'page';
+@import 'iconfont';
+@import 'cropper';
+@import 'mui';
+@import 'swiper';
+@import 'reset';
+@import 'plyr';
+@import 'iframely';
+
+@layer components {
+  .safe-area-inset-bottom {
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+@layer utilities {
+  // text-gradient
+  .text-gradient {
+    display: inline-block;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  // animate
+  .animate-duration-sm {
+    animation-duration: 1.5s;
+  }
+  .animate-duration-5 {
+    animation-duration: 5s;
+  }
+  .animate-duration-6 {
+    animation-duration: 6s;
+  }
+  .animate-duration-8 {
+    animation-duration: 8s;
+  }
+  .animate-duration-10 {
+    animation-duration: 10s;
+  }
+  .animate-duration-12 {
+    animation-duration: 12s;
+  }
+  //
+  .animate__delay-sm {
+    animation-delay: 0.5s;
+  }
+  //
+  .animate-trans-blur {
+    animation: animate-blur 0.8s;
+  }
+}
+
+.wallet-adapter-modal {
+  z-index: 99999;
+}
+
+.btn-loading {
+  .hidden {
+    display: flex !important;
+  }
+  .flex {
+    display: none !important;
+  }
+}
+
+@keyframes animate-blur {
+  from {
+    opacity: 0;
+    filter: blur(16px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}

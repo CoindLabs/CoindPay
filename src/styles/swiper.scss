@@ -1,0 +1,30 @@
+.swiper-horizontal > .swiper-scrollbar,
+.swiper-scrollbar.swiper-scrollbar-horizontal {
+  width: 18%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  .swiper-scrollbar-drag {
+    background-color: #3772ff;
+  }
+}
+
+.scrollBgWhite {
+  .swiper-horizontal > .swiper-scrollbar,
+  .swiper-scrollbar.swiper-scrollbar-horizontal {
+    width: 18%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    .swiper-scrollbar-drag {
+      background-color: #fff;
+    }
+  }
+}
+
+.hide-scroll-bar {
+  .swiper-scrollbar {
+    width: 0;
+  }
+  .swiper-scrollbar.swiper-scrollbar-horizontal {
+    opacity: 0;
+  }
+}

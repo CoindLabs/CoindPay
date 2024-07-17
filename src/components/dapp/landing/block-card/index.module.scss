@@ -1,0 +1,13 @@
+.card {
+  :global(.iframely-app) {
+    max-width: 100% !important;
+  }
+}
+
+@media only screen and (max-width: 639px) {
+  .card {
+    :global(.iframely-small) {
+      // margin-bottom: -16%;
+    }
+  }
+}

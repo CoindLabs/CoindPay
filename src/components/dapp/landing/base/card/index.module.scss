@@ -1,0 +1,27 @@
+$hsv-background: linear-gradient(90deg, #ffbe0b 0, #ff0075 31.19%, #0076ff 68.63%, #3bdcff);
+$rainbow-background: linear-gradient(135deg, #fc692a, #ffd800 26.04%, #72db5a 49.48%, #6dc4fe 75.52%, #cdb9fa);
+
+.card-effect {
+  &-rainbow {
+    background-image: $rainbow-background;
+  }
+  &-hsv {
+    background-image: $hsv-background;
+    &::after {
+      position: absolute;
+      left: 0.125rem;
+      bottom: 0.125rem;
+      right: 0.125rem;
+      top: 0.125rem;
+      z-index: -10;
+      content: '';
+      border-radius: inherit;
+      filter: blur(16px);
+      transform: scale(1.03);
+      background-image: inherit;
+      transition-property: opacity;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 0.3s;
+    }
+  }
+}

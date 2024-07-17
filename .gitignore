@@ -1,0 +1,88 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+coverage.json
+typechain
+
+# next.js
+/.next/
+/out/
+
+# db
+/prisma
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env
+.env.local
+.env.development
+.env.production
+
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# vercel
+.vercel
+.swc
+
+# hardhat files
+cache
+artifacts
+
+# production
+/dist
+/build
+/public
+/src/components/nm*
+/src/components/l*
+/src/components/p*
+
+# lock
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+*bak
+
+# visual studio code
+.idea
+.vscode
+.history
+*.log
+functions/*
+.temp/**
+
+# umi
+.umi
+.umi-production
+
+# screenshot
+screenshot
+.firebase
+.eslintcache
+
+# pages
+src/pages/api/admin
+
+.yarn/*
+
+.pnp.*
+
+batch
+.npmrc

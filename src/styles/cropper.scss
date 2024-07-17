@@ -1,0 +1,82 @@
+@import 'mixins';
+
+.crop-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  mask-image: radial-gradient($white, $black);
+  -webkit-mask-image: radial-gradient($white, $black);
+}
+
+.cropper-view-box {
+  outline: inherit !important;
+}
+
+.cropper-point {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.cropper-line {
+  background-color: $white;
+}
+
+.cropping-blur-area-layer {
+  position: absolute;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-color: rgb(0, 0, 0);
+}
+
+.cropper-crop-area::before {
+  content: ' ';
+  box-sizing: border-box;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 50% 50%;
+}
+
+.crop-modal-box {
+  width: 70%;
+  max-width: 50rem !important;
+  min-width: 36rem !important;
+}
+
+.crop-modal-circle-box {
+  height: 38rem;
+  min-height: 38rem;
+}
+
+.#{$global-prefix}-modal {
+  margin: auto;
+
+  &-mask {
+    @include custom-position(fixed, 0, 0, 0, 0, 1050);
+    background-color: #373737;
+    background-color: rgba(55, 55, 55, 0.6);
+    height: 100%;
+    filter: alpha(opacity=50);
+  }
+
+  &-wrap {
+    @include custom-position(fixed, 0, 0, 0, 0, 1050);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+  }
+
+  &-content {
+    position: relative;
+    background-color: #ffffff;
+    border: none;
+    border-radius: $layout-padding;
+    background-clip: padding-box;
+  }
+
+  &-body {
+    padding: $layout-padding;
+  }
+}

@@ -1,0 +1,9 @@
+.dragging {
+  user-select: none;
+}
+
+.calendly-inline-widget iframe,
+.calendly-badge-widget iframe,
+.calendly-overlay iframe {
+  border-radius: 1rem;
+}

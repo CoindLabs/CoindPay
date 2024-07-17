@@ -1,0 +1,12 @@
+.page-studio {
+  background-image: url('https://app.sanctum.so/bubbles-mobile.svg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: 50%;
+}
+
+@media (min-width: 616px) {
+  .page-studio {
+    background-image: url('https://app.sanctum.so/bubbles.svg');
+  }
+}

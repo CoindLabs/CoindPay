@@ -1,0 +1,89 @@
+@import 'theme';
+// font set
+@mixin font-setting($size: $font-size-base, $weight: null, $color: null) {
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+// 一行 文本自动省略号,传width为max-width
+@mixin text-overflow($max-width: 100%) {
+  max-width: $max-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+// 多行
+@mixin line-overflow($line: 1, $width: 100%) {
+  max-width: $width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}
+
+//定位相关
+//position
+@mixin custom-position($position, $top: null, $bottom: null, $left: null, $right: null, $zindex: null) {
+  position: $position;
+  z-index: $zindex;
+  top: $top;
+  bottom: $bottom;
+  left: $left;
+  right: $right;
+}
+
+//水平垂直居中-1
+@mixin center-middle-position($top: 50%, $left: 50%) {
+  @include custom-position(absolute, $top: $top, $left: $left);
+  transform: translate(-50%, -50%);
+}
+
+//水平垂直居中-2
+@mixin center-middle-height($height: null) {
+  height: $height;
+  line-height: $height;
+}
+
+//水平垂直居中-3 | 默认全部居中，支持参数自定义替换
+@mixin center-middle-flex($flex: flex, $justify: center, $align: center) {
+  @include flexbox($flex);
+  @include justify-content($justify);
+  @include align-items($align);
+}
+
+// 底部适配iPhoneX
+@mixin iphonex-bottom($color: #fff) {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: $color;
+}
+
+//clearfix清除浮动
+@mixin clearfix() {
+  zoom: 1;
+
+  &:before,
+  &:after {
+    content: '';
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+  }
+}
+
+//size
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin square($size) {
+  @include size($size, $size);
+}
