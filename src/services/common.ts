@@ -1,8 +1,7 @@
 import { Network, AlchemySettings, GetNftsForOwnerOptions } from 'alchemy-sdk'
 import { fetcher } from '@/lib/fetcher'
 import { env } from '@/lib/types/env'
-import { getAPIsOrigin } from '@/lib/utils'
-import { solana, base } from '@/config/common/pay'
+import { solana, base } from '@/lib/chains/tokens'
 //https://docs.alchemy.com/reference/getnftsforcollection
 interface IAlchemy extends AlchemySettings {
   type?: string // 默认 getNftsForOwner

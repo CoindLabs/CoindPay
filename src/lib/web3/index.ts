@@ -1,4 +1,4 @@
-import { _supportChains } from '@/lib/types/chains'
+import { _supportChains } from '@/lib/chains'
 import { env } from '@/lib/types/env'
 
 let mainnet = env?.isProd

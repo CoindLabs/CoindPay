@@ -6,14 +6,16 @@ let solTokens = {
     sol: mainnet ? 'So11111111111111111111111111111111111111112' : '22fh2M7RX8cYiQt8vR4DvAtcqVkpVNofF51g3K8ZwvxH',
     usdc: mainnet ? 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' : 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
   },
+  ethTokens = {
+    usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+    eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    usdt: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+    dai: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+  },
   baseTokens = {
     usdc: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
     eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     dai: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
-  },
-  zkSyncTokens = {
-    usdc: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
-    eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
   },
   opTokens = {
     usdc: '0x0b2c639c533813f4aa9d7837caf62653d097ff85',
@@ -29,11 +31,24 @@ let solTokens = {
     usdt: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
     dai: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
   },
-  ethTokens = {
-    usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  bscTokens = {
+    usdc: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+    bnb: '0x0000000000000000000000000000000000000000',
+    dai: '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3',
+    busd: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+    usdt: '0x55d398326f99059fF775485246999027B3197955',
+  },
+  polygonTokens = {
+    usdc: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+    matic: '0x0000000000000000000000000000000000000000',
+    dai: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+    usdt: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+  },
+  zkSyncTokens = {
+    usdc: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
     eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    usdt: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-    dai: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+    zk: '0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E',
+    usdt: '0x493257fD37EDB34451f62EDf8D2a0C418852bA4C',
   }
 
 let USDC = {
@@ -85,6 +100,34 @@ let solana = {
       },
     ],
   },
+  ethereum = {
+    mocks: {
+      ...ethTokens,
+      usdc: {
+        mainnet: ethTokens.usdc,
+        sepolia: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
+      },
+    },
+    list: [
+      {
+        ...USDC,
+        address: ethTokens.usdc,
+      },
+      {
+        ...ETH,
+        address: ethTokens.eth,
+        native: true,
+      },
+      {
+        ...USDT,
+        address: ethTokens.usdt,
+      },
+      {
+        ...DAI,
+        address: ethTokens.dai,
+      },
+    ],
+  },
   base = {
     mocks: {
       ...baseTokens,
@@ -112,7 +155,7 @@ let solana = {
       {
         ...ETH,
         address: baseTokens.eth,
-        eth: true,
+        native: true,
       },
       {
         symbol: 'cbETH',
@@ -142,26 +185,6 @@ let solana = {
       },
     ],
   },
-  zkSync = {
-    mocks: {
-      ...zkSyncTokens,
-      usdc: {
-        mainnet: zkSyncTokens.usdc,
-        sepolia: '0xAe045DE5638162fa134807Cb558E15A3F5A7F853',
-      },
-    },
-    list: [
-      {
-        ...USDC,
-        address: zkSyncTokens.usdc,
-      },
-      {
-        ...ETH,
-        address: zkSyncTokens.eth,
-        eth: true,
-      },
-    ],
-  },
   optimism = {
     mocks: {
       ...opTokens,
@@ -178,7 +201,7 @@ let solana = {
       {
         ...ETH,
         address: opTokens.eth,
-        eth: true,
+        native: true,
       },
       {
         symbol: 'OP',
@@ -212,7 +235,7 @@ let solana = {
       {
         ...ETH,
         address: arbTokens.eth,
-        eth: true,
+        native: true,
       },
       {
         symbol: 'ARB',
@@ -230,33 +253,102 @@ let solana = {
       },
     ],
   },
-  ethereum = {
+  bsc = {
     mocks: {
-      ...ethTokens,
+      ...bscTokens,
       usdc: {
-        mainnet: ethTokens.usdc,
-        sepolia: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
+        mainnet: bscTokens.usdc,
+        sepolia: '0x64544969ed7EBf5f083679233325356EbE738930',
       },
     },
     list: [
       {
         ...USDC,
-        address: ethTokens.usdc,
+        address: bscTokens.usdc,
       },
       {
-        ...ETH,
-        address: ethTokens.eth,
-        eth: true,
-      },
-      {
-        ...USDT,
-        address: ethTokens.usdt,
+        symbol: 'BNB',
+        name: 'Binance Coin',
+        logoURI: 'https://tokens-data.1inch.io/images/0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c.png',
+        address: bscTokens.bnb,
+        native: true,
       },
       {
         ...DAI,
-        address: ethTokens.dai,
+        address: bscTokens.dai,
+      },
+      {
+        symbol: 'BUSD',
+        name: 'Binance USD',
+        logoURI: 'https://tokens-data.1inch.io/images/0x4fabb145d64652a948d72533023f6e7a623c7c53.png',
+        address: bscTokens.busd,
+      },
+      {
+        ...USDT,
+        address: bscTokens.usdt,
+      },
+    ],
+  },
+  polygon = {
+    mocks: {
+      ...polygonTokens,
+      usdc: {
+        mainnet: polygonTokens.usdc,
+        sepolia: '0x41e94eb019c0762f9bfcf9fb1e58725bfb0e7582',
+      },
+    },
+    list: [
+      {
+        ...USDC,
+        address: polygonTokens.usdc,
+      },
+      {
+        symbol: 'MATIC',
+        name: 'Polygon Coin',
+        address: polygonTokens.matic,
+        logoURI: 'https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png',
+        native: true,
+      },
+      {
+        ...DAI,
+        address: polygonTokens.dai,
+      },
+      {
+        ...USDT,
+        address: polygonTokens.usdt,
+      },
+    ],
+  },
+  zkSync = {
+    mocks: {
+      ...zkSyncTokens,
+      usdc: {
+        mainnet: zkSyncTokens.usdc,
+        sepolia: '0xAe045DE5638162fa134807Cb558E15A3F5A7F853',
+      },
+    },
+    list: [
+      {
+        ...USDC,
+        address: zkSyncTokens.usdc,
+      },
+      {
+        ...ETH,
+        address: zkSyncTokens.eth,
+        native: true,
+      },
+      {
+        symbol: 'ZK',
+        name: 'ZK Coin',
+        address: zkSyncTokens.zk,
+        logoURI:
+          'https://static.debank.com/image/era_token/logo_url/0x5a7d6b2f92c77fad6ccabd7ee0624e64907eaf3e/7edf9f54939170547960eb08d2fa1c63.png',
+      },
+      {
+        ...USDT,
+        address: zkSyncTokens.usdt,
       },
     ],
   }
 
-export { solana, base, zkSync, optimism, arbitrum, ethereum }
+export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync }

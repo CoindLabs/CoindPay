@@ -14,9 +14,9 @@ import { StudioContextProvider } from '@/components/context/studio'
 import { TempContextProvider } from '@/components/context/temp'
 import { CacheRequestProvider } from '@/lib/api/cache'
 import { SnackbarProvider } from '@/components/context/snackbar'
+import { wagmiConfig } from '@/lib/chains'
 import { store } from '@/lib/store'
 
-import { wagmiConfig } from '@/config/common/wagmi'
 import config from '@/config'
 
 const { prefix, themes } = config
@@ -130,19 +130,19 @@ export const GlobalContextProvider: FC<{ children: ReactNode }> = ({ children })
                 locale="en-US"
               >
                 <SolanaContextProvider>
-                  {/* <ICPContextProvider> */}
-                  <Provider store={store}>
-                    <PersistGate loading={null} persistor={persistor}>
-                      <TempContextProvider>
-                        <CacheRequestProvider>
-                          <StudioContextProvider>
-                            <SnackbarProvider>{children}</SnackbarProvider>
-                          </StudioContextProvider>
-                        </CacheRequestProvider>
-                      </TempContextProvider>
-                    </PersistGate>
-                  </Provider>
-                  {/* </ICPContextProvider> */}
+                  <ICPContextProvider>
+                    <Provider store={store}>
+                      <PersistGate loading={null} persistor={persistor}>
+                        <TempContextProvider>
+                          <CacheRequestProvider>
+                            <StudioContextProvider>
+                              <SnackbarProvider>{children}</SnackbarProvider>
+                            </StudioContextProvider>
+                          </CacheRequestProvider>
+                        </TempContextProvider>
+                      </PersistGate>
+                    </Provider>
+                  </ICPContextProvider>
                 </SolanaContextProvider>
               </RainbowKitProvider>
             </WagmiProvider>

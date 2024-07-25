@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Box, useMediaQuery } from '@mui/material'
 import classNames from 'classnames'
+import { FlipWords } from '@/components/aceternity-ui/flip-words'
 
 import config from '@/config'
-import { FlipWords } from '@/components/aceternity-ui/flip-words'
 
 const { domains } = config
 

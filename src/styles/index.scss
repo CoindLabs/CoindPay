@@ -53,6 +53,13 @@
   .animate-trans-blur {
     animation: animate-blur 0.8s;
   }
+  // https://github.com/tailwindlabs/tailwindcss/discussions/2213
+  .break-anywhere {
+    overflow-wrap: anywhere;
+  }
+  .break-word {
+    word-break: break-word;
+  }
 }
 
 .wallet-adapter-modal {

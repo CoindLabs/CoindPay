@@ -1,5 +1,7 @@
 import { Ref, forwardRef, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
 import {
   Avatar,
   Box,
@@ -26,6 +28,7 @@ import { useStudioContext } from '@/components/context/studio'
 import AccountWallet from '../account/wallet'
 import { getUserAddressSvc } from '@/services/user'
 import { setUserInfo } from '@/store/slice/user'
+import { icpInfo } from '@/store/slice/icp'
 import { getActiveChain } from '@/lib/web3'
 import { useAppDispatch, useGlobalWalletConnect, useSolAccount, useUserData } from '@/lib/hooks'
 
@@ -44,17 +47,17 @@ const Transition = forwardRef(function Transition(
 
 const StudioHeader = () => {
   let iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)
-
+  const router = useRouter()
   const theme = useTheme()
   const mdlScreen = useMediaQuery(theme.breakpoints.up('md'))
   const user = useUserData()
   const dispatch = useAppDispatch()
   const account = useAccount()
+  const icpData = useSelector(icpInfo)
   const { solAddress } = useSolAccount()
   const globalWalletConnect = useGlobalWalletConnect()
   const { showSnackbar } = useSnackbar()
   const { accountCardShow, setAccountCardShow } = useStudioContext()
-
   const [dialog, setDialog] = useState({
     title: null,
     content: null,
@@ -110,6 +113,9 @@ const StudioHeader = () => {
         },
       })
       setAccountCardShow(false)
+      if (router?.pathname == '/[uuid]') {
+        router.replace(`${res?.data?.id}`)
+      }
     } else {
       if (res?.boundAddressList?.length) {
         setDialog({
@@ -136,8 +142,7 @@ const StudioHeader = () => {
 
   const handleReceiptSubmit = () => {
     if (!globalWalletConnect) return
-
-    if (account?.address || solAddress) {
+    if (account?.address || solAddress || icpData?.accountId) {
       try {
         let list = []
         if (account && account?.address) {
@@ -145,6 +150,9 @@ const StudioHeader = () => {
         }
         if (solAddress) {
           list.push({ chain: 'sol', value: solAddress })
+        }
+        if (icpData?.accountId) {
+          list.push({ chain: 'icp', value: icpData.accountId })
         }
 
         handleAccountSubmit(list)
@@ -188,13 +196,13 @@ const StudioHeader = () => {
           <Button
             size="large"
             variant="contained"
-            className="min-w-40 py-2.5 shadow-none rounded-lg bg-create-gradient-004"
+            className="px-8 py-2.5 shadow-none rounded-lg bg-create-gradient-004"
             onClick={handleToggleDrawer(true)}
           >
             {(user?.id ? globalWalletConnect : globalWalletConnect && user?.id) ? (
-              <Box className="flex items-center">
+              <Box className="flex items-center gap-2">
                 Account Wallet
-                <NmIcon type="icon-user" className="ml-4 text-lg leading-0" />
+                <NmIcon type="icon-user" className="text-lg leading-0" />
               </Box>
             ) : (
               'Connect Wallet'
@@ -210,7 +218,7 @@ const StudioHeader = () => {
         onClose={handleToggleDrawer(false)}
         onOpen={handleToggleDrawer(true)}
       >
-        <AccountWallet exitGuide customClass="p-8 lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl" />
+        <AccountWallet exitGuide customClass="p-8 lg:max-w-2xl 2xl:max-w-3xl" />
         <footer className="sticky bottom-0 flex justify-center items-center gap-6 pb-2 pt-3 text-center w-full px-4 backdrop-blur">
           <IconButton className="size-11 bg-create-gradient-004 text-white" onClick={handleToggleDrawer(false)}>
             <NmIcon type="icon-close" />

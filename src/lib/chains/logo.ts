@@ -33,7 +33,7 @@ export const logoChains = {
   avax: 'https://cryptofonts.com/img/icons/avax.svg',
   bnb: 'https://cryptofonts.com/img/icons/bnb.svg',
   polygon: 'https://cryptologos.cc/logos/thumbs/polygon.png',
-  icp: 'https://cryptologos.cc/logos/thumbs/internet-computer.png',
+  icp: `${domains.cdn}/static/social/icp.svg`,
   aptos: 'https://cryptofonts.com/img/icons/apt.svg',
   ton: 'https://cryptofonts.com/img/icons/ton.svg',
   starknet: `${domains.cdn}/static/social/starknet.svg`,

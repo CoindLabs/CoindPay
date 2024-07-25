@@ -33,9 +33,11 @@ import {
   baseSepolia,
   optimismSepolia,
   arbitrumSepolia,
+  bscTestnet,
+  polygonAmoy,
   zkSyncSepoliaTestnet,
   berachainTestnetbArtio,
-} from 'wagmi/chains'
+} from 'viem/chains'
 import { customChains } from './custom'
 
 export const chainIdToNetWork = (chainId: number): Chain => {
@@ -105,6 +107,10 @@ export const chainIdToNetWork = (chainId: number): Chain => {
       return baseSepolia as any
     case 421614:
       return arbitrumSepolia as any
+    case 97:
+      return bscTestnet as any
+    case 80002:
+      return polygonAmoy as any
     case 80084:
       return berachainTestnetbArtio
     case 5555:

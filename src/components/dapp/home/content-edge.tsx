@@ -4,7 +4,7 @@ import { Box, Avatar, Chip } from '@mui/material'
 import NmIcon from '@/components/nm-icon'
 import LandingCard from '@/components/dapp/landing/base/card'
 import ItemChainsSwiper from './swiper-card/item-chains'
-import { _supportChains } from '@/lib/types/chains'
+import { _supportChains } from '@/lib/chains'
 import { getActiveChain } from '@/lib/web3'
 
 import config from '@/config'

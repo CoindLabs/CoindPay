@@ -4,12 +4,14 @@ import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import userReducer from '@/store/slice/user'
 import studioReducer from '@/store/slice/studio'
+import icpReducer from '@/store/slice/icp'
 
 import config from '@/config'
 
 const reducers = combineReducers({
   user: userReducer,
   studio: studioReducer,
+  icp: icpReducer,
 })
 
 const persistConfig = {

@@ -10,7 +10,7 @@ import NmSpinInfinity from '@/components/nm-spin/infinity'
 import { useSnackbar } from '@/components/context/snackbar'
 import { useStudioContext } from '@/components/context/studio'
 import { useGlobalWalletConnect, useLocation, useUserData } from '@/lib/hooks'
-import { _supportChains } from '@/lib/types/chains'
+import { _supportChains } from '@/lib/chains'
 import { getPayeeAccountSvc } from '@/services/pay'
 
 export default function Pay() {
@@ -144,7 +144,7 @@ export default function Pay() {
                 innerClass="flex items-center justify-between"
                 tpls={{ style: `S00${themeIndex}` }}
               >
-                <Link href={`${origin}/${user?.id}`} target="_blank" className="opacity-80 truncate">
+                <Link href={`${origin}/${user?.id}`} className="opacity-80 truncate">
                   {`${host}/${user?.id}`}
                 </Link>
                 <Button

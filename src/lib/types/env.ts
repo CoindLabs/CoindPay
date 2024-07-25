@@ -8,7 +8,7 @@ export const env = {
   payChainId: Number(process.env.NEXT_PUBLIC_SBT_CHAIN_ID),
   sbtBillingDate: process.env.NEXT_PUBLIC_SBT_BILLING_COUNTDOWN,
   simplehashKey: process.env.SIMPLEHASH_KEY,
-  blockVisionBNBMainnet: process.env.NEXT_PUBLIC_BLOCKVISION_BNB_MAINNET,
+  blockVisionBSCKey: process.env.NEXT_PUBLIC_BLOCKVISION_BSC_KEY,
   awsCDN: process.env.NEXT_PUBLIC_AWS_CDN.endsWith('/')
     ? process.env.NEXT_PUBLIC_AWS_CDN
     : `${process.env.NEXT_PUBLIC_AWS_CDN}/`,

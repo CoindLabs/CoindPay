@@ -67,8 +67,8 @@ let partners = [
     pathId: 31,
   },
   {
-    name: 'BSCS',
-    pathId: 27,
+    name: 'Fuse',
+    pathId: 32,
   },
 ]
 

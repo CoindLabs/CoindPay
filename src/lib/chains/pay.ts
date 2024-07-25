@@ -1,8 +1,8 @@
 import { logoChains } from './logo'
 import { customChains } from './custom'
-import { env } from '../env'
+import { env } from '../types/env'
+import * as pay from './tokens'
 
-import * as pay from '@/config/common/pay'
 import config from '@/config'
 
 const { domains } = config
@@ -19,19 +19,19 @@ export const payChains = [
     ...pay?.solana,
   },
   {
+    name: isProd ? 'Ethereum' : 'Ethereum Sepolia',
+    icon: 'https://cryptofonts.com/img/SVG/cbeth.svg',
+    chainId: isProd ? 1 : 11155111,
+    chainIdProd: 1,
+    ...pay?.ethereum,
+  },
+  {
     name: isProd ? 'Base' : 'Base Sepolia',
     icon: logoChains.base,
     chainNamePrice: 'BASE',
     chainId: isProd ? 8453 : 84532,
     chainIdProd: 8453,
     ...pay?.base,
-  },
-  {
-    name: isProd ? 'zkSync' : 'zkSync Sepolia',
-    icon: logoChains.zksync,
-    chainId: isProd ? 324 : 300,
-    chainIdProd: 324,
-    ...pay?.zkSync,
   },
   {
     name: isProd ? 'Optimism' : 'Optimism Sepolia',
@@ -48,19 +48,25 @@ export const payChains = [
     ...pay?.arbitrum,
   },
   {
-    name: isProd ? 'Ethereum' : 'Ethereum Sepolia',
-    icon: 'https://cryptofonts.com/img/SVG/cbeth.svg',
-    chainId: isProd ? 1 : 11155111,
-    chainIdProd: 1,
-    ...pay?.ethereum,
+    name: isProd ? 'BSC' : 'BSC Testnet',
+    icon: 'https://cryptofonts.com/img/brands/binance.svg',
+    chainId: isProd ? 56 : 97,
+    chainIdProd: 56,
+    ...pay?.bsc,
   },
   {
-    name: 'Bitcoin',
-    disabled: true,
+    name: isProd ? 'Polygon' : 'Polygon Amoy Testnet',
+    icon: logoChains.polygon,
+    chainId: isProd ? 137 : 80002,
+    chainIdProd: 137,
+    ...pay?.polygon,
   },
   {
-    name: 'TON',
-    disabled: true,
+    name: isProd ? 'zkSync' : 'zkSync Sepolia',
+    icon: logoChains.zksync,
+    chainId: isProd ? 324 : 300,
+    chainIdProd: 324,
+    ...pay?.zkSync,
   },
   {
     name: 'ICP',
@@ -71,12 +77,11 @@ export const payChains = [
     disabled: true,
   },
   {
-    name: 'Binance',
-    icon: 'https://cryptofonts.com/img/brands/binance.svg',
+    name: 'Bitcoin',
     disabled: true,
   },
   {
-    name: 'Polygon',
+    name: 'TON',
     disabled: true,
   },
   {
@@ -115,15 +120,15 @@ export const payChains = [
     disabled: true,
   },
   {
+    name: 'Sui',
+    disabled: true,
+  },
+  {
     name: 'Mantle',
     disabled: true,
   },
   {
     name: 'Manta',
-    disabled: true,
-  },
-  {
-    name: 'Sui',
     disabled: true,
   },
   {

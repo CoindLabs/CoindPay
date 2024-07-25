@@ -1,5 +1,5 @@
-import { nftAvailableChains, chainIdToNetWork } from './types/chains'
-import { env } from './types/env'
+import { nftAvailableChains, chainIdToNetWork } from '../chains'
+import { env } from '../types/env'
 
 import config from '@/config'
 
@@ -486,7 +486,8 @@ export const getNFTOrScanUrl = ({
   let _item = nftAvailableChains.find(row => row.chain == chain?.toLowerCase()),
     _chainId = Number(chainId || _item?.id),
     _chainCurrency = _item?.['currency'],
-    _sol = chainType == 'sol' || chain?.toLowerCase()?.includes('sol') // 兼容不同地方的solana数据
+    _sol = chainType == 'sol' || chain?.toLowerCase()?.includes('sol'), // 兼容不同地方的solana数据
+    _icp = chainType == 'icp'
 
   switch (type) {
     case 'tx':
@@ -499,6 +500,7 @@ export const getNFTOrScanUrl = ({
 
     case 'address':
       if (_sol) return `https://solscan.io/account/${contractAddress || address}${env?.isProd ? '' : '?cluster=devnet'}`
+      if (_icp) return `https://dashboard.internetcomputer.org/account/${address}`
       return `${chainIdToNetWork(_chainId).blockExplorers?.default?.url}/address/${address}`
 
     case 'nft':

@@ -113,7 +113,6 @@ const config = {
       {
         icon: 'discord',
         name: 'Discord',
-        url: '//discord.gg/5CVtZQvf',
       },
       {
         icon: 'telegram',

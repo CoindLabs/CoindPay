@@ -72,4 +72,25 @@ export const customChains = {
       },
     },
   },
+  Mint: {
+    id: 185,
+    name: 'Mint',
+    icon: 'https://explorer.mintchain.io/assets/configs/network_icon.png',
+    nativeCurrency: {
+      name: 'Ether',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: {
+      default: {
+        http: ['https://rpc.mintchain.io'],
+      },
+    },
+    blockExplorers: {
+      default: {
+        name: 'Mintchain Mainnet explorer',
+        url: 'https://explorer.mintchain.io',
+      },
+    },
+  },
 }

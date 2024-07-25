@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react'
-import { Avatar, Box, Button, Grid, Typography, useTheme } from '@mui/material'
+import { Avatar, Box, Button, Grid, Typography } from '@mui/material'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui'
@@ -11,15 +11,17 @@ import { GlobalContextProvider } from '@/components/context'
 import NmIcon from '@/components/nm-icon'
 import NmWallet from '@/components/nm-wallet'
 import { labels, ChainsWalletCard } from '@/components/nm-chains-wallet'
+import ICPModal from '@/components/dapp/account/icp'
 import { useEVMWalletConnect } from '@/lib/hooks'
-import { supportChains } from '@/lib/types/chains'
+import { supportChains } from '@/lib/chains'
 import { getShortenMidDots } from '@/lib/utils'
+
 import config from '@/config'
 
 const { themes } = config
 
-// const ConnectButtonDynamic = dynamic(() => import('@connect2ic/react').then(mod => mod.ConnectButton), { ssr: false })
-// const ConnectDialogDynamic = dynamic(() => import('@connect2ic/react').then(mod => mod.ConnectDialog), { ssr: false })
+const ConnectButtonDynamic = dynamic(() => import('@connect2ic/react').then(mod => mod.ConnectButton), { ssr: false })
+const ConnectDialogDynamic = dynamic(() => import('@connect2ic/react').then(mod => mod.ConnectDialog), { ssr: false })
 
 export default function AccountWallet(props) {
   // evm
@@ -30,7 +32,7 @@ export default function AccountWallet(props) {
   // solana
   const { setVisible } = useWalletModal()
   const { wallet: solanaWallet, connect } = useWallet()
-  const { buttonState, publicKey } = useWalletMultiButton({
+  const { onDisconnect, buttonState, publicKey } = useWalletMultiButton({
     onSelectWallet() {
       setVisible(true)
     },
@@ -128,13 +130,14 @@ export default function AccountWallet(props) {
               </Grid>
               <p className="text-neutral-400 py-6">{row.desc}</p>
               <Box className="mb-8 flex flex-wrap gap-4">
+                {row.type == 'Non-EVM' && <ICPModal />}
                 {row.type == 'Non-EVM' && solanaWallet?.readyState === 'Installed' && publicKey && (
                   <Box className="p-3 w-full  border rounded-xl flex items-center justify-between">
                     <Avatar
                       src="https://icons.llamao.fi/icons/chains/rsz_solana?w=100&h=100"
                       className="skeleton rounded-full"
                     />
-                    <ul className="flex-1 px-2 sm:px-4">
+                    <ul className="flex-1 px-4 pr-6">
                       <li className="font-semibold">Solana</li>
                       <li className="text-neutral-400 text-sm">{solanaAccount}</li>
                     </ul>
@@ -155,6 +158,8 @@ export default function AccountWallet(props) {
                       anchorEl={anchorRef}
                       chainsExpand={open}
                       setChainsExpand={setOpen}
+                      publicKey={publicKey}
+                      onDisconnect={onDisconnect}
                     />
                   </Box>
                 )}
@@ -167,6 +172,8 @@ export default function AccountWallet(props) {
                 >
                   {row?.list.map((item, kIndex) => {
                     if (solanaWallet?.readyState === 'Installed' && publicKey && item.name === 'Solana') return null
+                    if (item.name === 'ICP')
+                      return <ICPModal connected key={`card-item-chains-${index}-${kIndex + 1}`} />
                     return (
                       <li
                         className={classNames('relative cursor-pointer group flex items-center justify-between gap-2', {
@@ -196,28 +203,29 @@ export default function AccountWallet(props) {
                         )}
                         {row?.type == 'Non-EVM' &&
                           (!item?.disabled ? (
-                            // item.name == 'ICP' ? (
-                            //   <ConnectButtonDynamic
-                            //     style={{
-                            //       width: '8rem',
-                            //       height: '2.25rem',
-                            //       fontSize: '0.875rem',
-                            //       borderRadius: '0.5rem',
-                            //       justifyContent: 'center',
-                            //       backgroundImage: themes.backgroundImage['create-gradient-004'],
-                            //     }}
-                            //   >
-                            //     Connect {item.name}
-                            //   </ConnectButtonDynamic>
-                            // ) : (
-                            <Button
-                              size="large"
-                              color="success"
-                              variant="contained"
-                              className="bg-create-gradient-004 w-32 truncate rounded-lg text-sm shadow-none"
-                            >
-                              Connect {item.name}
-                            </Button>
+                            item.name == 'ICP' ? (
+                              <ConnectButtonDynamic
+                                style={{
+                                  width: '8rem',
+                                  height: '2.25rem',
+                                  fontSize: '0.875rem',
+                                  borderRadius: '0.5rem',
+                                  justifyContent: 'center',
+                                  backgroundImage: themes.backgroundImage['create-gradient-004'],
+                                }}
+                              >
+                                Connect {item.name}
+                              </ConnectButtonDynamic>
+                            ) : (
+                              <Button
+                                size="large"
+                                color="success"
+                                variant="contained"
+                                className="bg-create-gradient-004 w-32 truncate rounded-lg text-sm shadow-none"
+                              >
+                                Connect {item.name}
+                              </Button>
+                            )
                           ) : (
                             <strong className="opacity-15">{item.name}</strong>
                           ))}
@@ -228,9 +236,9 @@ export default function AccountWallet(props) {
               )}
             </Box>
           ))}
-          {/* <ConnectDialogDynamic /> */}
         </section>
       </article>
+      <ConnectDialogDynamic />
     </GlobalContextProvider>
   )
 }

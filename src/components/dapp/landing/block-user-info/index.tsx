@@ -1,20 +1,23 @@
 import React, { useState, memo, useRef, useEffect } from 'react'
-import { Box, Button, ClickAwayListener, Grow, IconButton, Link, Paper, Popper, Typography } from '@mui/material'
+import { Box, Link, Button, ClickAwayListener, Grow, IconButton, Paper, Popper, Typography } from '@mui/material'
+import Image from 'next/image'
 import { useEnsName } from 'wagmi'
 import classNames from 'classnames'
 import NmIcon from '@/components/nm-icon'
 import Skus from '@/components/dapp/landing/skus'
 import { useSnackbar } from '@/components/context/snackbar'
 import { capitalizeFirstLetter, getNFTOrScanUrl, getShortenMidDots } from '@/lib/utils'
-import { useAppDispatch, useIsLoggedIn } from '@/lib/hooks'
+import { useAppDispatch, useLocation } from '@/lib/hooks'
 import { getUserAccountSvc } from '@/services/user'
 import { setUserInfo } from '@/store/slice/user'
+import { logoChains } from '@/lib/chains'
 
 const BlockUserInfo = ({ payee, user, ...props }) => {
+  const host = useLocation('host')
+
   const dispatch = useAppDispatch()
 
-  const isLoggedIn = useIsLoggedIn({ id: user?.id })
-
+  const { isInProfile } = user
   const [nickname, setNickName] = useState(user?.nickname || '')
   const [bio, setBio] = useState(user?.bio || '')
 
@@ -29,18 +32,20 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
   const { bg = {} } = Skus[`S00${payee?.style?.theme || 0}`]
   const { showSnackbar } = useSnackbar()
 
-  let { addressList } = user
-  let { data: ensName } = useEnsName({ address: addressList?.find(row => row?.chain == 'evm')?.value }),
+  let { data: ensName } = useEnsName({ address: user?.addressList?.find(row => row?.chain == 'evm')?.value }),
     domainName = ensName || ''
 
-  let addressDefault = addressList?.length > 0 && addressList[0],
+  let addressDefault = user?.addressList?.length > 0 && user?.addressList[0],
     shortenDotAddress = getShortenMidDots(addressDefault?.value)
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [addressHub, setAddressHub] = useState({
     open: false,
   })
-  const [addressIcon, setAddressIcon] = useState(addressList?.length > 1 ? 'icon-arrow_down' : 'icon-copy_outline')
+
+  const [addressIcon, setAddressIcon] = useState(
+    user?.addressList?.length > 1 ? 'icon-arrow_down' : 'icon-copy_outline'
+  )
 
   const scan_url = getNFTOrScanUrl({
     type: 'address',
@@ -111,6 +116,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
           ...res?.data,
         })
       )
+      setProfileEdited(false)
       showSnackbar({
         snackbar: {
           open: true,
@@ -122,6 +128,26 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
     setLoading(false)
   }
 
+  const handleCopyPayeeURL = () => {
+    navigator.clipboard.writeText(`${origin}/${user?.id}`)
+    showSnackbar({
+      snackbar: {
+        open: true,
+        type: 'success',
+        text: 'Payment profile copy success ᵔ◡ᵔ',
+      },
+      anchorOrigin: {
+        vertical: 'bottom',
+        horizontal: 'right',
+      },
+    })
+  }
+
+  useEffect(() => {
+    setNickName(user?.nickname || '')
+    setBio(user?.bio || '')
+  }, [user])
+
   useEffect(() => {
     if (bioEditing && textAreaRef.current) {
       const textarea = textAreaRef.current
@@ -130,16 +156,24 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
     }
   }, [bioEditing])
 
+  useEffect(() => {
+    setAddressIcon(user?.addressList?.length > 1 ? 'icon-arrow_down' : 'icon-copy_outline')
+  }, [user?.addressList])
+
   const contentTitle = (
-    <Box className="text-4xl max-w-md leading-normal">
-      {isLoggedIn && nicknameEditing ? (
+    <Box
+      className={classNames('font-semibold py-1 text-4xl leading-normal', {
+        'max-w-md': isInProfile,
+      })}
+    >
+      {isInProfile && nicknameEditing ? (
         <input
           type="text"
           autoFocus
           className="rounded-md placeholder:text-neutral-400 pl-0 border-0 outline-0 focus:ring-0 w-full bg-transparent truncate text-4xl"
           placeholder="Name"
           defaultValue={nickname || user?.nickname}
-          disabled={!isLoggedIn}
+          disabled={!isInProfile}
           onChange={e => {
             setNickName(e.target.value)
             setProfileEdited(
@@ -150,7 +184,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
         />
       ) : (
         <h1
-          className={classNames('cursor-pointer py-px truncate', {
+          className={classNames('cursor-pointer py-px', {
             'text-neutral-400': !(nickname || user?.nickname),
           })}
           onClick={() => setNicknameEditing(true)}
@@ -162,15 +196,15 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
   )
 
   const contentDesc = (
-    <Box className="pb-1.5 text-neutral-400 line-clamp-5 whitespace-pre-wrap break-words">
-      {isLoggedIn && bioEditing ? (
+    <Box className="mb-2 text-neutral-400 line-clamp-5 whitespace-pre-wrap break-words">
+      {isInProfile && bioEditing ? (
         <textarea
           rows={5}
           ref={textAreaRef}
           className="animate__animated animate__fadeIn resize-none outline-0 p-2 rounded-md border-neutral-800 focus:ring-0 w-full bg-transparent truncate text-neutral-700 whitespace-pre-wrap break-words"
           placeholder="Add some bio..."
           defaultValue={bio || user?.bio}
-          disabled={!isLoggedIn}
+          disabled={!isInProfile}
           onChange={e => {
             setBio(e.target.value)
             setProfileEdited(
@@ -180,8 +214,8 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
           onBlur={() => handleProfileBlur('bio')}
         />
       ) : (
-        <p className="cursor-pointer" onClick={() => setBioEditing(true)}>
-          {bio || user?.bio || 'Add some bio...'}
+        <p className="cursor-pointer break-word" onClick={() => setBioEditing(true)}>
+          {bio || user?.bio || 'No bio yet...'}
         </p>
       )}
     </Box>
@@ -200,7 +234,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
         className={classNames(
           'text-neutral-600 flex flex-wrap items-center relative z-1',
           {
-            'max-lg:justify-center': !isLoggedIn,
+            'max-lg:justify-center': !isInProfile,
           },
           classes
         )}
@@ -239,7 +273,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
               }
             )}
             onClick={event =>
-              addressList?.length > 1
+              user?.addressList?.length > 1
                 ? handleEventAction({ type: 'hub', event, toast: false })
                 : handleEventAction({ type: 'address' })
             }
@@ -262,7 +296,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
                 >
                   <ClickAwayListener onClickAway={() => setAddressHub({ open: false })}>
                     <ul className="menu px-0">
-                      {addressList.map(row => (
+                      {user?.addressList.map(row => (
                         <li
                           className="flex flex-row flex-nowrap justify-between items-center leading-8"
                           key={`${row?.value}`}
@@ -278,11 +312,15 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
                               chainType: row?.chain,
                             })}
                           >
-                            <NmIcon
-                              type={`icon-${row?.chain == 'sol' ? 'solana' : 'evm'}`}
-                              className="leading-0 mr-1 text-1.5xl hover:scale-110 transition-all"
-                            />
-                            {getShortenMidDots(row?.value, 6)}
+                            {row?.chain == 'icp' ? (
+                              <Image alt="" width={24} height={24} src={logoChains.icp} className="mr-0.5" />
+                            ) : (
+                              <NmIcon
+                                type={`icon-${(row?.chain == 'sol' && 'solana') || (row?.chain == 'evm' && 'evm') || 'antelope'}`}
+                                className="leading-0 mr-1 text-1.5xl hover:scale-110 transition-all"
+                              />
+                            )}
+                            {getShortenMidDots(row?.value, row?.chain == 'icp' ? 8 : 6)}
                           </Link>
                           <NmIcon
                             className="text-white hover:opacity-80 px-3"
@@ -300,6 +338,34 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
         </Popper>
       </Box>
     )
+
+  const contentUsername = (
+    <Box
+      className={classNames('mt-2 p-2 text-sm flex justify-between items-center bg-neutral-100/70 rounded-md', {
+        'max-sm:absolute max-sm:mt-5 left-0 w-full': isInProfile,
+      })}
+    >
+      <Link
+        className="select-all sm:tracking-wide truncate text-neutral-600"
+        href={isInProfile ? `/${user?.id}?newtab=1` : undefined}
+        target="_blank"
+        underline="none"
+        rel="noopener noreferrer nofollow"
+      >{`${host}/${user?.id}`}</Link>
+      <Button
+        size="small"
+        color="success"
+        variant="contained"
+        data-tip="Upcoming"
+        className={classNames('px-2 bg-create-gradient-004 rounded-md shadow-none', {
+          tooltip: isInProfile,
+        })}
+        onClick={handleCopyPayeeURL}
+      >
+        {isInProfile ? 'Claim ID' : 'Copy'}
+      </Button>
+    </Box>
+  )
 
   return (
     <article className={props?.customClass}>
@@ -326,6 +392,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
       {contentTitle}
       {contentDesc}
       {contentAddress()}
+      {contentUsername}
     </article>
   )
 }

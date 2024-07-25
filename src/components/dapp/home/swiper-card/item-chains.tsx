@@ -3,7 +3,7 @@ import { Avatar } from '@mui/material'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper'
 import { useMobile } from '@/lib/hooks'
-import { _supportChains } from '@/lib/types/chains'
+import { _supportChains } from '@/lib/chains'
 
 const ItemChainsSwiper = ({ data = [], ...props }) => {
   const isMobile = useMobile()

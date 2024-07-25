@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { Avatar, Box, Button, Drawer, Fab } from '@mui/material'
+import { Avatar, Box, Button, Drawer } from '@mui/material'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
 import { CountUp } from 'use-count-up'
@@ -16,22 +16,30 @@ import { get1InchTokenSvc, getJupTokenPriceSvc, getMoralisTokenSvc, getSolTokenL
 import { getPaymentOrderSvc } from '@/services/pay'
 import { useMobile, useUserData } from '@/lib/hooks'
 import { getNFTOrScanUrl, getShortenMidDots } from '@/lib/utils'
-import { _supportChains, payChains } from '@/lib/types/chains'
+import { _supportChains, payChains } from '@/lib/chains'
 import { getActiveChain } from '@/lib/web3'
+import * as pay from '@/lib/chains/tokens'
 
-import * as pay from '@/config/common/pay'
 import config from '@/config'
 
 let animateWords = ['Business', 'Invoice', 'Checkout', 'Recurring', 'Connect']
 
-const { base, zkSync, optimism, arbitrum, ethereum } = pay
+const { ethereum, base, optimism, arbitrum, bsc, polygon, zkSync } = pay
 const { domains } = config
 
 export default function Dashboard() {
   const isMobile = useMobile()
   const user = useUserData()
   const router = useRouter()
-  const tokensCache = useRef([...base.list, ...zkSync.list, ...optimism.list, ...arbitrum.list, ...ethereum.list])
+  const tokensCache = useRef([
+    ...ethereum.list,
+    ...base.list,
+    ...optimism.list,
+    ...arbitrum.list,
+    ...bsc.list,
+    ...polygon.list,
+    ...zkSync.list,
+  ])
   const tokensPrice = useRef([])
   const [loading, setPaymentsLoading] = useState(false)
   const [loadMore, setPaymentsLoadMore] = useState(false)
@@ -74,30 +82,41 @@ export default function Dashboard() {
     let res = await getPaymentOrderSvc({ uuid: user?.id })
     if (res?.ok && res?.data?.length) {
       let solList = res?.data?.filter(row => row?.chain?.includes('Solana')),
-        baseList = res?.data?.filter(row => row?.chain?.includes('Base') || payChains[1]?.['chainId'] == row?.chainId),
-        zkSyncList = res?.data?.filter(row => row?.chain?.includes('zkSync')),
+        ethList = res?.data?.filter(row => row?.chain?.includes('Ethereum')),
+        baseList = res?.data?.filter(row => row?.chain?.includes('Base') || payChains[2]?.['chainId'] == row?.chainId),
         opList = res?.data?.filter(row => row?.chain?.includes('Optimism')),
         arbList = res?.data?.filter(row => row?.chain?.includes('Arbitrum')),
-        ethList = res?.data?.filter(row => row?.chain?.includes('Ethereum'))
+        bscList = res?.data?.filter(row => row?.chain?.includes('BSC')),
+        polygonList = res?.data?.filter(row => row?.chain?.includes('Polygon')),
+        zkSyncList = res?.data?.filter(row => row?.chain?.includes('zkSync'))
+
+      let chainIdProd = name => payChains.find(row => row.name.includes(name))?.['chainIdProd']
+
       if (solList?.length) {
         await getJupTokenPrice({
           ids: [...new Set(solList.map(item => item.symbol))].join(','),
         })
       }
-      if (baseList?.length) {
-        await get1InchTokenPrice([...new Set(baseList.map(item => item.contract))], payChains[1]?.['chainIdProd'])
+      if (ethList?.length) {
+        await get1InchTokenPrice([...new Set(ethList.map(item => item.contract))], chainIdProd('Ethereum'))
       }
-      if (zkSyncList?.length) {
-        await get1InchTokenPrice([...new Set(zkSyncList.map(item => item.contract))], payChains[2]?.['chainIdProd'])
+      if (baseList?.length) {
+        await get1InchTokenPrice([...new Set(baseList.map(item => item.contract))], chainIdProd('Base'))
       }
       if (opList?.length) {
-        await get1InchTokenPrice([...new Set(opList.map(item => item.contract))], payChains[3]?.['chainIdProd'])
+        await get1InchTokenPrice([...new Set(opList.map(item => item.contract))], chainIdProd('Optimism'))
       }
       if (arbList?.length) {
-        await get1InchTokenPrice([...new Set(arbList.map(item => item.contract))], payChains[4]?.['chainIdProd'])
+        await get1InchTokenPrice([...new Set(arbList.map(item => item.contract))], chainIdProd('Arbitrum'))
       }
-      if (ethList?.length) {
-        await get1InchTokenPrice([...new Set(ethList.map(item => item.contract))], payChains[5]?.['chainIdProd'])
+      if (bscList?.length) {
+        await get1InchTokenPrice([...new Set(bscList.map(item => item.contract))], chainIdProd('BSC'))
+      }
+      if (polygonList?.length) {
+        await get1InchTokenPrice([...new Set(polygonList.map(item => item.contract))], chainIdProd('Polygon'))
+      }
+      if (zkSyncList?.length) {
+        await get1InchTokenPrice([...new Set(zkSyncList.map(item => item.contract))], chainIdProd('zkSync'))
       }
 
       paymentsListCache.current = res?.data
@@ -315,7 +334,10 @@ export default function Dashboard() {
                 <Box
                   className={classNames(
                     'pr-2.5 py-px flex items-center rounded-full transition-all bg-create-gradient-004',
-                    item?.disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+                    item?.disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+                    {
+                      'px-3': ['Arbitrum', 'BSC', 'Polygon'].includes(item?.name),
+                    }
                   )}
                 >
                   {avatarBox()}
@@ -348,7 +370,9 @@ export default function Dashboard() {
           </thead>
           <tbody>
             {payments.list?.map((item, index) => {
-              let tokenItem = tokensCache.current.find(row => row?.address == item?.contract)
+              let tokenItem = tokensCache.current.find(
+                row => row?.address == item?.contract && row.symbol?.toLowerCase() == item?.symbol?.toLowerCase()
+              )
               let chainIcon = ({ classes = null } = {}) => (
                 <Image
                   alt=""
@@ -358,9 +382,7 @@ export default function Dashboard() {
                     _supportChains.find(row => item?.chain?.includes(row?.name))?.icon ||
                     `https://icons.llamao.fi/icons/chains/rsz_${item?.chain?.toLowerCase()}?w=100&h=100`
                   }
-                  className={classNames('rounded-full', classes, {
-                    'bg-black p-1': item?.chain?.includes('Solana'),
-                  })}
+                  className={classNames('rounded-full', classes)}
                 />
               )
               return (
@@ -369,7 +391,12 @@ export default function Dashboard() {
                     <ul className="flex gap-2">
                       <li className="pt-1 relative">
                         <Avatar src={tokenItem?.logoURI} className="max-sm:size-8" />
-                        {chainIcon({ classes: 'size-4 sm:size-5 border absolute top-0 right-0' })}
+                        {chainIcon({
+                          classes: classNames('size-4 sm:size-5 border absolute top-0 right-0', {
+                            'bg-white p-1': ['Arbitrum', 'BSC', 'Polygon'].includes(item?.chain),
+                            'bg-black p-1': item?.chain == 'Solana',
+                          }),
+                        })}
                       </li>
                       <li className="max-sm:max-w-40 xl:max-w-2xl">
                         <Link
@@ -447,7 +474,7 @@ export default function Dashboard() {
             </h2>
             <Avatar
               className="shadow-sm cursor-pointer bg-create-gradient-004 hover:scale-105 transition-all"
-              onClick={() => router.push('/pay')}
+              onClick={() => router.push('pay')}
             >
               <NmIcon type="icon-arrow_down" className="text-2xl -rotate-90" />
             </Avatar>

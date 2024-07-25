@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import { ParsedUrlQuery } from 'querystring'
 import { useRouter } from 'next/router'
+import isEqual from 'lodash.isequal'
+import { useDeepCompareEffect } from 'ahooks'
 import LandingLayout from '@/components/layout/landing'
 import { PayeeContext } from '@/components/context/payee'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
 import { bigintFactory } from '@/lib/prisma/common'
 import prisma from '@/lib/prisma'
-import { useIsLoggedIn } from '@/lib/hooks'
+import { useIsLoggedIn, useUserData } from '@/lib/hooks'
 import StudioLayout from '@/components/layout/studio'
+import { getPayeeAccountSvc } from '@/services/pay'
 
 interface Params extends ParsedUrlQuery {
   uuid: string
@@ -68,16 +71,52 @@ export async function getStaticProps(context) {
   }
 }
 
-export default function RenderUser({ user, payee }) {
+export default function RenderUser({ user: initialUser, payee: initialPayee }) {
   const router = useRouter()
-  const isLoggedIn = useIsLoggedIn({ id: user?.id })
+
+  const localUser = useUserData()
+
+  const [user, setUser] = useState(initialUser)
+  const [payee, setPayee] = useState(initialPayee)
+
+  const isLoggedIn = useIsLoggedIn()
+  const [isInProfile, setInProfile] = useState(false)
+
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (user) {
-      setLoading(false)
+    setInProfile(isLoggedIn && localUser?.id == router?.query?.uuid)
+  }, [router?.query?.uuid])
+
+  useDeepCompareEffect(() => {
+    if (!user?.id) return
+
+    if (!localUser?.id) {
+      setUser(user)
+      setInProfile(false)
+      return
     }
-  }, [user])
+
+    setLoading(false)
+
+    let equal = isEqual(localUser, user)
+    if (isInProfile && !equal) {
+      setUser(localUser)
+      const getPayeeAccount = async () => {
+        try {
+          let res = await getPayeeAccountSvc({
+            id: localUser?.id,
+          })
+          if (res?.ok && res?.data) {
+            setPayee(res?.data)
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error)
+        }
+      }
+      getPayeeAccount()
+    }
+  }, [localUser])
 
   if (loading) {
     return <NmSpinInfinity absoluteCenter customClass="loading-lg scale-150" />
@@ -85,11 +124,11 @@ export default function RenderUser({ user, payee }) {
 
   return (
     <PayeeContext.Provider value={{ user, payee }}>
-      {!isLoggedIn || router.query?.newtab ? (
-        <LandingLayout payee={payee} user={user} />
+      {!isInProfile || router.query?.newtab ? (
+        <LandingLayout payee={payee} user={{ ...user, isInProfile: router.query?.newtab ? false : isInProfile }} />
       ) : (
         <StudioLayout>
-          <LandingLayout payee={payee} user={user} />
+          <LandingLayout payee={payee} user={{ ...user, isInProfile }} />
         </StudioLayout>
       )}
     </PayeeContext.Provider>

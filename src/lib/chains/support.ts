@@ -27,14 +27,68 @@ import {
   fantom,
   polygonZkEvm,
   berachainTestnetbArtio,
-} from 'wagmi/chains'
+} from 'viem/chains'
 import { logoChains } from './logo'
 import { customChains } from './custom'
 
 export const supportChains = [
   {
+    type: 'Non-EVM',
+    desc: 'Fast and low-cost Non-EVM（Ethereum Virtual Machine） Chains.',
+    list: [
+      {
+        name: 'ICP',
+        icon: logoChains.icp,
+      },
+      {
+        name: 'Solana',
+        icon: 'https://cryptofonts.com/img/icons/sol.svg',
+      },
+      {
+        name: 'Bitcoin',
+        icon: logoChains.btc,
+        disabled: true,
+      },
+      {
+        name: 'TON',
+        icon: logoChains.ton,
+        disabled: true,
+      },
+      {
+        name: 'Sui',
+        icon: logoChains.sui,
+        disabled: true,
+      },
+      {
+        name: 'Aptos',
+        icon: logoChains.aptos,
+        disabled: true,
+      },
+      {
+        name: 'Starknet',
+        icon: logoChains.starknet,
+        disabled: true,
+      },
+      {
+        name: 'Cardano',
+        icon: logoChains.cardano,
+        disabled: true,
+      },
+      {
+        name: 'Near',
+        icon: logoChains.near,
+        disabled: true,
+      },
+      {
+        name: 'Injective',
+        icon: logoChains.injective,
+        disabled: true,
+      },
+    ],
+  },
+  {
     type: 'EVM',
-    desc: 'Blockchain network compatible with Ethernet Virtual Machine (EVM).',
+    desc: 'Blockchain network compatible with Ethereum Virtual Machine (EVM).',
     list: [
       {
         name: 'Ethereum',
@@ -50,16 +104,6 @@ export const supportChains = [
         name: 'Optimism',
         chain: optimism,
         icon: logoChains.optimism,
-      },
-      {
-        name: 'Polygon',
-        chain: polygon,
-        icon: logoChains.polygon,
-      },
-      {
-        name: 'BSC',
-        chain: bsc,
-        icon: logoChains.bnb,
       },
       {
         name: 'Arbitrum',
@@ -91,6 +135,16 @@ export const supportChains = [
         chain: fuse,
       },
       {
+        name: 'BSC',
+        chain: bsc,
+        icon: logoChains.bnb,
+      },
+      {
+        name: 'Polygon',
+        chain: polygon,
+        icon: logoChains.polygon,
+      },
+      {
         name: 'Metis',
         chain: metis,
         icon: logoChains.metis,
@@ -115,6 +169,11 @@ export const supportChains = [
         name: 'zkSync',
         chain: zkSync,
         icon: logoChains.zksync,
+      },
+      {
+        name: 'Mint',
+        chain: customChains.Mint,
+        icon: customChains.Mint.icon,
       },
       {
         name: 'Mode',
@@ -237,86 +296,6 @@ export const supportChains = [
         name: 'Metis',
         icon: logoChains.metis,
         chain: metis,
-      },
-    ],
-  },
-  {
-    type: 'Non-EVM',
-    desc: 'Fast and low-cost Non-EVM Chains.',
-    list: [
-      {
-        name: 'Solana',
-        icon: 'https://cryptofonts.com/img/icons/sol.svg',
-      },
-      {
-        name: 'ICP',
-        icon: logoChains.icp,
-        disabled: true,
-      },
-      {
-        name: 'Bitcoin',
-        icon: logoChains.btc,
-        disabled: true,
-      },
-      {
-        name: 'TON',
-        icon: logoChains.ton,
-        disabled: true,
-      },
-      {
-        name: 'Aptos',
-        icon: logoChains.aptos,
-        disabled: true,
-      },
-      {
-        name: 'Starknet',
-        icon: logoChains.starknet,
-        disabled: true,
-      },
-      {
-        name: 'Osmosis',
-        icon: logoChains.osmosis,
-        disabled: true,
-      },
-      {
-        name: 'Doge',
-        icon: logoChains.doge,
-        disabled: true,
-      },
-      {
-        name: 'Sui',
-        icon: logoChains.sui,
-        disabled: true,
-      },
-      {
-        name: 'Flow',
-        icon: logoChains.flow,
-        disabled: true,
-      },
-      {
-        name: 'Cardano',
-        icon: logoChains.cardano,
-        disabled: true,
-      },
-      {
-        name: 'Near',
-        icon: logoChains.near,
-        disabled: true,
-      },
-      {
-        name: 'EOS',
-        icon: logoChains.eos,
-        disabled: true,
-      },
-      {
-        name: 'Tezos',
-        icon: logoChains.tezos,
-        disabled: true,
-      },
-      {
-        name: 'Injective',
-        icon: logoChains.injective,
-        disabled: true,
       },
     ],
   },

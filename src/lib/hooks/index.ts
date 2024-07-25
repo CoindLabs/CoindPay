@@ -4,7 +4,7 @@
  * @version 0.1 | 2022-07-18 // Initial version.
  * @Date: 2022-07-16 12:33:20
  * @Last Modified by: 0x3Anthony
- * @Last Modified time: 2024-07-03 14:09:04
+ * @Last Modified time: 2024-07-16 18:50:30
  */
 import { RefObject, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
@@ -14,7 +14,8 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { useRouter } from 'next/router'
 import { Network } from 'alchemy-sdk'
 import { getSpaceIDReverseNameSvc } from '@/services/common'
-import { chainIdToNetWork } from '@/lib/types/chains'
+import { icpInfo } from '@/store/slice/icp'
+import { chainIdToNetWork } from '@/lib/chains'
 import type { AppDispatch, AppState } from '../store'
 
 import config from '@/config'
@@ -80,6 +81,7 @@ export const useNetworkType = (id?: number) => {
 export const useChainConnect = () => {
   const account = useAccount()
   const { solAddress } = useSolAccount()
+  const icpData = useSelector(icpInfo)
   if (account?.address) {
     return {
       address: account.address,
@@ -92,6 +94,12 @@ export const useChainConnect = () => {
       address: solAddress,
       chainType: 'sol',
       sol: true,
+    }
+  } else if (icpData?.accountId) {
+    return {
+      address: icpData.accountId,
+      chainType: 'icp',
+      icp: true,
     }
   }
   return { address: null }
@@ -312,10 +320,11 @@ export function useHydrated() {
     () => false
   )
 }
+
 /**
- * 判断是否为当前登录账户
+ * 判断是否登录
  */
-export function useIsLoggedIn({ id }) {
+export function useIsLoggedIn() {
   const localUser = useUserData()
-  return localUser?.id && localUser?.id == id
+  return Boolean(localUser?.id)
 }

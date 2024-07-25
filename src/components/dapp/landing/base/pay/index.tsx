@@ -52,12 +52,11 @@ import { getPaymentOrderSvc } from '@/services/pay'
 import { get1InchTokenSvc, getJupTokenPriceSvc, getSolTokenListSvc } from '@/services/common'
 import { getNFTOrScanUrl, getRandomNumber, getShortenMidDots } from '@/lib/utils'
 import { useChainConnect, useEVMWalletConnect, useGlobalWalletConnect, useSolAccount, useUserData } from '@/lib/hooks'
-import { payChains, _supportChains } from '@/lib/types/chains'
+import { payChains, _supportChains, wagmiCoreConfig } from '@/lib/chains'
 import { getActiveChain, getSolanaRPCUrl } from '@/lib/web3'
 import { env } from '@/lib/types/env'
+import * as pay from '@/lib/chains/tokens'
 
-import { wagmiCoreConfig } from '@/config/common/wagmi'
-import * as pay from '@/config/common/pay'
 import config from '@/config'
 
 const { title, domains } = config
@@ -445,7 +444,7 @@ const PaymentCard = ({ ...props }) => {
           let balanceFactory = val =>
             parseFloat(formatUnits((val?.value || val?.balance || val) as bigint, val?.decimals as number))
           // 发送原生代币
-          if (tokensItem?.eth) {
+          if (tokensItem?.native) {
             if (
               tokensAmount >=
               (evmNativeBalanceSuccess && evmNativeBalance && evmNativeBalance?.value > 0
@@ -636,23 +635,23 @@ const PaymentCard = ({ ...props }) => {
     setPaymentType(3)
 
     if (globalWalletConnect) {
-      switch (chainIndex) {
-        case 0:
-          if (!solAddress) {
+      switch (chainType) {
+        case 'evm':
+        default:
+          if (!chainIndex) {
             setVisible(true)
             disconnect()
             return handleTransactionError('Please connect solana chain first.')
           }
-          solanaPay()?.sendCoin()
-          break
+          evmPay()?.sendToken()
 
-        case 1:
-        default:
-          if (!evmWalletConnect) {
+          break
+        case 'sol':
+          if (chainIndex > 0) {
             openConnectModal()
             return handleTransactionError('Please connect evm chain first.')
           }
-          evmPay()?.sendToken()
+          solanaPay()?.sendCoin()
           break
       }
     }
@@ -1097,7 +1096,7 @@ const PaymentCard = ({ ...props }) => {
                   <p>
                     <span className="opacity-50">Give us</span>
                     <NextLink
-                      href="//x.com/CoindPay"
+                      href="https://x.com/CoindPay"
                       target="_blank"
                       rel="noopener noreferrer nofollow"
                       className="px-1.5"
@@ -1118,7 +1117,7 @@ const PaymentCard = ({ ...props }) => {
             <textarea
               value={payNote}
               placeholder={`Leave a encrypted message for payment of $${payInputValue} and visible to you and the creator only.`}
-              className="min-h-68 rounded-lg whitespace-pre-wrap w-full p-4 bg-transparent border-gray-300/30 focus:border-gray-300/70 outline-0 focus:ring-0 placeholder-gray-300/70"
+              className="resize-none min-h-68 rounded-lg whitespace-pre-wrap w-full p-4 bg-transparent border-gray-300/30 focus:border-gray-300/70 outline-0 focus:ring-0 placeholder-gray-300/70"
               onChange={e => setPayNote(e.target.value)}
             />
             <ul className="flex justify-center pt-6 gap-4">

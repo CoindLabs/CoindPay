@@ -40,17 +40,19 @@ import {
   baseSepolia,
   optimismSepolia,
   arbitrumSepolia,
+  bscTestnet,
+  polygonAmoy,
   zkSyncSepoliaTestnet,
   berachainTestnetbArtio,
-} from 'wagmi/chains'
+} from 'viem/chains'
 import { env } from '@/lib/types/env'
-import { customChains, logoChains } from '@/lib/types/chains'
+import { customChains, logoChains } from '.'
 
 import config from '@/config'
 
-const { title, domains } = config
+const { title } = config
 
-const { Xenea, xrpLedger, jocChain } = customChains
+const { Xenea, xrpLedger, jocChain, Mint } = customChains
 
 let isProd = env?.isProd
 
@@ -74,8 +76,8 @@ let chains_tpl = [
   mainnet,
   base,
   optimism,
-  polygon,
   bsc,
+  polygon,
   avalanche,
   arbitrum,
   { ...manta, name: 'Manta', iconUrl: logoChains.manta },
@@ -95,6 +97,7 @@ let chains_tpl = [
   { ...moonbeam, name: 'Moonbeam', iconUrl: logoChains.moonbeam },
   { ...moonriver, name: 'Moonriver', iconUrl: logoChains.moonriver },
   { ...zetachain, name: 'Zeta' },
+  { ...Mint, iconUrl: Mint.icon },
   { ...berachainTestnetbArtio, iconUrl: logoChains.berachain },
   { ...celo, iconUrl: logoChains.celo },
   { ...fantom, iconUrl: logoChains.fantom },
@@ -121,6 +124,8 @@ const chains = isProd
       baseSepolia,
       optimismSepolia,
       arbitrumSepolia,
+      bscTestnet,
+      polygonAmoy,
       { ...zkSyncSepoliaTestnet, iconUrl: logoChains.zksync },
     ]
 
@@ -135,7 +140,10 @@ export const chainsTransports = {
   [optimismSepolia.id]: http(`https://opt-sepolia.g.alchemy.com/v2/${env.alchemyId}`),
   [arbitrum.id]: http(`https://arb-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
   [arbitrumSepolia.id]: http(`https://arb-sepolia.g.alchemy.com/v2/${env.alchemyId}`),
-  [bsc.id]: http(`https://bsc-mainnet.blockvision.org/v1/${env.alchemyId}`),
+  [polygon.id]: http(`https://polygon-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
+  [polygonAmoy.id]: http(`https://polygon-amoy.g.alchemy.com/v2/${env.alchemyId}`),
+  [bsc.id]: http(`https://bsc-mainnet.blockvision.org/v1/${env.blockVisionBSCKey}`),
+  [bscTestnet.id]: http(`https://bsc-testnet.blockvision.org/v1/${env.blockVisionBSCKey}`),
 }
 
 export const wagmiConfig = {
