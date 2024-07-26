@@ -44,6 +44,8 @@ import {
   polygonAmoy,
   zkSyncSepoliaTestnet,
   berachainTestnetbArtio,
+  auroraTestnet,
+  zetachainAthensTestnet,
 } from 'viem/chains'
 import { env } from '@/lib/types/env'
 import { customChains, logoChains } from '.'
@@ -97,8 +99,8 @@ let chains_tpl = [
   { ...moonbeam, name: 'Moonbeam', iconUrl: logoChains.moonbeam },
   { ...moonriver, name: 'Moonriver', iconUrl: logoChains.moonriver },
   { ...zetachain, name: 'Zeta' },
-  { ...Mint, iconUrl: Mint.icon },
   { ...berachainTestnetbArtio, iconUrl: logoChains.berachain },
+  { ...Mint, iconUrl: Mint.icon },
   { ...celo, iconUrl: logoChains.celo },
   { ...fantom, iconUrl: logoChains.fantom },
   { ...polygonZkEvm, iconUrl: logoChains.polygonzkevm },
@@ -125,8 +127,9 @@ const chains = isProd
       optimismSepolia,
       arbitrumSepolia,
       bscTestnet,
-      polygonAmoy,
+      { ...polygonAmoy, iconUrl: logoChains.polygon },
       { ...zkSyncSepoliaTestnet, iconUrl: logoChains.zksync },
+      { ...auroraTestnet, iconUrl: logoChains.aurora },
     ]
 
 export const chainsTransports = {
@@ -142,8 +145,12 @@ export const chainsTransports = {
   [arbitrumSepolia.id]: http(`https://arb-sepolia.g.alchemy.com/v2/${env.alchemyId}`),
   [polygon.id]: http(`https://polygon-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
   [polygonAmoy.id]: http(`https://polygon-amoy.g.alchemy.com/v2/${env.alchemyId}`),
-  [bsc.id]: http(`https://bsc-mainnet.blockvision.org/v1/${env.blockVisionBSCKey}`),
-  [bscTestnet.id]: http(`https://bsc-testnet.blockvision.org/v1/${env.blockVisionBSCKey}`),
+  [bsc.id]: http(`https://lb.drpc.org/ogrpc?network=bsc&dkey=${env.drpcKey}`),
+  [bscTestnet.id]: http(`https://lb.drpc.org/ogrpc?network=bsc-testnet&dkey=${env.drpcKey}`),
+  [aurora.id]: http(`https://lb.drpc.org/ogrpc?network=aurora&dkey=${env.drpcKey}`),
+  [auroraTestnet.id]: http(`https://lb.drpc.org/ogrpc?network=aurora-testnet&dkey=${env.drpcKey}`),
+  [zetachain.id]: http(`https://lb.drpc.org/ogrpc?network=zeta-chain&dkey=${env.drpcKey}`),
+  [zetachainAthensTestnet.id]: http(`https://lb.drpc.org/ogrpc?network=zeta-chain-testnet&dkey=${env.drpcKey}`),
 }
 
 export const wagmiConfig = {

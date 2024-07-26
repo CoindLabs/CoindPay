@@ -147,28 +147,7 @@ const ICPModal = ({ connected }: { connected?: boolean }) => {
                             {copied ? labels?.copied : labels?.copy_address}
                           </MenuItem>
                         ) : null}
-                        {/* <MenuItem
-                          className={classNames('pb-2', itemsClass)}
-                          onClick={() => {
-                            setOpen(false)
-                            setTimeout(() => ICPOpen(true), 300)
-                          }}
-                        >
-                          {labels?.change_wallet}
-                        </MenuItem> */}
-                        {/* {switchChain ? (
-                          <MenuItem
-                            className={classNames('border border-t border-zinc-500', itemsClass)}
-                            onClick={() => {
-                              setOpen(false)
-                              setTimeout(() => {
-                                evmWalletConnect ? openAccountModal() : openConnectModal()
-                              }, 300)
-                            }}
-                          >
-                            {labels?.switch_chain}
-                          </MenuItem>
-                        ) : null} */}
+                       
                         {disconnect ? (
                           <MenuItem
                             className={classNames('border border-t border-zinc-500', itemsClass)}

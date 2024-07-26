@@ -3,8 +3,6 @@ import dynamic from 'next/dynamic'
 import { Connect2ICProvider } from '@connect2ic/react'
 import { ICPConnectProvider } from '@/components/context/chains/icp/connect'
 import { CustomPlugWallet } from '@/lib/utils/providers/plug'
-// import { CustomInternetIdentity } from '@/lib/utils/providers/ii'
-// import { CustomNFID } from '@/lib/utils/providers/nfid'
 
 import '@connect2ic/core/style.css'
 
@@ -15,6 +13,9 @@ const { title } = config
 const ICP2Dynamic = dynamic(() => import('@connect2ic/react').then(module => module.Connect2ICProvider) as any, {
   ssr: false,
 }) as typeof Connect2ICProvider
+
+const ConnectDialogDynamic = dynamic(() => import('@connect2ic/react').then(mod => mod.ConnectDialog), { ssr: false })
+
 
 export const ICPContextProvider: FC<{ children: ReactNode }> = ({ children, ...props }) => {
   const [client, setClient] = useState(null)
@@ -29,8 +30,6 @@ export const ICPContextProvider: FC<{ children: ReactNode }> = ({ children, ...p
         providers: [
           new InternetIdentity(),
           new NFID(),
-          // new CustomInternetIdentity(),
-          // new CustomNFID(),
           new CustomPlugWallet(),
           new InfinityWallet(),
           (window as any).icx
@@ -60,6 +59,7 @@ export const ICPContextProvider: FC<{ children: ReactNode }> = ({ children, ...p
   return (
     <ICP2Dynamic client={client}>
       <ICPConnectProvider>{children}</ICPConnectProvider>
+      <ConnectDialogDynamic />
     </ICP2Dynamic>
   )
 }

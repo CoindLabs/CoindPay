@@ -69,7 +69,18 @@ export const payChains = [
     ...pay?.zkSync,
   },
   {
+    name: isProd ? 'Aurora' : 'Aurora Testnet',
+    icon: `${domains.cdn}/static/social/aurora.svg`,
+    chainId: isProd ? 1313161554 : 1313161555,
+    chainIdProd: 1313161554,
+    ...pay?.aurora,
+  },
+  {
     name: 'ICP',
+    disabled: true,
+  },
+  {
+    name: 'ZetaChain',
     disabled: true,
   },
   {
@@ -95,10 +106,6 @@ export const payChains = [
   {
     name: 'BeraChain',
     icon: logoChains.berachain,
-    disabled: true,
-  },
-  {
-    name: 'ZetaChain',
     disabled: true,
   },
   {

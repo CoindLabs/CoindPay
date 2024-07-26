@@ -49,6 +49,13 @@ let solTokens = {
     eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     zk: '0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E',
     usdt: '0x493257fD37EDB34451f62EDf8D2a0C418852bA4C',
+  },
+  auroraTokens = {
+    usdc: '0xB12BFcA5A55806AaF64E99521918A4bf0fC40802',
+    eth: '0x0000000000000000000000000000000000000000',
+    aurora: '0x8BEc47865aDe3B172A928df8f990Bc7f2A3b9f79',
+    usdt: '0x4988a896b1227218e4A686fdE5EabdcAbd91571f',
+    dai: '0xe3520349F477A5F6EB06107066048508498A291b',
   }
 
 let USDC = {
@@ -349,6 +356,41 @@ let solana = {
         address: zkSyncTokens.usdt,
       },
     ],
+  },
+  aurora = {
+    mocks: {
+      ...auroraTokens,
+      usdc: {
+        mainnet: auroraTokens.usdc,
+        sepolia: '0x3dcB6AdF46E4d854E94719b6ed9cfab6939cC1Cb',
+      },
+    },
+    list: [
+      {
+        ...USDC,
+        address: auroraTokens.usdc,
+      },
+      {
+        ...ETH,
+        address: auroraTokens.eth,
+        native: true,
+      },
+      {
+        symbol: 'AURORA',
+        name: 'Aurora Coin',
+        address: auroraTokens.aurora,
+        logoURI:
+          'https://static.debank.com/image/aurora_token/logo_url/0x8bec47865ade3b172a928df8f990bc7f2a3b9f79/ec63b91b7247ce338caa842eb6439530.png',
+      },
+      {
+        ...USDT,
+        address: auroraTokens.usdt,
+      },
+      {
+        ...DAI,
+        address: auroraTokens.dai,
+      },
+    ],
   }
 
-export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync }
+export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora }

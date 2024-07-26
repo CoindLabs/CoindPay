@@ -37,6 +37,7 @@ import {
   polygonAmoy,
   zkSyncSepoliaTestnet,
   berachainTestnetbArtio,
+  auroraTestnet,
 } from 'viem/chains'
 import { customChains } from './custom'
 
@@ -121,6 +122,8 @@ export const chainIdToNetWork = (chainId: number): Chain => {
       return customChains.jocChain as any
     case 300:
       return zkSyncSepoliaTestnet as any
+    case 1313161555:
+      return auroraTestnet as any
 
     case 1:
     default:

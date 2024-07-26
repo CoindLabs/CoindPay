@@ -21,7 +21,6 @@ import config from '@/config'
 const { themes } = config
 
 const ConnectButtonDynamic = dynamic(() => import('@connect2ic/react').then(mod => mod.ConnectButton), { ssr: false })
-const ConnectDialogDynamic = dynamic(() => import('@connect2ic/react').then(mod => mod.ConnectDialog), { ssr: false })
 
 export default function AccountWallet(props) {
   // evm
@@ -238,7 +237,6 @@ export default function AccountWallet(props) {
           ))}
         </section>
       </article>
-      <ConnectDialogDynamic />
     </GlobalContextProvider>
   )
 }

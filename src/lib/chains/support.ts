@@ -110,6 +110,36 @@ export const supportChains = [
         chain: arbitrum,
         icon: logoChains.arbitrum,
       },
+
+      {
+        name: 'Fuse',
+        chain: fuse,
+      },
+      {
+        name: 'Aurora',
+        chain: aurora,
+        icon: logoChains.aurora,
+      },
+      {
+        name: 'BSC',
+        chain: bsc,
+        icon: logoChains.bnb,
+      },
+      {
+        name: 'Polygon',
+        chain: polygon,
+        icon: logoChains.polygon,
+      },
+      {
+        name: 'zkSync',
+        chain: zkSync,
+        icon: logoChains.zksync,
+      },
+      {
+        name: 'Sei',
+        chain: sei,
+        icon: logoChains.sei,
+      },
       {
         name: 'Avalanche',
         chain: avalanche,
@@ -124,25 +154,6 @@ export const supportChains = [
         name: 'Gnosis',
         chain: gnosis,
         icon: logoChains.gnosis,
-      },
-      {
-        name: 'Sei',
-        chain: sei,
-        icon: logoChains.sei,
-      },
-      {
-        name: 'Fuse',
-        chain: fuse,
-      },
-      {
-        name: 'BSC',
-        chain: bsc,
-        icon: logoChains.bnb,
-      },
-      {
-        name: 'Polygon',
-        chain: polygon,
-        icon: logoChains.polygon,
       },
       {
         name: 'Metis',
@@ -166,11 +177,6 @@ export const supportChains = [
         chain: scroll,
       },
       {
-        name: 'zkSync',
-        chain: zkSync,
-        icon: logoChains.zksync,
-      },
-      {
         name: 'Mint',
         chain: customChains.Mint,
         icon: customChains.Mint.icon,
@@ -188,11 +194,6 @@ export const supportChains = [
         name: 'Boba',
         chain: boba,
         icon: logoChains.boba,
-      },
-      {
-        name: 'Aurora',
-        chain: aurora,
-        icon: logoChains.aurora,
       },
       {
         name: 'Moonbeam',
