@@ -1,4 +1,5 @@
 import { env } from '@/lib/types/env'
+import { logoChains } from './logo'
 
 let mainnet = env?.isProd
 
@@ -56,6 +57,12 @@ let solTokens = {
     aurora: '0x8BEc47865aDe3B172A928df8f990Bc7f2A3b9f79',
     usdt: '0x4988a896b1227218e4A686fdE5EabdcAbd91571f',
     dai: '0xe3520349F477A5F6EB06107066048508498A291b',
+  },
+  zetaTokens = {
+    zeta: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    usdc: '0x0cbe0df132a6c6b4a2974fa1b7fb953cf0cc798a',
+    eth: '0xd97b1de3619ed2c6beb3860147e30ca8a7dc9891',
+    usdt: '0x7c8dda80bbbe1254a7aacf3219ebe1481c6e01d7',
   }
 
 let USDC = {
@@ -112,7 +119,7 @@ let solana = {
       ...ethTokens,
       usdc: {
         mainnet: ethTokens.usdc,
-        sepolia: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
+        dev: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238',
       },
     },
     list: [
@@ -140,7 +147,7 @@ let solana = {
       ...baseTokens,
       usdc: {
         mainnet: baseTokens.usdc,
-        sepolia: '0x036CbD53842c5426634e7929541eC2318f3dCF7e',
+        dev: '0x036CbD53842c5426634e7929541eC2318f3dCF7e',
       },
     },
     list: [
@@ -197,7 +204,7 @@ let solana = {
       ...opTokens,
       usdc: {
         mainnet: opTokens.usdc,
-        sepolia: '0x5fd84259d66Cd46123540766Be93DFE6D43130D7',
+        dev: '0x5fd84259d66Cd46123540766Be93DFE6D43130D7',
       },
     },
     list: [
@@ -231,7 +238,7 @@ let solana = {
       ...arbTokens,
       usdc: {
         mainnet: arbTokens.usdc,
-        sepolia: '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d',
+        dev: '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d',
       },
     },
     list: [
@@ -247,7 +254,7 @@ let solana = {
       {
         symbol: 'ARB',
         name: 'Arbitrum',
-        logoURI: 'https://cryptofonts.com/img/icons/arb.svg',
+        logoURI: logoChains.arbitrum,
         address: arbTokens.arb,
       },
       {
@@ -265,7 +272,7 @@ let solana = {
       ...bscTokens,
       usdc: {
         mainnet: bscTokens.usdc,
-        sepolia: '0x64544969ed7EBf5f083679233325356EbE738930',
+        dev: '0x64544969ed7EBf5f083679233325356EbE738930',
       },
     },
     list: [
@@ -301,7 +308,7 @@ let solana = {
       ...polygonTokens,
       usdc: {
         mainnet: polygonTokens.usdc,
-        sepolia: '0x41e94eb019c0762f9bfcf9fb1e58725bfb0e7582',
+        dev: '0x41e94eb019c0762f9bfcf9fb1e58725bfb0e7582',
       },
     },
     list: [
@@ -331,7 +338,7 @@ let solana = {
       ...zkSyncTokens,
       usdc: {
         mainnet: zkSyncTokens.usdc,
-        sepolia: '0xAe045DE5638162fa134807Cb558E15A3F5A7F853',
+        dev: '0xAe045DE5638162fa134807Cb558E15A3F5A7F853',
       },
     },
     list: [
@@ -362,7 +369,7 @@ let solana = {
       ...auroraTokens,
       usdc: {
         mainnet: auroraTokens.usdc,
-        sepolia: '0x3dcB6AdF46E4d854E94719b6ed9cfab6939cC1Cb',
+        dev: '0x3dcB6AdF46E4d854E94719b6ed9cfab6939cC1Cb',
       },
     },
     list: [
@@ -391,6 +398,33 @@ let solana = {
         address: auroraTokens.dai,
       },
     ],
+  },
+  zeta = {
+    mocks: {
+      ...zetaTokens,
+      usdc: zetaTokens.usdc,
+    },
+    list: [
+      {
+        symbol: 'ZETA',
+        name: 'ZetaChain Coin',
+        address: zetaTokens.zeta,
+        logoURI: logoChains.zeta,
+        native: true,
+      },
+      {
+        ...USDC,
+        symbol: 'USDC.ETH',
+        name: 'ZRC20 USDC on ETH',
+        address: zetaTokens.usdc,
+      },
+      {
+        ...ETH,
+        symbol: 'ETH.ETH',
+        name: 'ZRC20 ETH on ETH',
+        address: zetaTokens.eth,
+      },
+    ],
   }
 
-export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora }
+export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, zeta }

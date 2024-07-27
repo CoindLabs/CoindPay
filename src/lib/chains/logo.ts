@@ -20,6 +20,7 @@ export const logoChains = {
   manta: `${domains.cdn}/static/social/manta.svg`,
   mode: `${domains.cdn}/static/social/mode.svg`,
   fuse: `${domains.cdn}/static/social/fuse.svg`,
+  zeta: `${domains.cdn}/static/social/zeta.svg`,
   rootstock: 'https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/rootstock.svg',
   boba: 'https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/boba.png',
   aurora: 'https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/aurora.png',

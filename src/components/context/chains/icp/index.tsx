@@ -16,7 +16,6 @@ const ICP2Dynamic = dynamic(() => import('@connect2ic/react').then(module => mod
 
 const ConnectDialogDynamic = dynamic(() => import('@connect2ic/react').then(mod => mod.ConnectDialog), { ssr: false })
 
-
 export const ICPContextProvider: FC<{ children: ReactNode }> = ({ children, ...props }) => {
   const [client, setClient] = useState(null)
 

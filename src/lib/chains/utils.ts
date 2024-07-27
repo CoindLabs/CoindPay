@@ -38,6 +38,7 @@ import {
   zkSyncSepoliaTestnet,
   berachainTestnetbArtio,
   auroraTestnet,
+  zetachainAthensTestnet,
 } from 'viem/chains'
 import { customChains } from './custom'
 
@@ -124,6 +125,8 @@ export const chainIdToNetWork = (chainId: number): Chain => {
       return zkSyncSepoliaTestnet as any
     case 1313161555:
       return auroraTestnet as any
+    case 7001:
+      return zetachainAthensTestnet as any
 
     case 1:
     default:

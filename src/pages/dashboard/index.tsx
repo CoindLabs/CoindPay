@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { Avatar, Box, Button, Drawer } from '@mui/material'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
+import { formatUnits } from 'viem'
 import { CountUp } from 'use-count-up'
 import StudioLayout from '@/components/layout/studio'
 import NmIcon from '@/components/nm-icon'
@@ -12,7 +13,13 @@ import NmTooltip from '@/components/nm-tooltip'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
 import { FlipWords } from '@/components/aceternity-ui/flip-words'
 import ItemChainsSwiper from '@/components/dapp/home/swiper-card/item-chains'
-import { get1InchTokenSvc, getJupTokenPriceSvc, getMoralisTokenSvc, getSolTokenListSvc } from '@/services/common'
+import {
+  get1InchTokenSvc,
+  getJupTokenPriceSvc,
+  getMoralisTokenSvc,
+  getSolTokenListSvc,
+  getSushiTokenSvc,
+} from '@/services/common'
 import { getPaymentOrderSvc } from '@/services/pay'
 import { useMobile, useUserData } from '@/lib/hooks'
 import { getNFTOrScanUrl, getShortenMidDots } from '@/lib/utils'
@@ -24,7 +31,7 @@ import config from '@/config'
 
 let animateWords = ['Business', 'Invoice', 'Checkout', 'Recurring', 'Connect']
 
-const { ethereum, base, optimism, arbitrum, bsc, polygon, zkSync } = pay
+const { ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, zeta } = pay
 const { domains } = config
 
 export default function Dashboard() {
@@ -39,6 +46,8 @@ export default function Dashboard() {
     ...bsc.list,
     ...polygon.list,
     ...zkSync.list,
+    ...aurora.list,
+    ...zeta.list,
   ])
   const tokensPrice = useRef([])
   const [loading, setPaymentsLoading] = useState(false)
@@ -88,7 +97,9 @@ export default function Dashboard() {
         arbList = res?.data?.filter(row => row?.chain?.includes('Arbitrum')),
         bscList = res?.data?.filter(row => row?.chain?.includes('BSC')),
         polygonList = res?.data?.filter(row => row?.chain?.includes('Polygon')),
-        zkSyncList = res?.data?.filter(row => row?.chain?.includes('zkSync'))
+        zkSyncList = res?.data?.filter(row => row?.chain?.includes('zkSync')),
+        auroraList = res?.data?.filter(row => row?.chain?.includes('Aurora')),
+        zetaList = res?.data?.filter(row => row?.chain?.includes('Zeta'))
 
       let chainIdProd = name => payChains.find(row => row.name.includes(name))?.['chainIdProd']
 
@@ -117,6 +128,12 @@ export default function Dashboard() {
       }
       if (zkSyncList?.length) {
         await get1InchTokenPrice([...new Set(zkSyncList.map(item => item.contract))], chainIdProd('zkSync'))
+      }
+      if (auroraList?.length) {
+        await get1InchTokenPrice([...new Set(auroraList.map(item => item.contract))], chainIdProd('Aurora'))
+      }
+      if (zetaList?.length) {
+        await getSushiTokenPrice([...new Set(zetaList.map(item => item.contract))], chainIdProd('Zeta'))
       }
 
       paymentsListCache.current = res?.data
@@ -154,6 +171,44 @@ export default function Dashboard() {
       address,
     })
     if (res) tokensPrice.current = Object.assign(tokensPrice.current, res)
+  }
+
+  const getSushiTokenPrice = async (addresses, chainId) => {
+    try {
+      const requests = addresses.map(address =>
+        getSushiTokenSvc({
+          chainId,
+          tokenIn: address,
+          tokenOut: payChains.find(row => row?.['chainId'] === chainId)?.['mocks']?.usdc,
+          amount: 1000000000000000000,
+        })
+          .then(res => {
+            if (res?.assumedAmountOut) {
+              return {
+                address,
+                price: Number(formatUnits(res.assumedAmountOut, 6)),
+              }
+            }
+          })
+          .catch(error => {
+            console.error(`Error fetching price for address ${address}:`, error)
+            return null
+          })
+      )
+
+      const results = await Promise.all(requests)
+
+      results.forEach(result => {
+        if (result) {
+          tokensPrice.current = {
+            ...tokensPrice.current,
+            [result.address]: result.price,
+          }
+        }
+      })
+    } catch (error) {
+      console.error('Error in getSushiTokenPrice:', error)
+    }
   }
 
   /**
@@ -317,7 +372,12 @@ export default function Dashboard() {
               src={item?.icon || getActiveChain({ name: item?.name })?.icon}
               className={classNames(
                 item?.disabled ? 'cursor-not-allowed opacity-20' : 'cursor-pointer',
-                index == 0 || item.name == 'Solana' ? 'bg-black p-2' : 'bg-transparent'
+                {
+                  'bg-black p-1.5': item?.name
+                    .split(' ')
+                    .some(word => ['Solana', 'Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(word)),
+                },
+                classes
               )}
             />
           )
@@ -331,20 +391,12 @@ export default function Dashboard() {
               onClick={() => handleSwitchChain(index)}
             >
               {index == chainIndex && !item?.disabled ? (
-                <Box
-                  className={classNames(
-                    'pr-2.5 py-px flex items-center rounded-full transition-all bg-create-gradient-004',
-                    item?.disabled ? 'cursor-not-allowed' : 'cursor-pointer',
-                    {
-                      'px-3': ['Arbitrum', 'BSC', 'Polygon'].includes(item?.name),
-                    }
-                  )}
-                >
-                  {avatarBox()}
+                <Box className="pr-2.5 py-px flex items-center rounded-full transition-all bg-create-gradient-004">
+                  {avatarBox({ classes: 'hover:scale-105 transition-all' })}
                   <strong className="pl-1 text-white">{item?.name}</strong>
                 </Box>
               ) : (
-                avatarBox({ classes: 'border border-gray-100/50 hover:border-2 transition-all' })
+                avatarBox()
               )}
             </li>
           )
@@ -393,8 +445,8 @@ export default function Dashboard() {
                         <Avatar src={tokenItem?.logoURI} className="max-sm:size-8" />
                         {chainIcon({
                           classes: classNames('size-4 sm:size-5 border absolute top-0 right-0', {
-                            'bg-white p-1': ['Arbitrum', 'BSC', 'Polygon'].includes(item?.chain),
-                            'bg-black p-1': item?.chain == 'Solana',
+                            'bg-white': ['Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(item?.chain),
+                            'bg-black': item?.chain == 'Solana',
                           }),
                         })}
                       </li>

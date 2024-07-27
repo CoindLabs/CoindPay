@@ -121,6 +121,11 @@ export const supportChains = [
         icon: logoChains.aurora,
       },
       {
+        name: 'Zeta',
+        chain: zetachain,
+        icon: logoChains.zeta,
+      },
+      {
         name: 'BSC',
         chain: bsc,
         icon: logoChains.bnb,
@@ -222,10 +227,6 @@ export const supportChains = [
         name: 'Berachain',
         chain: berachainTestnetbArtio,
         icon: logoChains.berachain,
-      },
-      {
-        name: 'ZetaChain',
-        chain: zetachain,
       },
       {
         name: 'Japan Open Chain',

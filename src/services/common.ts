@@ -89,7 +89,11 @@ export function getSerperImageSvc(data) {
     params: data,
   })
 }
-
+/**
+ * iframely卡片服务
+ * @param data
+ * @returns
+ */
 export function getIframelySvc(data) {
   if (!data?.url) return
   return fetcher({
@@ -164,6 +168,23 @@ export function get1InchTokenSvc(params) {
     baseURL: `https://token-prices.1inch.io/v1.1/${chainId}/${address}`,
     params: {
       currency: 'usd',
+    },
+  })
+}
+
+export function getSushiTokenSvc(params) {
+  if (!params?.chainId || !params?.tokenIn) return
+  const { chainId, tokenIn, tokenOut, amount } = params
+  // https://api.sushi.com/swap/v4/7000?tokenIn=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&tokenOut=0x0cbe0dF132a6c6B4a2974Fa1b7Fb953CF0Cc798a&amount=1000000000000000000&maxPriceImpact=0.001&gasPrice=10100000000&preferSushi=true
+  return fetcher({
+    baseURL: `https://api.sushi.com/swap/v4/${chainId}`,
+    params: {
+      tokenIn,
+      tokenOut,
+      amount,
+      maxPriceImpact: 0.001,
+      gasPrice: 10100000000,
+      preferSushi: true,
     },
   })
 }

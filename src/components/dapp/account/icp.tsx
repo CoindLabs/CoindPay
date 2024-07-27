@@ -147,7 +147,6 @@ const ICPModal = ({ connected }: { connected?: boolean }) => {
                             {copied ? labels?.copied : labels?.copy_address}
                           </MenuItem>
                         ) : null}
-                       
                         {disconnect ? (
                           <MenuItem
                             className={classNames('border border-t border-zinc-500', itemsClass)}

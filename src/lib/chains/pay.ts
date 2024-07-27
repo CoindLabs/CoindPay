@@ -76,11 +76,14 @@ export const payChains = [
     ...pay?.aurora,
   },
   {
-    name: 'ICP',
-    disabled: true,
+    name: isProd ? 'Zeta' : 'Zeta Testnet',
+    icon: logoChains.zeta,
+    chainId: isProd ? 7000 : 7001,
+    chainIdProd: 7000,
+    ...pay?.zeta,
   },
   {
-    name: 'ZetaChain',
+    name: 'ICP',
     disabled: true,
   },
   {

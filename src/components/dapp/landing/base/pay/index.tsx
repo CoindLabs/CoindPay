@@ -49,7 +49,7 @@ import NmGlobalWallet from '@/components/nm-global-wallet'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
 import { useSnackbar } from '@/components/context/snackbar'
 import { getPaymentOrderSvc } from '@/services/pay'
-import { get1InchTokenSvc, getJupTokenPriceSvc, getSolTokenListSvc } from '@/services/common'
+import { get1InchTokenSvc, getJupTokenPriceSvc, getSolTokenListSvc, getSushiTokenSvc } from '@/services/common'
 import { getNFTOrScanUrl, getRandomNumber, getShortenMidDots } from '@/lib/utils'
 import { useChainConnect, useEVMWalletConnect, useGlobalWalletConnect, useSolAccount, useUserData } from '@/lib/hooks'
 import { payChains, _supportChains, wagmiCoreConfig } from '@/lib/chains'
@@ -124,7 +124,7 @@ const PaymentCard = ({ ...props }) => {
   const tokensEvm = useMemo(
     () =>
       !env?.isProd && tokens.address == payChains[chainIndex]?.['mocks']?.usdc?.mainnet
-        ? payChains[chainIndex]?.['mocks']?.usdc?.sepolia
+        ? payChains[chainIndex]?.['mocks']?.usdc?.dev
         : tokens.address,
     [tokens.address]
   )
@@ -600,6 +600,8 @@ const PaymentCard = ({ ...props }) => {
   }, [tokens?.list, chainIndex])
 
   useEffect(() => {
+    chainIndex ? getTokenPrice(tokens?.address) : getJupTokenPrice({ ids: tokens.symbol })
+
     let interval
     if (paymentType !== 5) {
       interval = setInterval(() => {
@@ -609,7 +611,7 @@ const PaymentCard = ({ ...props }) => {
       clearInterval(interval)
     }
     return () => clearInterval(interval)
-  }, [paymentType, payInputValue, tokens.address])
+  }, [paymentType, payInputValue, tokens.address, tokens.symbol])
 
   const delay = useCallback((ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms))
@@ -677,7 +679,6 @@ const PaymentCard = ({ ...props }) => {
         list: res.slice(0, 20),
       }
       setTokenList(tokensNew)
-      getTokenPrice(tokensNew.address)
     }
     setTokenListLoading(false)
   }
@@ -706,13 +707,33 @@ const PaymentCard = ({ ...props }) => {
     setTokenPriceLoading(false)
   }
 
+  const getSushiTokenPrice = async (address = null) => {
+    setTokenPriceLoading(true)
+
+    let res = await getSushiTokenSvc({
+      chainId: payChains[chainIndex]?.['chainIdProd'],
+      tokenIn: address || tokensItem?.address || tokens.address,
+      tokenOut: payChains[chainIndex]?.['mocks']?.usdc,
+      amount: 1000000000000000000,
+    })
+
+    if (res?.assumedAmountOut) {
+      setTokenPrice(Number(formatUnits(res?.assumedAmountOut, 6)))
+    }
+
+    setTokenPriceLoading(false)
+  }
+
   const getTokenPrice = (address = null) => {
     switch (chainIndex) {
       case 0:
         if (tokens.address == pay.solana.mocks.usdc) return setTokenPrice(1)
         getJupTokenPrice({ ids: address || tokensItem?.symbol || tokens.address })
         break
-      case 1:
+      case 9:
+        if (tokens.address == pay.zeta.mocks.usdc) return setTokenPrice(1)
+        getSushiTokenPrice(address)
+        break
       default:
         get1InchTokenPrice(address)
         break
@@ -946,7 +967,7 @@ const PaymentCard = ({ ...props }) => {
                 {tokenPrice ? (
                   <p
                     className={classNames({
-                      'animate__animated animate__fadeIn': tokenPriceLoading,
+                      'animate__animated animate__fadeIn blur': tokenPriceLoading,
                     })}
                   >
                     ≈ {tokensAmount} {tokensItem?.symbol}
@@ -958,9 +979,7 @@ const PaymentCard = ({ ...props }) => {
                       size="small"
                       variant="outlined"
                       className="rounded-md scale-80"
-                      onClick={() =>
-                        chainIndex ? get1InchTokenPrice() : getJupTokenPrice({ ids: tokensItem?.symbol })
-                      }
+                      onClick={() => (chainIndex ? getTokenPrice() : getJupTokenPrice({ ids: tokensItem?.symbol }))}
                     >
                       Try
                     </Button>
@@ -1043,7 +1062,6 @@ const PaymentCard = ({ ...props }) => {
                     )}
                     onClick={() => {
                       setTokenList({ ...tokens, address: row?.address, symbol: row?.symbol })
-                      chainIndex ? get1InchTokenPrice(row?.address) : getJupTokenPrice({ ids: row.symbol })
                       setPaymentType(0)
                       handleTokenListReset()
                     }}
@@ -1052,7 +1070,11 @@ const PaymentCard = ({ ...props }) => {
                       <Avatar src={row?.logoURI || row?.icon_url} className="size-9 sm:size-10" />
                       <Avatar
                         src={payChains[chainIndex]?.icon || getActiveChain({ name: payChains[chainIndex]?.name })?.icon}
-                        className="size-4 p-0.5 bg-black border absolute bottom-0 right-0"
+                        className={classNames('size-4 border absolute bottom-0 right-0', {
+                          'bg-black': payChains[chainIndex]?.name
+                            .split(' ')
+                            .some(word => ['Solana', 'Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(word)),
+                        })}
                       />
                     </Box>
                     <ul className="flex-1 flex items-center px-2 gap-2">
@@ -1237,9 +1259,7 @@ const PaymentCard = ({ ...props }) => {
             let avatarBox = ({ classes = null } = {}) => (
               <Avatar
                 src={item?.icon || getActiveChain({ name: item?.name })?.icon}
-                className={classNames(chainAvatarClass, classes, {
-                  'cursor-pointer': !item?.disabled,
-                })}
+                className={classNames(chainAvatarClass, classes, item?.disabled ? 'opacity-40' : 'cursor-pointer')}
               />
             )
             return (

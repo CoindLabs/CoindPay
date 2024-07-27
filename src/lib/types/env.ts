@@ -2,6 +2,7 @@ export const env = {
   moralisKey: process.env.MORALIS_KEY,
   alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_ID,
   serverAlchemyId: process.env.SERVER_ALCHEMY_ID,
+  rpc1Key: process.env.NEXT_PUBLIC_1RPC_KEY,
   officialEvmRecipient: process.env.NEXT_PUBLIC_OFFICIAL_EVM_RECEIPT,
   officialSolRecipient: process.env.NEXT_PUBLIC_OFFICIAL_SOL_RECEIPT,
   mockWalletAddress: process.env.NEXT_PUBLIC_LOCAL_MOCK_WALLET_ADDRESS,
