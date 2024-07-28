@@ -123,7 +123,6 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 Different branches correspond to different environments
 
 - production：master branch <https://coindpay.xyz>
-- development：dev branch <https://dev.coindpay.xyz>
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
