@@ -31,6 +31,7 @@ import { setUserInfo } from '@/store/slice/user'
 import { icpInfo } from '@/store/slice/icp'
 import { getActiveChain } from '@/lib/web3'
 import { useAppDispatch, useGlobalWalletConnect, useSolAccount, useUserData } from '@/lib/hooks'
+import { logoChains } from '@/lib/chains'
 
 import config from '@/config'
 
@@ -170,8 +171,9 @@ const StudioHeader = () => {
       case 'sol':
         return getActiveChain({ name: 'Solana' })?.icon
         break
+      case 'icp':
       default:
-        return logo.pro_colors
+        return logoChains.icp
         break
     }
   }

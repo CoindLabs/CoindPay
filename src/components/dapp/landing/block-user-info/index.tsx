@@ -50,7 +50,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
   const scan_url = getNFTOrScanUrl({
     type: 'address',
     address: addressDefault?.value,
-    chainType: addressDefault?.type,
+    chainType: addressDefault?.chain
   })
 
   const handleEventAction = ({ type = 'address', address = null, label = null, event = null, toast = true }) => {

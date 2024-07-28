@@ -455,9 +455,9 @@ export default function Dashboard() {
                           target="_blank"
                           rel="noopener noreferrer nofollow"
                           href={getNFTOrScanUrl({
+                            type: 'address',
                             chain: item.chain?.replace(/\s/g, '-'),
                             chainId: item?.chainId,
-                            type: 'address',
                             address: item?.payer,
                           })}
                           className="block text-neutral-900 hover:text-theme-accent font-semibold text-md"
@@ -468,9 +468,9 @@ export default function Dashboard() {
                           target="_blank"
                           rel="noopener noreferrer nofollow"
                           href={getNFTOrScanUrl({
+                            type: 'tx',
                             chain: item.chain?.replace(/\s/g, '-'),
                             chainId: item?.chainId,
-                            type: 'tx',
                             hash: item?.signature,
                           })}
                           className="text-neutral-800/50 hover:text-theme-accent/50 text-sm"
