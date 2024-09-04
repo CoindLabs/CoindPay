@@ -30,6 +30,10 @@ const nextConfig = withPWA({
   webpack: config => {
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
     config.resolve.fallback = { fs: false, net: false, tls: false }
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack', 'url-loader'],
+    })
     return config
   },
   i18n: {
@@ -39,7 +43,7 @@ const nextConfig = withPWA({
   experimental: {
     esmExternals: true,
   },
-  transpilePackages: ['ahooks', '@connect2ic/react', '@connect2ic/core'],
+  transpilePackages: ['ahooks', '@connect2ic/react', '@connect2ic/core', '@dfinity/principal'],
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },

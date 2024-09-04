@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { Avatar, Box, Button, Drawer } from '@mui/material'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
+import { ChainId, ChainKey, getTokens } from '@lifi/sdk'
 import { formatUnits } from 'viem'
 import { CountUp } from 'use-count-up'
 import StudioLayout from '@/components/layout/studio'
@@ -29,10 +30,11 @@ import * as pay from '@/lib/chains/tokens'
 
 import config from '@/config'
 
-let animateWords = ['Business', 'Invoice', 'Checkout', 'Recurring', 'Connect']
+const animateWords = ['Business', 'Invoice', 'Checkout', 'Recurring', 'Connect']
 
-const { ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, zeta } = pay
 const { domains } = config
+
+const { ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis } = pay
 
 export default function Dashboard() {
   const isMobile = useMobile()
@@ -47,7 +49,9 @@ export default function Dashboard() {
     ...polygon.list,
     ...zkSync.list,
     ...aurora.list,
+    ...fuse.list,
     ...zeta.list,
+    ...metis.list,
   ])
   const tokensPrice = useRef([])
   const [loading, setPaymentsLoading] = useState(false)
@@ -90,16 +94,7 @@ export default function Dashboard() {
     setPaymentsLoading(spin)
     let res = await getPaymentOrderSvc({ uuid: user?.id })
     if (res?.ok && res?.data?.length) {
-      let solList = res?.data?.filter(row => row?.chain?.includes('Solana')),
-        ethList = res?.data?.filter(row => row?.chain?.includes('Ethereum')),
-        baseList = res?.data?.filter(row => row?.chain?.includes('Base') || payChains[2]?.['chainId'] == row?.chainId),
-        opList = res?.data?.filter(row => row?.chain?.includes('Optimism')),
-        arbList = res?.data?.filter(row => row?.chain?.includes('Arbitrum')),
-        bscList = res?.data?.filter(row => row?.chain?.includes('BSC')),
-        polygonList = res?.data?.filter(row => row?.chain?.includes('Polygon')),
-        zkSyncList = res?.data?.filter(row => row?.chain?.includes('zkSync')),
-        auroraList = res?.data?.filter(row => row?.chain?.includes('Aurora')),
-        zetaList = res?.data?.filter(row => row?.chain?.includes('Zeta'))
+      let solList = res?.data?.filter(row => row?.chain?.includes('Solana'))
 
       let chainIdProd = name => payChains.find(row => row.name.includes(name))?.['chainIdProd']
 
@@ -108,38 +103,35 @@ export default function Dashboard() {
           ids: [...new Set(solList.map(item => item.symbol))].join(','),
         })
       }
-      if (ethList?.length) {
-        await get1InchTokenPrice([...new Set(ethList.map(item => item.contract))], chainIdProd('Ethereum'))
-      }
-      if (baseList?.length) {
-        await get1InchTokenPrice([...new Set(baseList.map(item => item.contract))], chainIdProd('Base'))
-      }
-      if (opList?.length) {
-        await get1InchTokenPrice([...new Set(opList.map(item => item.contract))], chainIdProd('Optimism'))
-      }
-      if (arbList?.length) {
-        await get1InchTokenPrice([...new Set(arbList.map(item => item.contract))], chainIdProd('Arbitrum'))
-      }
-      if (bscList?.length) {
-        await get1InchTokenPrice([...new Set(bscList.map(item => item.contract))], chainIdProd('BSC'))
-      }
-      if (polygonList?.length) {
-        await get1InchTokenPrice([...new Set(polygonList.map(item => item.contract))], chainIdProd('Polygon'))
-      }
-      if (zkSyncList?.length) {
-        await get1InchTokenPrice([...new Set(zkSyncList.map(item => item.contract))], chainIdProd('zkSync'))
-      }
-      if (auroraList?.length) {
-        await get1InchTokenPrice([...new Set(auroraList.map(item => item.contract))], chainIdProd('Aurora'))
-      }
-      if (zetaList?.length) {
-        await getSushiTokenPrice([...new Set(zetaList.map(item => item.contract))], chainIdProd('Zeta'))
+
+      let paymentsData = res?.data.filter(item => !item?.chain.includes('Zeta'))
+
+      const lifiChainIds = [
+        ...new Set(
+          paymentsData.map(item => chainIdProd(item?.chain) as ChainId | ChainKey) // 类型断言
+        ),
+      ] as (ChainId | ChainKey)[]
+
+      const chainTokens = await getTokens({
+        chains: lifiChainIds,
+      })
+
+      if (chainTokens?.tokens) {
+        for (let item of paymentsData) {
+          if (item.chainId) {
+            tokensPrice.current = Object.assign(tokensPrice.current, {
+              [item.contract]: chainTokens.tokens[chainIdProd(item?.chain)]?.find(row => row.address == item.contract)
+                ?.priceUSD,
+            })
+          }
+        }
       }
 
-      paymentsListCache.current = res?.data
+      paymentsListCache.current = paymentsData
+
       setPaymentsData({
-        list: res?.data,
-        total: res?.data?.reduce(
+        list: paymentsData,
+        total: paymentsData?.reduce(
           (total, item) =>
             total + item.amount * (handleTokenPriceFactory(item?.symbol) || handleTokenPriceFactory(item?.contract)),
           0
@@ -160,7 +152,6 @@ export default function Dashboard() {
   const getJupTokenPrice = async ({ ids }) => {
     let res = await getJupTokenPriceSvc({ ids })
     if (res?.data) {
-      tokensPrice.current = Object.assign(tokensPrice.current, res?.data)
     }
   }
 
@@ -432,7 +423,7 @@ export default function Dashboard() {
                   height={36}
                   src={
                     _supportChains.find(row => item?.chain?.includes(row?.name))?.icon ||
-                    `https://icons.llamao.fi/icons/chains/rsz_${item?.chain?.toLowerCase()}?w=100&h=100`
+                    getActiveChain({ name: item?.chain })?.icon
                   }
                   className={classNames('rounded-full', classes)}
                 />

@@ -41,6 +41,11 @@ const config = {
     light: `${domains.cdn}/stream/brand/logo/light.png`,
     dark: `${domains.cdn}/stream/brand/logo/dark.png`,
     pro_colors: `${domains.cdn}/stream/brand/logo/pro_colors.svg`,
+    pro_dark: `${domains.cdn}/stream/brand/logo/pro_dark.svg`,
+    pro_mix_black: `${domains.cdn}/stream/brand/logo/pro_mix_black.png`,
+    pro_mix_white: `${domains.cdn}/stream/brand/logo/pro_mix_white.png`,
+    pro_mix_colors: `${domains.cdn}/stream/brand/logo/pro_mix_colors.png`,
+    pro_mix_colors_light: `${domains.cdn}/stream/brand/logo/pro_mix_colors_light.png`,
   },
   images: {
     placeholder: 'https://picsum.photos/256/256/?blur=5',

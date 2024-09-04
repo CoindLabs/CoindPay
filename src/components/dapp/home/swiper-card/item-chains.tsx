@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper'
 import { useMobile } from '@/lib/hooks'
 import { _supportChains } from '@/lib/chains'
+import { getActiveChain } from '@/lib/web3'
 
 const ItemChainsSwiper = ({ data = [], ...props }) => {
   const isMobile = useMobile()
@@ -27,7 +28,7 @@ const ItemChainsSwiper = ({ data = [], ...props }) => {
         return (
           <SwiperSlide key={`chain-item-${item?.type || item?.name}-${index}`} className="!w-auto">
             <Avatar
-              src={item?.icon || `https://icons.llamao.fi/icons/chains/rsz_${item?.name?.toLowerCase()}?w=100&h=100`}
+              src={item?.icon || getActiveChain({ name: item?.name })?.icon}
               className={classNames(
                 'bg-transparent shadow-sm size-12 hover:rotate-y-360 duration-1000 transition-all',
                 {

@@ -17,6 +17,7 @@ import { supportChains } from '@/lib/chains'
 import { getShortenMidDots } from '@/lib/utils'
 
 import config from '@/config'
+import { getActiveChain } from '@/lib/web3'
 
 const { themes } = config
 
@@ -132,10 +133,7 @@ export default function AccountWallet(props) {
                 {row.type == 'Non-EVM' && <ICPModal />}
                 {row.type == 'Non-EVM' && solanaWallet?.readyState === 'Installed' && publicKey && (
                   <Box className="p-3 w-full  border rounded-xl flex items-center justify-between">
-                    <Avatar
-                      src="https://icons.llamao.fi/icons/chains/rsz_solana?w=100&h=100"
-                      className="skeleton rounded-full"
-                    />
+                    <Avatar src={getActiveChain({ name: 'Solana' })?.icon} className="skeleton rounded-full" />
                     <ul className="flex-1 px-4 pr-6">
                       <li className="font-semibold">Solana</li>
                       <li className="text-neutral-400 text-sm">{solanaAccount}</li>
@@ -184,10 +182,7 @@ export default function AccountWallet(props) {
                         onClick={e => handleChainsAction(item, row.type)}
                       >
                         <Avatar
-                          src={
-                            item?.icon ||
-                            `https://icons.llamao.fi/icons/chains/rsz_${item?.name?.toLowerCase()}?w=100&h=100`
-                          }
+                          src={item?.icon || getActiveChain({ name: item?.name })?.icon}
                           className={classNames(
                             'bg-transparent shadow-sm hover:rotate-y-360 duration-1000 transition-all',
                             {

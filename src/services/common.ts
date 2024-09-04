@@ -175,9 +175,9 @@ export function get1InchTokenSvc(params) {
 export function getSushiTokenSvc(params) {
   if (!params?.chainId || !params?.tokenIn) return
   const { chainId, tokenIn, tokenOut, amount } = params
-  // https://api.sushi.com/swap/v4/7000?tokenIn=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&tokenOut=0x0cbe0dF132a6c6B4a2974Fa1b7Fb953CF0Cc798a&amount=1000000000000000000&maxPriceImpact=0.001&gasPrice=10100000000&preferSushi=true
+  // https://api.sushi.com/swap/v5/7000?tokenIn=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&tokenOut=0x0cbe0dF132a6c6B4a2974Fa1b7Fb953CF0Cc798a&amount=1000000000000000000&maxSlippage=0.005&gasPrice=10100000000&to=0xa323b49Fe61742527D081ECf8D5fE396515a3bFe&preferSushi=true&enableFee=true&feeReceiver=0xca226bd9c754F1283123d32B2a7cF62a722f8ADa&fee=0.0025&feeBy=output&includeTransaction=true&includeRoute=true
   return fetcher({
-    baseURL: `https://api.sushi.com/swap/v4/${chainId}`,
+    baseURL: `https://api.sushi.com/swap/v5/${chainId}`,
     params: {
       tokenIn,
       tokenOut,
@@ -185,6 +185,18 @@ export function getSushiTokenSvc(params) {
       maxPriceImpact: 0.001,
       gasPrice: 10100000000,
       preferSushi: true,
+    },
+  })
+}
+
+export function getLiFiTokenSvc(params) {
+  if (!params?.chain || !params?.token) return
+  const { chain, token } = params
+  return fetcher({
+    baseURL: 'https://li.quest/v1/token',
+    params: {
+      chain,
+      token,
     },
   })
 }

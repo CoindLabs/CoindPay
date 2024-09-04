@@ -12,7 +12,7 @@ import {
   linea,
   gnosis,
   metis,
-  zkSync,
+  zksync,
   blast,
   scroll,
   mode,
@@ -37,12 +37,12 @@ export const supportChains = [
     desc: 'Fast and low-cost Non-EVM（Ethereum Virtual Machine） Chains.',
     list: [
       {
-        name: 'ICP',
-        icon: logoChains.icp,
-      },
-      {
         name: 'Solana',
         icon: 'https://cryptofonts.com/img/icons/sol.svg',
+      },
+      {
+        name: 'ICP',
+        icon: logoChains.icp,
       },
       {
         name: 'Bitcoin',
@@ -110,7 +110,21 @@ export const supportChains = [
         chain: arbitrum,
         icon: logoChains.arbitrum,
       },
-
+      {
+        name: 'BSC',
+        chain: bsc,
+        icon: logoChains.bnb,
+      },
+      {
+        name: 'Polygon',
+        chain: polygon,
+        icon: logoChains.polygon,
+      },
+      {
+        name: 'Metis',
+        chain: metis,
+        icon: logoChains.metis,
+      },
       {
         name: 'Fuse',
         chain: fuse,
@@ -126,19 +140,13 @@ export const supportChains = [
         icon: logoChains.zeta,
       },
       {
-        name: 'BSC',
-        chain: bsc,
-        icon: logoChains.bnb,
-      },
-      {
-        name: 'Polygon',
-        chain: polygon,
-        icon: logoChains.polygon,
-      },
-      {
         name: 'zkSync',
-        chain: zkSync,
+        chain: zksync,
         icon: logoChains.zksync,
+      },
+      {
+        name: 'Scroll',
+        chain: scroll,
       },
       {
         name: 'Sei',
@@ -161,11 +169,6 @@ export const supportChains = [
         icon: logoChains.gnosis,
       },
       {
-        name: 'Metis',
-        chain: metis,
-        icon: logoChains.metis,
-      },
-      {
         name: 'Linea',
         chain: linea,
       },
@@ -176,15 +179,6 @@ export const supportChains = [
       {
         name: 'Blast',
         chain: blast,
-      },
-      {
-        name: 'Scroll',
-        chain: scroll,
-      },
-      {
-        name: 'Mint',
-        chain: customChains.Mint,
-        icon: customChains.Mint.icon,
       },
       {
         name: 'Mode',
@@ -228,21 +222,6 @@ export const supportChains = [
         chain: berachainTestnetbArtio,
         icon: logoChains.berachain,
       },
-      {
-        name: 'Japan Open Chain',
-        chain: customChains.jocChain,
-        icon: customChains.jocChain.icon,
-      },
-      {
-        name: 'XRPL EVM Sidechain',
-        chain: customChains.xrpLedger,
-        icon: customChains.xrpLedger.icon,
-      },
-      {
-        name: 'Xenea',
-        chain: customChains.Xenea,
-        icon: customChains.Xenea.icon,
-      },
     ],
   },
   {
@@ -265,6 +244,19 @@ export const supportChains = [
         chain: arbitrum,
       },
       {
+        name: 'Metis',
+        icon: logoChains.metis,
+        chain: metis,
+      },
+      {
+        name: 'Scroll',
+        chain: scroll,
+      },
+      {
+        name: 'Mode',
+        chain: mode,
+      },
+      {
         name: 'Mantle',
         icon: logoChains.mantle,
         chain: mantle,
@@ -282,22 +274,9 @@ export const supportChains = [
         chain: blast,
       },
       {
-        name: 'Scroll',
-        chain: scroll,
-      },
-      {
         name: 'zkSync',
-        chain: zkSync,
+        chain: zksync,
         icon: logoChains.zksync,
-      },
-      {
-        name: 'Mode',
-        chain: mode,
-      },
-      {
-        name: 'Metis',
-        icon: logoChains.metis,
-        chain: metis,
       },
     ],
   },

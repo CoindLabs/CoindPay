@@ -9,14 +9,14 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
+    chain: 'anomaly-andromeda-testnet',
+    id: 241120,
+    is_testnet: true,
+  },
+  {
     chain: 'arbitrum',
     id: 42161,
     is_testnet: false,
-  },
-  {
-    chain: 'arbitrum-goerli',
-    id: 421613,
-    is_testnet: true,
   },
   {
     chain: 'arbitrum-nova',
@@ -26,11 +26,6 @@ export const nftAvailableChains = [
   {
     chain: 'arbitrum-sepolia',
     id: 421614,
-    is_testnet: true,
-  },
-  {
-    chain: 'astria-devnet',
-    id: 912559,
     is_testnet: true,
   },
   {
@@ -44,14 +39,14 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
+    chain: 'b3-sepolia',
+    id: 1993,
+    is_testnet: true,
+  },
+  {
     chain: 'base',
     id: 8453,
     is_testnet: false,
-  },
-  {
-    chain: 'base-goerli',
-    id: 84531,
-    is_testnet: true,
   },
   {
     chain: 'base-sepolia',
@@ -60,11 +55,6 @@ export const nftAvailableChains = [
   },
   {
     chain: 'bitcoin',
-    id: null,
-    is_testnet: false,
-  },
-  {
-    chain: 'bitcoin-utxo',
     id: null,
     is_testnet: false,
   },
@@ -94,6 +84,11 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
+    chain: 'canto',
+    id: 7700,
+    is_testnet: false,
+  },
+  {
     chain: 'celo',
     id: 42220,
     is_testnet: false,
@@ -107,16 +102,6 @@ export const nftAvailableChains = [
     chain: 'ethereum',
     id: 1,
     is_testnet: false,
-  },
-  {
-    chain: 'ethereum-goerli',
-    id: 5,
-    is_testnet: true,
-  },
-  {
-    chain: 'ethereum-rinkeby',
-    id: 4,
-    is_testnet: true,
   },
   {
     chain: 'ethereum-sepolia',
@@ -134,28 +119,23 @@ export const nftAvailableChains = [
     is_testnet: false,
   },
   {
-    chain: 'frame-dev-test',
-    id: 37284,
+    chain: 'flow-evm-previewnet',
+    id: 646,
     is_testnet: true,
   },
   {
-    chain: 'frame-test-2',
-    id: 74299523,
+    chain: 'flow-evm-testnet',
+    id: 545,
     is_testnet: true,
   },
   {
-    chain: 'frame-testnet',
-    id: 68840142,
-    is_testnet: true,
+    chain: 'forma',
+    id: 984122,
+    is_testnet: false,
   },
   {
     chain: 'gnosis',
     id: 100,
-    is_testnet: false,
-  },
-  {
-    chain: 'gnosis-old',
-    id: null,
     is_testnet: false,
   },
   {
@@ -169,34 +149,24 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
-    chain: 'gunzilla',
-    id: null,
-    is_testnet: false,
-  },
-  {
-    chain: 'gunzilla-testnet',
-    id: 49321,
-    is_testnet: true,
-  },
-  {
-    chain: 'hokum-testnet',
-    id: 20482050,
-    is_testnet: true,
-  },
-  {
     chain: 'immutable-zkevm',
     id: 13371,
     is_testnet: false,
   },
   {
+    chain: 'immutable-zkevm-testnet',
+    id: 13473,
+    is_testnet: true,
+  },
+  {
+    chain: 'lens-sepolia',
+    id: 37111,
+    is_testnet: true,
+  },
+  {
     chain: 'linea',
     id: 59144,
     is_testnet: false,
-  },
-  {
-    chain: 'linea-testnet',
-    id: 59140,
-    is_testnet: true,
   },
   {
     chain: 'loot',
@@ -209,9 +179,9 @@ export const nftAvailableChains = [
     is_testnet: false,
   },
   {
-    chain: 'manta-testnet',
-    id: 3441005,
-    is_testnet: true,
+    chain: 'mode',
+    id: 34443,
+    is_testnet: false,
   },
   {
     chain: 'moonbeam',
@@ -229,11 +199,6 @@ export const nftAvailableChains = [
     is_testnet: false,
   },
   {
-    chain: 'optimism-goerli',
-    id: 420,
-    is_testnet: true,
-  },
-  {
     chain: 'optimism-sepolia',
     id: 11155420,
     is_testnet: true,
@@ -246,11 +211,6 @@ export const nftAvailableChains = [
   {
     chain: 'palm-testnet',
     id: 11297108099,
-    is_testnet: true,
-  },
-  {
-    chain: 'palm-testnet-edge',
-    id: null,
     is_testnet: true,
   },
   {
@@ -271,21 +231,9 @@ export const nftAvailableChains = [
     currency: 'matic',
   },
   {
-    chain: 'polygon-mumbai',
-    id: 80001,
-    is_testnet: true,
-    currency: 'matic',
-  },
-  {
     chain: 'polygon-zkevm',
     id: 1101,
     is_testnet: false,
-    currency: 'matic',
-  },
-  {
-    chain: 'polygon-zkevm-testnet',
-    id: 1442,
-    is_testnet: true,
     currency: 'matic',
   },
   {
@@ -299,9 +247,9 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
-    chain: 'proof-of-play-testnet',
-    id: 3860316325893729,
-    is_testnet: true,
+    chain: 'proof-of-play-boss',
+    id: 70701,
+    is_testnet: false,
   },
   {
     chain: 'rari',
@@ -324,14 +272,24 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
-    chain: 'scroll-testnet',
-    id: 534353,
-    is_testnet: true,
-  },
-  {
     chain: 'sei',
     id: 1329,
     is_testnet: false,
+  },
+  {
+    chain: 'sei-atlantic-2',
+    id: 1328,
+    is_testnet: true,
+  },
+  {
+    chain: 'shape-sepolia',
+    id: 11011,
+    is_testnet: true,
+  },
+  {
+    chain: 'shardeum-atomium',
+    id: 8082,
+    is_testnet: true,
   },
   {
     chain: 'solana',
@@ -351,6 +309,11 @@ export const nftAvailableChains = [
   {
     chain: 'story-testnet',
     id: 1513,
+    is_testnet: true,
+  },
+  {
+    chain: 'superseed-sepolia',
+    id: 53302,
     is_testnet: true,
   },
   {
@@ -379,14 +342,14 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
+    chain: 'zero-sepolia',
+    id: 4457845,
+    is_testnet: true,
+  },
+  {
     chain: 'zksync-era',
     id: 324,
     is_testnet: false,
-  },
-  {
-    chain: 'zksync-era-testnet',
-    id: 280,
-    is_testnet: true,
   },
   {
     chain: 'zora',
@@ -396,11 +359,6 @@ export const nftAvailableChains = [
   {
     chain: 'zora-sepolia',
     id: 999999999,
-    is_testnet: true,
-  },
-  {
-    chain: 'zora-testnet',
-    id: 999,
     is_testnet: true,
   },
 ]

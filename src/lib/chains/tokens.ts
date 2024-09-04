@@ -9,25 +9,25 @@ let solTokens = {
   },
   ethTokens = {
     usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-    eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    eth: '0x0000000000000000000000000000000000000000',
     usdt: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     dai: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
   },
   baseTokens = {
     usdc: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
-    eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    eth: '0x0000000000000000000000000000000000000000',
     dai: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
   },
   opTokens = {
     usdc: '0x0b2c639c533813f4aa9d7837caf62653d097ff85',
-    eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    eth: '0x0000000000000000000000000000000000000000',
     op: '0x4200000000000000000000000000000000000042',
     usdt: '0x94b008aa00579c1307b0ef2c499ad98a8ce58e58',
     dai: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
   },
   arbTokens = {
     usdc: '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
-    eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    eth: '0x0000000000000000000000000000000000000000',
     arb: '0x912ce59144191c1204e64559fe8253a0e49e6548',
     usdt: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
     dai: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
@@ -40,14 +40,14 @@ let solTokens = {
     usdt: '0x55d398326f99059fF775485246999027B3197955',
   },
   polygonTokens = {
-    usdc: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-    matic: '0x0000000000000000000000000000000000000000',
+    usdc: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',
+    pol: '0x0000000000000000000000000000000000000000',
     dai: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     usdt: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
   },
   zkSyncTokens = {
     usdc: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
-    eth: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    eth: '0x0000000000000000000000000000000000000000',
     zk: '0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E',
     usdt: '0x493257fD37EDB34451f62EDf8D2a0C418852bA4C',
   },
@@ -57,6 +57,19 @@ let solTokens = {
     aurora: '0x8BEc47865aDe3B172A928df8f990Bc7f2A3b9f79',
     usdt: '0x4988a896b1227218e4A686fdE5EabdcAbd91571f',
     dai: '0xe3520349F477A5F6EB06107066048508498A291b',
+  },
+  fuseTokens = {
+    fuse: '0x0000000000000000000000000000000000000000',
+    usdc: '0x620fd5fa44BE6af63715Ef4E65DDFA0387aD13F5',
+    weth: '0xa722c13135930332Eb3d749B2F0906559D2C5b99',
+    usdt: '0xFaDbBF8Ce7D5b7041bE672561bbA99f79c532e10',
+    dai: '0x94Ba7A27c7A95863d1bdC7645AC2951E0cca06bA',
+  },
+  metisTokens = {
+    metis: '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000',
+    usdc: '0xEA32A96608495e54156Ae48931A7c20f0dcc1a21',
+    usdt: '0xbB06DCA3AE6887fAbF931640f67cab3e3a16F4dC',
+    dai: '0x4c078361FC9BbB78DF910800A991C7c3DD2F6ce0',
   },
   zetaTokens = {
     zeta: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -158,13 +171,6 @@ let solana = {
       {
         ...DAI,
         address: baseTokens.dai,
-      },
-      {
-        symbol: 'USDBC',
-        name: 'USD Base Coin',
-        logoURI:
-          'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
-        address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca',
       },
       {
         ...ETH,
@@ -317,9 +323,9 @@ let solana = {
         address: polygonTokens.usdc,
       },
       {
-        symbol: 'MATIC',
-        name: 'Polygon Coin',
-        address: polygonTokens.matic,
+        symbol: 'POL',
+        name: 'Polygon Ecosystem Coin',
+        address: polygonTokens.pol,
         logoURI: 'https://static.debank.com/image/matic_token/logo_url/matic/6f5a6b6f0732a7a235131bd7804d357c.png',
         native: true,
       },
@@ -361,6 +367,31 @@ let solana = {
       {
         ...USDT,
         address: zkSyncTokens.usdt,
+      },
+    ],
+  },
+  fuse = {
+    mocks: {
+      ...fuseTokens,
+      usdc: fuseTokens.usdc,
+    },
+    list: [
+      {
+        ...USDC,
+        address: fuseTokens.usdc,
+      },
+      {
+        symbol: 'FUSE',
+        name: 'Fuse Coin',
+        address: fuseTokens.fuse,
+        logoURI: logoChains.fuse,
+        native: true,
+      },
+      {
+        ...ETH,
+        symbol: 'WETH',
+        name: 'Wrapped Ethereum Coin',
+        address: fuseTokens.weth,
       },
     ],
   },
@@ -418,13 +449,40 @@ let solana = {
         name: 'ZRC20 USDC on ETH',
         address: zetaTokens.usdc,
       },
+    ],
+  },
+  metis = {
+    mocks: {
+      ...metisTokens,
+      usdc: metisTokens.usdc,
+    },
+    list: [
       {
-        ...ETH,
-        symbol: 'ETH.ETH',
-        name: 'ZRC20 ETH on ETH',
-        address: zetaTokens.eth,
+        symbol: 'METIS',
+        name: 'Metis Token',
+        address: metisTokens.metis,
+        logoURI: logoChains.metis,
+        native: true,
+      },
+      {
+        ...USDC,
+        symbol: 'm.USDC',
+        address: metisTokens.usdc,
+      },
+      {
+        ...USDT,
+        symbol: 'm.USDT',
+        address: metisTokens.usdt,
+      },
+      {
+        ...DAI,
+        symbol: 'm.DAI',
+        address: metisTokens.dai,
       },
     ],
-  }
+  },
+  // coming
+  scroll = {},
+  sei = {}
 
-export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, zeta }
+export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis }

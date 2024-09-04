@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import {
   createQR,
@@ -28,6 +29,7 @@ import {
   sendAndConfirmTransaction,
 } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
+import { getToken } from '@lifi/sdk'
 import {
   useReadContract,
   useWriteContract,
@@ -49,9 +51,22 @@ import NmGlobalWallet from '@/components/nm-global-wallet'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
 import { useSnackbar } from '@/components/context/snackbar'
 import { getPaymentOrderSvc } from '@/services/pay'
-import { get1InchTokenSvc, getJupTokenPriceSvc, getSolTokenListSvc, getSushiTokenSvc } from '@/services/common'
+import {
+  get1InchTokenSvc,
+  getJupTokenPriceSvc,
+  getLiFiTokenSvc,
+  getSolTokenListSvc,
+  getSushiTokenSvc,
+} from '@/services/common'
 import { getNFTOrScanUrl, getRandomNumber, getShortenMidDots } from '@/lib/utils'
-import { useChainConnect, useEVMWalletConnect, useGlobalWalletConnect, useSolAccount, useUserData } from '@/lib/hooks'
+import {
+  useChainConnect,
+  useEVMWalletConnect,
+  useGlobalWalletConnect,
+  useInitPayChainIndex,
+  useSolAccount,
+  useUserData,
+} from '@/lib/hooks'
 import { payChains, _supportChains, wagmiCoreConfig } from '@/lib/chains'
 import { getActiveChain, getSolanaRPCUrl } from '@/lib/web3'
 import { env } from '@/lib/types/env'
@@ -59,9 +74,11 @@ import * as pay from '@/lib/chains/tokens'
 
 import config from '@/config'
 
-const { title, domains } = config
+const { title, domains, logo } = config
 
 const PaymentCard = ({ ...props }) => {
+  let { payee = {} } = props
+  const router = useRouter()
   const { addressList } = props?.user || useUserData()
   const { solAddress } = useSolAccount()
   const evmWalletConnect = useEVMWalletConnect()
@@ -74,7 +91,9 @@ const PaymentCard = ({ ...props }) => {
 
   const { showSnackbar } = useSnackbar()
 
-  const [chainIndex, setChainIndex] = useState(0) // 默认次序0
+  const [chainIndex, setChainIndex] = useState(useInitPayChainIndex()) // chain 次序
+  const chainRefs = useRef<(HTMLLIElement | null)[]>([])
+
   // 付款流程
   // 0 默认为输入状态
   // 1 选择代币状态
@@ -434,6 +453,7 @@ const PaymentCard = ({ ...props }) => {
         args: [to, amount],
       })
     }
+
     return {
       sendToken: async () => {
         if (payChainId !== chainId) {
@@ -537,6 +557,16 @@ const PaymentCard = ({ ...props }) => {
       }, 500)
     }
   }, [paymentType, paymentQr, paymentAmount])
+
+  useEffect(() => {
+    if (chainRefs.current[chainIndex]) {
+      chainRefs.current[chainIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start',
+      })
+    }
+  }, [chainIndex])
 
   // Check transaction is completed
   useEffect(() => {
@@ -724,18 +754,23 @@ const PaymentCard = ({ ...props }) => {
     setTokenPriceLoading(false)
   }
 
+  const getLiFiTokenInfo = async (address = null) => {
+    setTokenPriceLoading(true)
+    let res = await getToken(payChains[chainIndex]?.['chainIdProd'], address || tokensItem?.address || tokens.address)
+    if (res?.priceUSD) {
+      setTokenPrice(Number(res?.priceUSD))
+    }
+    setTokenPriceLoading(false)
+  }
+
   const getTokenPrice = (address = null) => {
     switch (chainIndex) {
       case 0:
         if (tokens.address == pay.solana.mocks.usdc) return setTokenPrice(1)
         getJupTokenPrice({ ids: address || tokensItem?.symbol || tokens.address })
         break
-      case 9:
-        if (tokens.address == pay.zeta.mocks.usdc) return setTokenPrice(1)
-        getSushiTokenPrice(address)
-        break
       default:
-        get1InchTokenPrice(address)
+        getLiFiTokenInfo(address)
         break
     }
   }
@@ -774,15 +809,31 @@ const PaymentCard = ({ ...props }) => {
   )
 
   const handleSwitchChain = async index => {
-    if (payChains[index]?.disabled) return
+    const selectedChain = payChains[index]
+
+    if (selectedChain?.disabled || index == chainIndex) return
     setChainIndex(index)
+
+    const formattedChainName = selectedChain.name.replace(/\s+/g, '_')
+
+    // 构建新的 URL，确保不会重复添加链参数
+    const newQuery = { ...router.query, chain: formattedChainName }
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: newQuery,
+      },
+      undefined,
+      { shallow: true } // 使用 shallow 避免页面完全重新加载
+    )
+
     if (paymentType > 1) setPaymentType(0)
     tokensCache.current = []
     setTokenList({
       ...tokens,
       list: [],
-      symbol: payChains[index]['list'][0]?.symbol,
-      address: payChains[index]['list'][0]?.address,
+      symbol: selectedChain['list'][0]?.symbol,
+      address: selectedChain['list'][0]?.address,
     })
   }
 
@@ -840,7 +891,7 @@ const PaymentCard = ({ ...props }) => {
         amount: tokensAmount,
         signature: data?.signature,
         payer: data?.payer,
-        payeeId: props?.payeeId,
+        payeeId: payee?.id,
       }
       if (debouncedPayNote) paymentOrderParams = Object.assign(paymentOrderParams, { message: debouncedPayNote })
       if (payChainId) paymentOrderParams = { ...paymentOrderParams, ...{ chainId: payChainId } }
@@ -1254,20 +1305,32 @@ const PaymentCard = ({ ...props }) => {
   return (
     <article className="flex-1 animate__animated animate__fadeIn px-2">
       <section className="py-8 flex justify-between items-center">
-        <ul className="carousel gap-3 flex-1">
+        <ul className="carousel gap-3 flex-1 scroll-smooth">
           {payChains.map((item, index) => {
             let avatarBox = ({ classes = null } = {}) => (
               <Avatar
                 src={item?.icon || getActiveChain({ name: item?.name })?.icon}
-                className={classNames(chainAvatarClass, classes, item?.disabled ? 'opacity-40' : 'cursor-pointer')}
+                className={classNames(chainAvatarClass, classes, item?.disabled ? 'opacity-30' : 'cursor-pointer')}
               />
             )
             return (
-              <li key={`chain-item-${item?.name}`} className="carousel-item" onClick={() => handleSwitchChain(index)}>
+              <li
+                key={`chain-item-${item?.name}`}
+                className="carousel-item"
+                onClick={() => handleSwitchChain(index)}
+                ref={el => {
+                  chainRefs.current[index] = el
+                }}
+              >
                 <NmTooltip title={item?.disabled ? 'Upcoming' : ''}>
                   {index == chainIndex && !item?.disabled ? (
-                    <NmBorderCounter speed="smooth" customClass="rounded-md transition-all" innerClass="border-1">
+                    <NmBorderCounter
+                      speed="smooth"
+                      customClass="rounded-md transition-all flex items-center pl-1 pr-2 cursor-pointer"
+                      innerClass="border-1"
+                    >
                       {avatarBox()}
+                      <span className="font-righteous">{item?.name}</span>
                     </NmBorderCounter>
                   ) : (
                     avatarBox({ classes: 'border border-gray-100/50 hover:border-2 transition-all' })
@@ -1276,13 +1339,6 @@ const PaymentCard = ({ ...props }) => {
               </li>
             )
           })}
-          <li className="carousel-item">
-            <NmTooltip title="More">
-              <Avatar className={classNames('border border-gray-100/80', chainAvatarClass)}>
-                <NmIcon type="icon-more_colors" />
-              </Avatar>
-            </NmTooltip>
-          </li>
         </ul>
         <NmBorderCounter
           speed="smooth"
@@ -1310,6 +1366,19 @@ const PaymentCard = ({ ...props }) => {
         </NmBorderCounter>
       </section>
       {payContent(paymentType)}
+      {payee?.copyright && (
+        <footer className="flex justify-end pt-10 opacity-70 hover:opacity-100 transition-all">
+          <NextLink href={domains.master} target="_blank" rel="noopener noreferrer nofollow">
+            <Image
+              alt=""
+              width={120}
+              height={60}
+              draggable={false}
+              src={payee?.style?.theme !== 5 ? logo.pro_mix_white : logo.pro_mix_black}
+            />
+          </NextLink>
+        </footer>
+      )}
     </article>
   )
 }

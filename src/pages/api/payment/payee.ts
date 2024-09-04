@@ -5,27 +5,21 @@ import prisma from '@/lib/prisma'
 export default async function payee(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'POST':
-      const { id, style, ...content } = req.body
-      if (!id || !style) {
-        return res.status(400).json({ ok: false, message: 'User id and style are required ˙◠˙' })
+      const { uuid, id, createdAt, ...content } = req.body
+
+      if (!uuid) {
+        return res.status(400).json({ ok: false, message: 'User id required ˙◠˙' })
       }
 
       try {
-        const user = await prisma.user.findUnique({
-          where: { id },
-        })
-
-        if (!user) {
-          return res.status(404).json({ ok: false, message: 'User not found ˙◠˙' })
-        }
+        if (!content?.title) content['title'] = null
 
         const payee = await prisma.payee.upsert({
-          where: { uuid: user.id },
-          update: { style, ...content },
+          where: { uuid },
+          update: { ...content },
           create: {
             id: nanoid(),
-            uuid: user.id,
-            style,
+            uuid,
             ...content,
           },
         })

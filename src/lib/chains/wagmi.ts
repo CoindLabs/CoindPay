@@ -22,7 +22,7 @@ import {
   linea,
   gnosis,
   metis,
-  zkSync,
+  zksync,
   blast,
   scroll,
   mode,
@@ -42,9 +42,10 @@ import {
   arbitrumSepolia,
   bscTestnet,
   polygonAmoy,
-  zkSyncSepoliaTestnet,
+  zksyncSepoliaTestnet,
   berachainTestnetbArtio,
   auroraTestnet,
+  fuseSparknet,
   zetachainAthensTestnet,
 } from 'viem/chains'
 import { env } from '@/lib/types/env'
@@ -66,7 +67,7 @@ const wallets = [
   ...defaultWallets,
   {
     groupName: 'Others',
-    wallets: [phantomWallet, uniswapWallet, tokenPocketWallet, trustWallet, okxWallet],
+    wallets: [okxWallet, phantomWallet, uniswapWallet, tokenPocketWallet, trustWallet],
   },
   {
     groupName: 'Hardware',
@@ -82,16 +83,17 @@ let chains_tpl = [
   polygon,
   avalanche,
   arbitrum,
+  { ...metis, name: 'Metis', iconUrl: logoChains.metis },
+  { ...fuse, name: 'Fuse', iconUrl: logoChains.fuse },
+
+  { ...sei, iconUrl: logoChains.sei },
+  { ...scroll, iconUrl: logoChains.scroll },
   { ...manta, name: 'Manta', iconUrl: logoChains.manta },
   { ...mantle, iconUrl: logoChains.mantle },
   { ...blast, iconUrl: logoChains.blast },
-  { ...scroll, iconUrl: logoChains.scroll },
   { ...gnosis, iconUrl: logoChains.gnosis },
-  { ...sei, iconUrl: logoChains.sei },
-  { ...fuse, name: 'Fuse', iconUrl: logoChains.fuse },
-  { ...metis, name: 'Metis', iconUrl: logoChains.metis },
   { ...linea, name: 'Linea', iconUrl: logoChains.linea },
-  { ...zkSync, iconUrl: logoChains.zksync },
+  { ...zksync, iconUrl: logoChains.zksync },
   { ...mode, name: 'Mode', iconUrl: logoChains.mode },
   { ...rootstock, name: 'Rootsock', iconUrl: logoChains.rootstock },
   { ...boba, name: 'Boba', iconUrl: logoChains.boba },
@@ -100,22 +102,9 @@ let chains_tpl = [
   { ...moonriver, name: 'Moonriver', iconUrl: logoChains.moonriver },
   { ...zetachain, name: 'Zeta' },
   { ...berachainTestnetbArtio, iconUrl: logoChains.berachain },
-  { ...Mint, iconUrl: Mint.icon },
   { ...celo, iconUrl: logoChains.celo },
   { ...fantom, iconUrl: logoChains.fantom },
   { ...polygonZkEvm, iconUrl: logoChains.polygonzkevm },
-  {
-    ...jocChain,
-    iconUrl: jocChain.icon,
-  },
-  {
-    ...xrpLedger,
-    iconUrl: xrpLedger.icon,
-  },
-  {
-    ...Xenea,
-    iconUrl: Xenea.icon,
-  },
 ]
 
 const chains = isProd
@@ -128,8 +117,9 @@ const chains = isProd
       arbitrumSepolia,
       bscTestnet,
       { ...polygonAmoy, iconUrl: logoChains.polygon },
-      { ...zkSyncSepoliaTestnet, iconUrl: logoChains.zksync },
+      { ...zksyncSepoliaTestnet, iconUrl: logoChains.zksync },
       { ...auroraTestnet, iconUrl: logoChains.aurora },
+      { ...fuseSparknet, iconUrl: logoChains.fuse },
       zetachainAthensTestnet,
     ]
 
@@ -138,8 +128,8 @@ export const chainsTransports = {
   [sepolia.id]: http(`https://eth-sepolia.g.alchemy.com/v2/${env.alchemyId}`),
   [base.id]: http(`https://base-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
   [baseSepolia.id]: http(`https://base-sepolia.g.alchemy.com/v2/${env.alchemyId}`),
-  [zkSync.id]: http(`https://zksync-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
-  [zkSyncSepoliaTestnet.id]: http(`https://zksync-sepolia.g.alchemy.com/v2/${env.alchemyId}`),
+  [zksync.id]: http(`https://zksync-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
+  [zksyncSepoliaTestnet.id]: http(`https://zksync-sepolia.g.alchemy.com/v2/${env.alchemyId}`),
   [optimism.id]: http(`https://opt-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
   [optimismSepolia.id]: http(`https://opt-sepolia.g.alchemy.com/v2/${env.alchemyId}`),
   [arbitrum.id]: http(`https://arb-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
@@ -149,7 +139,10 @@ export const chainsTransports = {
   [bsc.id]: http(`https://bsc-mainnet.blockvision.org/v1/${env.blockVisionBSCKey}`),
   [bscTestnet.id]: http(`https://bsc-testnet.blockvision.org/v1/${env.blockVisionBSCKey}`),
   [aurora.id]: http(`https://1rpc.io/${env.rpc1Key}/aurora`),
-  [auroraTestnet.id]: http('https://1313161555.rpc.thirdweb.com'),
+  [auroraTestnet.id]: http(`https://1313161555.rpc.thirdweb.com/${env.thirdwebKey}`),
+  [fuse.id]: http(`https://122.rpc.thirdweb.com/${env.thirdwebKey}`),
+  [fuseSparknet.id]: http(`https://123.rpc.thirdweb.com/${env.thirdwebKey}`),
+  [metis.id]: http(`https://1088.rpc.thirdweb.com/${env.thirdwebKey}`),
   [zetachain.id]: http(`https://zetachain-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
   [zetachainAthensTestnet.id]: http(`https://zetachain-testnet.g.alchemy.com/v2/${env.alchemyId}`),
 }

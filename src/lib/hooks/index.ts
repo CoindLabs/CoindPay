@@ -4,7 +4,7 @@
  * @version 0.1 | 2022-07-18 // Initial version.
  * @Date: 2022-07-16 12:33:20
  * @Last Modified by: 0x3Anthony
- * @Last Modified time: 2024-07-16 18:50:30
+ * @Last Modified time: 2024-08-30 03:22:13
  */
 import { RefObject, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
@@ -15,7 +15,7 @@ import { useRouter } from 'next/router'
 import { Network } from 'alchemy-sdk'
 import { getSpaceIDReverseNameSvc } from '@/services/common'
 import { icpInfo } from '@/store/slice/icp'
-import { chainIdToNetWork } from '@/lib/chains'
+import { chainIdToNetWork, payChains } from '@/lib/chains'
 import type { AppDispatch, AppState } from '../store'
 
 import config from '@/config'
@@ -27,8 +27,7 @@ export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector
 
 export const useUserData = () => useAppSelector((state: any) => state.user)
-export const useStudioData = () => useAppSelector((state: any) => state.studio)
-export const useStudioServerData = () => useAppSelector((state: any) => state.studioServer)
+export const usePayeeData = () => useAppSelector((state: any) => state.payee)
 
 export const useMobile = () => useMediaQuery('(max-width:640px)')
 
@@ -327,4 +326,27 @@ export function useHydrated() {
 export function useIsLoggedIn() {
   const localUser = useUserData()
   return Boolean(localUser?.id)
+}
+
+/**
+ * payment chain switch
+ */
+
+export const useInitPayChainIndex = () => {
+  const router = useRouter()
+
+  const getInitialChainIndex = () => {
+    let chainName = router.query.chain
+
+    if (Array.isArray(chainName)) {
+      chainName = chainName[0] // 如果是数组，取第一个元素
+    }
+
+    chainName = chainName?.replace(/_/g, ' ').toLowerCase() // 将下划线替换为空格
+
+    const index = payChains.findIndex(chain => chain.name.toLowerCase() == chainName)
+    return index !== -1 ? index : 0 // 如果找不到匹配的 chain，默认返回 0
+  }
+
+  return getInitialChainIndex()
 }

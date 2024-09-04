@@ -13,7 +13,7 @@ import {
   linea,
   gnosis,
   metis,
-  zkSync,
+  zksync,
   blast,
   scroll,
   mode,
@@ -35,7 +35,7 @@ import {
   arbitrumSepolia,
   bscTestnet,
   polygonAmoy,
-  zkSyncSepoliaTestnet,
+  zksyncSepoliaTestnet,
   berachainTestnetbArtio,
   auroraTestnet,
   zetachainAthensTestnet,
@@ -57,7 +57,7 @@ export const chainIdToNetWork = (chainId: number): Chain => {
     case 42161:
       return arbitrum as any
     case 324:
-      return zkSync as any
+      return zksync as any
     case 5000:
       return mantle as any
     case 169:
@@ -122,7 +122,7 @@ export const chainIdToNetWork = (chainId: number): Chain => {
     case 81:
       return customChains.jocChain as any
     case 300:
-      return zkSyncSepoliaTestnet as any
+      return zksyncSepoliaTestnet as any
     case 1313161555:
       return auroraTestnet as any
     case 7001:

@@ -50,7 +50,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
   const scan_url = getNFTOrScanUrl({
     type: 'address',
     address: addressDefault?.value,
-    chainType: addressDefault?.chain
+    chainType: addressDefault?.chain,
   })
 
   const handleEventAction = ({ type = 'address', address = null, label = null, event = null, toast = true }) => {
@@ -134,7 +134,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
       snackbar: {
         open: true,
         type: 'success',
-        text: 'Payment profile copy success ᵔ◡ᵔ',
+        text: 'Payments profile copy success ᵔ◡ᵔ',
       },
       anchorOrigin: {
         vertical: 'bottom',

@@ -6,10 +6,11 @@ import { useDeepCompareEffect } from 'ahooks'
 import LandingLayout from '@/components/layout/landing'
 import { PayeeContext } from '@/components/context/payee'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
-import { bigintFactory } from '@/lib/prisma/common'
-import prisma from '@/lib/prisma'
-import { useIsLoggedIn, useUserData } from '@/lib/hooks'
 import StudioLayout from '@/components/layout/studio'
+import PaymentWidget from '@/components/dapp/landing/base/pay/widget'
+import prisma from '@/lib/prisma'
+import { bigintFactory } from '@/lib/prisma/common'
+import { useIsLoggedIn, useUserData } from '@/lib/hooks'
 import { getPayeeAccountSvc } from '@/services/pay'
 
 interface Params extends ParsedUrlQuery {
@@ -84,6 +85,8 @@ export default function RenderUser({ user: initialUser, payee: initialPayee }) {
 
   const [loading, setLoading] = useState(true)
 
+  const widgetMode = router.query?.mode == 'widget'
+
   useEffect(() => {
     setInProfile(isLoggedIn && localUser?.id == router?.query?.uuid)
   }, [router?.query?.uuid])
@@ -91,13 +94,13 @@ export default function RenderUser({ user: initialUser, payee: initialPayee }) {
   useDeepCompareEffect(() => {
     if (!user?.id) return
 
+    setLoading(false)
+
     if (!localUser?.id) {
       setUser(user)
       setInProfile(false)
       return
     }
-
-    setLoading(false)
 
     let equal = isEqual(localUser, user)
     if (isInProfile && !equal) {
@@ -124,11 +127,25 @@ export default function RenderUser({ user: initialUser, payee: initialPayee }) {
 
   return (
     <PayeeContext.Provider value={{ user, payee }}>
-      {!isInProfile || router.query?.newtab ? (
-        <LandingLayout payee={payee} user={{ ...user, isInProfile: router.query?.newtab ? false : isInProfile }} />
+      {widgetMode && !payee?.accountInfo ? (
+        <PaymentWidget user={user} payee={payee} />
+      ) : !isInProfile || router.query?.newtab || widgetMode ? (
+        <LandingLayout
+          payee={payee}
+          user={{
+            ...user,
+            isInProfile: router.query?.newtab || widgetMode ? false : isInProfile,
+          }}
+        />
       ) : (
         <StudioLayout>
-          <LandingLayout payee={payee} user={{ ...user, isInProfile }} />
+          <LandingLayout
+            payee={payee}
+            user={{
+              ...user,
+              isInProfile,
+            }}
+          />
         </StudioLayout>
       )}
     </PayeeContext.Provider>

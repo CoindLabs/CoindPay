@@ -69,6 +69,19 @@ export const payChains = [
     ...pay?.zkSync,
   },
   {
+    name: isProd ? 'Fuse' : 'Fuse Sparknet',
+    chainId: isProd ? 122 : 123,
+    chainIdProd: 122,
+    ...pay?.fuse,
+  },
+  {
+    name: isProd ? 'Metis' : 'Metis Sepolia',
+    icon: logoChains.metis,
+    chainId: isProd ? 1088 : 59902,
+    chainIdProd: 1088,
+    ...pay?.metis,
+  },
+  {
     name: isProd ? 'Aurora' : 'Aurora Testnet',
     icon: `${domains.cdn}/static/social/aurora.svg`,
     chainId: isProd ? 1313161554 : 1313161555,
@@ -76,18 +89,15 @@ export const payChains = [
     ...pay?.aurora,
   },
   {
-    name: isProd ? 'Zeta' : 'Zeta Testnet',
-    icon: logoChains.zeta,
-    chainId: isProd ? 7000 : 7001,
-    chainIdProd: 7000,
-    ...pay?.zeta,
-  },
-  {
-    name: 'ICP',
+    name: 'Scroll',
     disabled: true,
   },
   {
     name: 'Sei',
+    disabled: true,
+  },
+  {
+    name: 'ICP',
     disabled: true,
   },
   {
@@ -103,22 +113,16 @@ export const payChains = [
     disabled: true,
   },
   {
-    name: 'Fuse',
+    name: isProd ? 'Zeta' : 'Zeta Testnet',
+    icon: logoChains.zeta,
+    chainId: isProd ? 7000 : 7000,
+    chainIdProd: 7000,
+    ...pay?.zeta,
     disabled: true,
   },
   {
     name: 'BeraChain',
     icon: logoChains.berachain,
-    disabled: true,
-  },
-  {
-    name: 'Japan Open Chain',
-    icon: customChains.jocChain.icon,
-    disabled: true,
-  },
-  {
-    name: 'XRPL EVM Sidechain',
-    icon: customChains.xrpLedger.icon,
     disabled: true,
   },
   {
