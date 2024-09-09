@@ -16,10 +16,10 @@ import { FlipWords } from '@/components/aceternity-ui/flip-words'
 import ItemChainsSwiper from '@/components/dapp/home/swiper-card/item-chains'
 import {
   get1InchTokenSvc,
-  getJupTokenPriceSvc,
-  getMoralisTokenSvc,
-  getSolTokenListSvc,
   getSushiTokenSvc,
+  getMoralisTokenSvc,
+  getJupTokenPriceSvc,
+  getSolTokenListSvc,
 } from '@/services/common'
 import { getPaymentOrderSvc } from '@/services/pay'
 import { useMobile, useUserData } from '@/lib/hooks'
@@ -152,77 +152,7 @@ export default function Dashboard() {
   const getJupTokenPrice = async ({ ids }) => {
     let res = await getJupTokenPriceSvc({ ids })
     if (res?.data) {
-    }
-  }
-
-  const get1InchTokenPrice = async (address, chainId) => {
-    if (address?.length) address = address.join(',')
-    let res = await get1InchTokenSvc({
-      chainId,
-      address,
-    })
-    if (res) tokensPrice.current = Object.assign(tokensPrice.current, res)
-  }
-
-  const getSushiTokenPrice = async (addresses, chainId) => {
-    try {
-      const requests = addresses.map(address =>
-        getSushiTokenSvc({
-          chainId,
-          tokenIn: address,
-          tokenOut: payChains.find(row => row?.['chainId'] === chainId)?.['mocks']?.usdc,
-          amount: 1000000000000000000,
-        })
-          .then(res => {
-            if (res?.assumedAmountOut) {
-              return {
-                address,
-                price: Number(formatUnits(res.assumedAmountOut, 6)),
-              }
-            }
-          })
-          .catch(error => {
-            console.error(`Error fetching price for address ${address}:`, error)
-            return null
-          })
-      )
-
-      const results = await Promise.all(requests)
-
-      results.forEach(result => {
-        if (result) {
-          tokensPrice.current = {
-            ...tokensPrice.current,
-            [result.address]: result.price,
-          }
-        }
-      })
-    } catch (error) {
-      console.error('Error in getSushiTokenPrice:', error)
-    }
-  }
-
-  /**
-   * Token price by Moralis（某些链不支持，暂时放弃该方案）
-   * @param token list
-   */
-  const getMoralisTokenPrice = async (tokens = null) => {
-    let res = await getMoralisTokenSvc(
-      {
-        type: 'getMultipleTokenPrices',
-        tokens,
-      },
-      {
-        chain: payChains[chainIndex]?.['chainNamePrice'],
-      }
-    )
-    if (res?.ok && res?.data?.length) {
-      const tokenAddressObj = res?.data.reduce((acc, item) => {
-        const { tokenAddress, ...rest } = item
-        acc[tokenAddress] = rest
-        return acc
-      }, {})
-      tokensPrice.current = Object.assign(tokensPrice.current, tokenAddressObj)
+      tokensPrice.current = Object.assign(tokensPrice.current, res?.data)
     }
   }
 

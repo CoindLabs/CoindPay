@@ -4,7 +4,7 @@ https://coindpay.xyz
 
 ![CoindPay Banner](https://cdn.cubik.so/aHR0cHM6Ly91dGZzLmlvL2YvOTRhZmVkOTYtODZiOC00NzQ1LTg5NjAtNWUwM2JkNmJhZmIyLXE1OTRzMi5wbmc=)
 
-![CoindPay Portfolio_Y](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/vjAkZW6VLUpp2dL6.jpg)
+![CoindPay Portfolio_Y](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/27XG4mwjDCQPrRma.jpg)
 
 ## Slogan
 
@@ -30,7 +30,7 @@ Make idle funds more available once and for all.
 ## Chains
 
 ✅ **EVM**
-Ethereum、Solana、Base、Optimism、Arbitrum、Polygon、Polygon zkEVM、Sei、Metis、Fuse、BSC、Celo、Aurora、Scroll、Gnosis、zkSync、Avalanche、Mantle、Linea、Manta、Blast、Mode、Fantom、Rootsock、Berachain、ZetaChain...and 26+ chains.
+Ethereum、Solana、Base、Optimism、Arbitrum、BSC、Polygon、Polygon zkEVM、Metis、Sei、Scroll、Fuse、Celo、Aurora、Gnosis、zkSync、Avalanche、Mantle、Linea、Manta、Blast、Mode、Fantom、Rootsock、Berachain、ZetaChain...and 26+ chains.
 
 ✅ **Solana**
 
@@ -44,7 +44,7 @@ Cross-chain Pay, get paid, grow a business, and more.
 
 More friendly receipts and payments from 20+ chains assets, more options for customers and friends.
 
-![CoindPay Payments_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/83V1vdDBZUl091WVg.png)
+![CoindPay Payments_01](https://res.cloudinary.com/travary/image/upload/w_800/v1/prd-akindo-public/communities/description-images/QlPqqQrOrF3ZQjax.jpg)
 ![CoindPay Payments_02](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/Be6Lx4v2gi6ZAkG7.png)
 ![CoindPay Payments_03](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/A8vnXMp9kHMo07ZKl.jpg)
 
@@ -63,7 +63,8 @@ All payments automatically flow into smart contracts like Compound and Lido, whi
 
 Audited and Verified. The most secure protocol for money.
 
-![CoindPay Finance](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/JBKerRNJNS413KJB.png)
+![CoindPay Finance_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/d8QggvODzidrNq8V.jpg)
+![CoindPay Finance_02](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/JBKerRNJNS413KJB.png)
 
 > Ecosystem developers
 
@@ -71,8 +72,9 @@ No-code payment configuration, intelligent widgets. free to share with anyone.
 
 SDK support for embedded development.
 
-![CoindPay Profile_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/rg4vAz9wQt7lErvpV.png)
-![CoindPay Profile_02](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/7mGz6aPknfJdq2kv.png)
+![CoindPay Profile_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/VwWxxgDDRuj87wr8.jpg)
+![CoindPay Profile_02](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/93RzzjMOPsGqVPqj.jpg)
+![CoindPay Profile_03](https://res.cloudinary.com/travary/image/upload/w_800/v1/prd-akindo-public/communities/description-images/7mG884ZBjtdN3La2v.jpg)
 
 ## Milestones
 
@@ -99,11 +101,21 @@ _Meet CoindPay：Infrastructure for Crypto Finance_
 
 https://youtu.be/eOSplOfUaYo
 
+_CoindPay with Metis Chain_
+
+https://x.com/CoindPay/status/1831765851525320923
+
+https://youtu.be/pftgjbtvORM
+
 _CoindPay with Arbitrum Chain_
+
+https://x.com/CoindPay/status/1818948341050523794
 
 https://youtu.be/CMmBzLm8slk
 
 _CoindPay with Optimism Chain_
+
+https://x.com/CoindPay/status/1820364919734419960
 
 https://youtu.be/F0E8AVgxSx0
 
@@ -113,17 +125,23 @@ https://youtu.be/rITsNd54o7A
 
 _CoindPay with Polygon Chain_
 
+https://x.com/CoindPay/status/1815822529694757098
+
 https://youtu.be/WjOi5ymgNUs
 
 _CoindPay on Fuse Chain_
 
 https://x.com/Fuse_network/status/1812842790268616835
 
+_CoindPay with OKX Wallet_
+
+https://x.com/okxweb3/status/1829016459521187851
+
 _CoindPay Strategic cooperation with LiFi_
 
 https://x.com/CoindPay/status/1809216610689044691
 
-![CoindPay Portfolio_X](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/QlPmRLvMGsN4exwXM.jpg)
+![CoindPay Portfolio_X](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/27XG4DlERi6ZqRrZ.jpg)
 
 _. . . And more_
 https://youtube.com/@CoindPay

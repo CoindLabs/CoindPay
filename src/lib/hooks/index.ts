@@ -345,6 +345,7 @@ export const useInitPayChainIndex = () => {
     chainName = chainName?.replace(/_/g, ' ').toLowerCase() // 将下划线替换为空格
 
     const index = payChains.findIndex(chain => chain.name.toLowerCase() == chainName)
+
     return index !== -1 ? index : 0 // 如果找不到匹配的 chain，默认返回 0
   }
 

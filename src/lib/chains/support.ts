@@ -33,60 +33,6 @@ import { customChains } from './custom'
 
 export const supportChains = [
   {
-    type: 'Non-EVM',
-    desc: 'Fast and low-cost Non-EVM（Ethereum Virtual Machine） Chains.',
-    list: [
-      {
-        name: 'Solana',
-        icon: 'https://cryptofonts.com/img/icons/sol.svg',
-      },
-      {
-        name: 'ICP',
-        icon: logoChains.icp,
-      },
-      {
-        name: 'Bitcoin',
-        icon: logoChains.btc,
-        disabled: true,
-      },
-      {
-        name: 'TON',
-        icon: logoChains.ton,
-        disabled: true,
-      },
-      {
-        name: 'Sui',
-        icon: logoChains.sui,
-        disabled: true,
-      },
-      {
-        name: 'Aptos',
-        icon: logoChains.aptos,
-        disabled: true,
-      },
-      {
-        name: 'Starknet',
-        icon: logoChains.starknet,
-        disabled: true,
-      },
-      {
-        name: 'Cardano',
-        icon: logoChains.cardano,
-        disabled: true,
-      },
-      {
-        name: 'Near',
-        icon: logoChains.near,
-        disabled: true,
-      },
-      {
-        name: 'Injective',
-        icon: logoChains.injective,
-        disabled: true,
-      },
-    ],
-  },
-  {
     type: 'EVM',
     desc: 'Blockchain network compatible with Ethereum Virtual Machine (EVM).',
     list: [
@@ -133,11 +79,6 @@ export const supportChains = [
         name: 'Aurora',
         chain: aurora,
         icon: logoChains.aurora,
-      },
-      {
-        name: 'Zeta',
-        chain: zetachain,
-        icon: logoChains.zeta,
       },
       {
         name: 'zkSync',
@@ -218,6 +159,11 @@ export const supportChains = [
         chain: polygonZkEvm,
       },
       {
+        name: 'Zeta',
+        chain: zetachain,
+        icon: logoChains.zeta,
+      },
+      {
         name: 'Berachain',
         chain: berachainTestnetbArtio,
         icon: logoChains.berachain,
@@ -277,6 +223,60 @@ export const supportChains = [
         name: 'zkSync',
         chain: zksync,
         icon: logoChains.zksync,
+      },
+    ],
+  },
+  {
+    type: 'Non-EVM',
+    desc: 'Fast and low-cost Non-EVM（Ethereum Virtual Machine） Chains.',
+    list: [
+      {
+        name: 'Solana',
+        icon: 'https://cryptofonts.com/img/icons/sol.svg',
+      },
+      {
+        name: 'ICP',
+        icon: logoChains.icp,
+      },
+      {
+        name: 'Bitcoin',
+        icon: logoChains.btc,
+        disabled: true,
+      },
+      {
+        name: 'TON',
+        icon: logoChains.ton,
+        disabled: true,
+      },
+      {
+        name: 'Sui',
+        icon: logoChains.sui,
+        disabled: true,
+      },
+      {
+        name: 'Aptos',
+        icon: logoChains.aptos,
+        disabled: true,
+      },
+      {
+        name: 'Starknet',
+        icon: logoChains.starknet,
+        disabled: true,
+      },
+      {
+        name: 'Cardano',
+        icon: logoChains.cardano,
+        disabled: true,
+      },
+      {
+        name: 'Near',
+        icon: logoChains.near,
+        disabled: true,
+      },
+      {
+        name: 'Injective',
+        icon: logoChains.injective,
+        disabled: true,
       },
     ],
   },

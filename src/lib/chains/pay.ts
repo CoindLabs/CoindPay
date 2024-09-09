@@ -69,17 +69,17 @@ export const payChains = [
     ...pay?.zkSync,
   },
   {
-    name: isProd ? 'Fuse' : 'Fuse Sparknet',
-    chainId: isProd ? 122 : 123,
-    chainIdProd: 122,
-    ...pay?.fuse,
-  },
-  {
     name: isProd ? 'Metis' : 'Metis Sepolia',
     icon: logoChains.metis,
     chainId: isProd ? 1088 : 59902,
     chainIdProd: 1088,
     ...pay?.metis,
+  },
+  {
+    name: isProd ? 'Fuse' : 'Fuse Sparknet',
+    chainId: isProd ? 122 : 123,
+    chainIdProd: 122,
+    ...pay?.fuse,
   },
   {
     name: isProd ? 'Aurora' : 'Aurora Testnet',
@@ -115,7 +115,7 @@ export const payChains = [
   {
     name: isProd ? 'Zeta' : 'Zeta Testnet',
     icon: logoChains.zeta,
-    chainId: isProd ? 7000 : 7000,
+    chainId: isProd ? 7000 : 7001,
     chainIdProd: 7000,
     ...pay?.zeta,
     disabled: true,

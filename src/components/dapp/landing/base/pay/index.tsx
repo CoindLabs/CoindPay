@@ -53,10 +53,10 @@ import { useSnackbar } from '@/components/context/snackbar'
 import { getPaymentOrderSvc } from '@/services/pay'
 import {
   get1InchTokenSvc,
-  getJupTokenPriceSvc,
-  getLiFiTokenSvc,
-  getSolTokenListSvc,
   getSushiTokenSvc,
+  getLiFiTokenSvc,
+  getJupTokenPriceSvc,
+  getSolTokenListSvc,
 } from '@/services/common'
 import { getNFTOrScanUrl, getRandomNumber, getShortenMidDots } from '@/lib/utils'
 import {
@@ -91,7 +91,10 @@ const PaymentCard = ({ ...props }) => {
 
   const { showSnackbar } = useSnackbar()
 
-  const [chainIndex, setChainIndex] = useState(useInitPayChainIndex()) // chain 次序
+  // 来自路由的 chain 次序
+  const payChainIndex = useInitPayChainIndex()
+  const [chainIndex, setChainIndex] = useState(payChainIndex)
+
   const chainRefs = useRef<(HTMLLIElement | null)[]>([])
 
   // 付款流程
@@ -116,6 +119,7 @@ const PaymentCard = ({ ...props }) => {
     symbol: 'USDC',
     address: pay.solana.mocks.usdc,
   })
+
   const [tokenPrice, setTokenPrice] = useState(1)
   const tokensCache = useRef([])
 
@@ -139,6 +143,7 @@ const PaymentCard = ({ ...props }) => {
     () => Number((payInputValue / tokenPrice)?.toFixed(5)),
     [payInputValue, tokenPrice, tokens.address]
   )
+
   // 本地调试EVM Chain对USDC的特殊处理，查Token Price仍用主网合约，本地调试用测试网合约
   const tokensEvm = useMemo(
     () =>
@@ -630,6 +635,8 @@ const PaymentCard = ({ ...props }) => {
   }, [tokens?.list, chainIndex])
 
   useEffect(() => {
+    if (!tokens?.list?.length) return
+
     chainIndex ? getTokenPrice(tokens?.address) : getJupTokenPrice({ ids: tokens.symbol })
 
     let interval
@@ -641,7 +648,7 @@ const PaymentCard = ({ ...props }) => {
       clearInterval(interval)
     }
     return () => clearInterval(interval)
-  }, [paymentType, payInputValue, tokens.address, tokens.symbol])
+  }, [paymentType, payInputValue, chainIndex, tokens?.list, tokens.address, tokens.symbol])
 
   const delay = useCallback((ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms))
@@ -692,6 +699,7 @@ const PaymentCard = ({ ...props }) => {
   const getChainsTokenList = async () => {
     let res = []
     setTokenListLoading(true)
+
     switch (chainIndex) {
       case 0:
         res = await getSolTokenListSvc()
@@ -703,13 +711,14 @@ const PaymentCard = ({ ...props }) => {
     }
     if (res?.length) {
       tokensCache.current = res
-      let tokensNew = {
+
+      setTokenList({
         symbol: res[0]?.symbol,
         address: res[0]?.address,
         list: res.slice(0, 20),
-      }
-      setTokenList(tokensNew)
+      })
     }
+
     setTokenListLoading(false)
   }
 
@@ -722,41 +731,9 @@ const PaymentCard = ({ ...props }) => {
     setTokenPriceLoading(false)
   }
 
-  const get1InchTokenPrice = async (address = null) => {
-    address = (address || tokensItem?.address || tokens.address)?.toLowerCase()
-    setTokenPriceLoading(true)
-
-    let res = await get1InchTokenSvc({
-      chainId: payChains[chainIndex]?.['chainIdProd'],
-      address,
-    })
-
-    if (res?.[address] && Number(res?.[address])) {
-      setTokenPrice(res?.[address])
-    }
-    setTokenPriceLoading(false)
-  }
-
-  const getSushiTokenPrice = async (address = null) => {
-    setTokenPriceLoading(true)
-
-    let res = await getSushiTokenSvc({
-      chainId: payChains[chainIndex]?.['chainIdProd'],
-      tokenIn: address || tokensItem?.address || tokens.address,
-      tokenOut: payChains[chainIndex]?.['mocks']?.usdc,
-      amount: 1000000000000000000,
-    })
-
-    if (res?.assumedAmountOut) {
-      setTokenPrice(Number(formatUnits(res?.assumedAmountOut, 6)))
-    }
-
-    setTokenPriceLoading(false)
-  }
-
   const getLiFiTokenInfo = async (address = null) => {
     setTokenPriceLoading(true)
-    let res = await getToken(payChains[chainIndex]?.['chainIdProd'], address || tokensItem?.address || tokens.address)
+    let res = await getToken(payChains[chainIndex]?.['chainIdProd'], address)
     if (res?.priceUSD) {
       setTokenPrice(Number(res?.priceUSD))
     }
@@ -764,10 +741,12 @@ const PaymentCard = ({ ...props }) => {
   }
 
   const getTokenPrice = (address = null) => {
+    address = (typeof address == 'string' && address) || tokensItem?.symbol || tokens.address
+
     switch (chainIndex) {
       case 0:
         if (tokens.address == pay.solana.mocks.usdc) return setTokenPrice(1)
-        getJupTokenPrice({ ids: address || tokensItem?.symbol || tokens.address })
+        getJupTokenPrice({ ids: address })
         break
       default:
         getLiFiTokenInfo(address)
@@ -808,24 +787,25 @@ const PaymentCard = ({ ...props }) => {
     }
   )
 
-  const handleSwitchChain = async index => {
+  const handleSwitchChain = async (index, init = false) => {
     const selectedChain = payChains[index]
 
     if (selectedChain?.disabled || index == chainIndex) return
     setChainIndex(index)
 
-    const formattedChainName = selectedChain.name.replace(/\s+/g, '_')
-
-    // 构建新的 URL，确保不会重复添加链参数
-    const newQuery = { ...router.query, chain: formattedChainName }
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: newQuery,
-      },
-      undefined,
-      { shallow: true } // 使用 shallow 避免页面完全重新加载
-    )
+    if (init) {
+      const formattedChainName = selectedChain.name.replace(/\s+/g, '_')
+      // 构建新的 URL，确保不会重复添加链参数
+      const newQuery = { ...router.query, chain: formattedChainName }
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: newQuery,
+        },
+        undefined,
+        { shallow: true } // 使用 shallow 避免页面完全重新加载
+      )
+    }
 
     if (paymentType > 1) setPaymentType(0)
     tokensCache.current = []
@@ -1317,7 +1297,7 @@ const PaymentCard = ({ ...props }) => {
               <li
                 key={`chain-item-${item?.name}`}
                 className="carousel-item"
-                onClick={() => handleSwitchChain(index)}
+                onClick={() => handleSwitchChain(index, true)}
                 ref={el => {
                   chainRefs.current[index] = el
                 }}
