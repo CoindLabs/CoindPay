@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from 'react'
+import React, { FC, ElementType, PropsWithChildren } from 'react'
 import { Box, BoxProps } from '@mui/material'
 import classNames from 'classnames'
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
@@ -12,7 +12,7 @@ export interface Props {
   customClass?: string // 整体盒子自定义样式
   hoverAnimation?: string | boolean // 卡片动画效果，borderFlow、boxZoom等type，默认无
   onClick?: BoxProps['onClick']
-  component?: BoxProps['component']
+  component?: ElementType
 }
 
 const Wrap: FC<Props & PropsWithChildren> = ({ tpls, customClass, hoverAnimation, component, onClick, children }) => {

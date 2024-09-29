@@ -72,8 +72,22 @@ export const supportChains = [
         icon: logoChains.metis,
       },
       {
+        name: 'Sei',
+        chain: sei,
+        icon: logoChains.sei,
+      },
+      {
+        name: 'Scroll',
+        chain: scroll,
+      },
+      {
         name: 'Fuse',
         chain: fuse,
+      },
+      {
+        name: 'Gnosis',
+        chain: gnosis,
+        icon: logoChains.gnosis,
       },
       {
         name: 'Aurora',
@@ -86,15 +100,6 @@ export const supportChains = [
         icon: logoChains.zksync,
       },
       {
-        name: 'Scroll',
-        chain: scroll,
-      },
-      {
-        name: 'Sei',
-        chain: sei,
-        icon: logoChains.sei,
-      },
-      {
         name: 'Avalanche',
         chain: avalanche,
         icon: logoChains.avax,
@@ -103,11 +108,6 @@ export const supportChains = [
         name: 'Mantle',
         chain: mantle,
         icon: logoChains.mantle,
-      },
-      {
-        name: 'Gnosis',
-        chain: gnosis,
-        icon: logoChains.gnosis,
       },
       {
         name: 'Linea',

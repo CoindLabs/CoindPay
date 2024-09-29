@@ -5,8 +5,7 @@ import { useRouter } from 'next/router'
 import { Avatar, Box, Button, Drawer } from '@mui/material'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
-import { ChainId, ChainKey, getTokens } from '@lifi/sdk'
-import { formatUnits } from 'viem'
+import { ChainId, ChainKey, ChainType, getTokens } from '@lifi/sdk'
 import { CountUp } from 'use-count-up'
 import StudioLayout from '@/components/layout/studio'
 import NmIcon from '@/components/nm-icon'
@@ -34,13 +33,14 @@ const animateWords = ['Business', 'Invoice', 'Checkout', 'Recurring', 'Connect']
 
 const { domains } = config
 
-const { ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis } = pay
+const { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis, sei } = pay
 
 export default function Dashboard() {
   const isMobile = useMobile()
   const user = useUserData()
   const router = useRouter()
   const tokensCache = useRef([
+    ...solana.list,
     ...ethereum.list,
     ...base.list,
     ...optimism.list,
@@ -48,10 +48,11 @@ export default function Dashboard() {
     ...bsc.list,
     ...polygon.list,
     ...zkSync.list,
+    ...metis.list,
+    ...sei.list,
     ...aurora.list,
     ...fuse.list,
     ...zeta.list,
-    ...metis.list,
   ])
   const tokensPrice = useRef([])
   const [loading, setPaymentsLoading] = useState(false)
@@ -94,36 +95,26 @@ export default function Dashboard() {
     setPaymentsLoading(spin)
     let res = await getPaymentOrderSvc({ uuid: user?.id })
     if (res?.ok && res?.data?.length) {
-      let solList = res?.data?.filter(row => row?.chain?.includes('Solana'))
-
-      let chainIdProd = name => payChains.find(row => row.name.includes(name))?.['chainIdProd']
-
-      if (solList?.length) {
-        await getJupTokenPrice({
-          ids: [...new Set(solList.map(item => item.symbol))].join(','),
-        })
-      }
-
-      let paymentsData = res?.data.filter(item => !item?.chain.includes('Zeta'))
-
-      const lifiChainIds = [
-        ...new Set(
-          paymentsData.map(item => chainIdProd(item?.chain) as ChainId | ChainKey) // 类型断言
-        ),
-      ] as (ChainId | ChainKey)[]
+      let chainIdProd = name => payChains.find(row => row.name.includes(name))?.['chainIdProd'],
+        paymentsData = res?.data.filter(item => !item?.chain.includes('Zeta')),
+        lifiChainIds = [
+          ...new Set(
+            paymentsData.map(item => chainIdProd(item?.chain) as ChainId | ChainKey) // 类型断言
+          ),
+        ] as (ChainId | ChainKey)[]
 
       const chainTokens = await getTokens({
         chains: lifiChainIds,
+        chainTypes: [ChainType.EVM, ChainType.SVM],
       })
 
       if (chainTokens?.tokens) {
         for (let item of paymentsData) {
-          if (item.chainId) {
-            tokensPrice.current = Object.assign(tokensPrice.current, {
-              [item.contract]: chainTokens.tokens[chainIdProd(item?.chain)]?.find(row => row.address == item.contract)
-                ?.priceUSD,
-            })
-          }
+          tokensPrice.current = Object.assign(tokensPrice.current, {
+            [`${item.symbol}_${item.contract}`]: chainTokens.tokens[chainIdProd(item?.chain)]?.find(
+              row => row.address == item.contract
+            )?.priceUSD,
+          })
         }
       }
 
@@ -132,8 +123,7 @@ export default function Dashboard() {
       setPaymentsData({
         list: paymentsData,
         total: paymentsData?.reduce(
-          (total, item) =>
-            total + item.amount * (handleTokenPriceFactory(item?.symbol) || handleTokenPriceFactory(item?.contract)),
+          (total, item) => total + item.amount * handleTokenPriceFactory(`${item?.symbol}_${item?.contract}`),
           0
         ),
       })
@@ -147,13 +137,6 @@ export default function Dashboard() {
 
     if (solRes?.status == 'fulfilled' && solRes?.value?.length)
       tokensCache.current = tokensCache.current?.concat(solRes?.value)
-  }
-
-  const getJupTokenPrice = async ({ ids }) => {
-    let res = await getJupTokenPriceSvc({ ids })
-    if (res?.data) {
-      tokensPrice.current = Object.assign(tokensPrice.current, res?.data)
-    }
   }
 
   const handleSwitchChain = async index => {
@@ -173,10 +156,8 @@ export default function Dashboard() {
   }
 
   const handleTokenPriceFactory = key =>
-    tokensPrice.current?.[key]?.price ||
-    tokensPrice.current?.[key?.toLowerCase()]?.price ||
-    tokensPrice.current?.[key]?.usdPrice ||
-    tokensPrice.current?.[key?.toLowerCase()]?.usdPrice ||
+    tokensPrice.current?.[key]?.priceUSD ||
+    tokensPrice.current?.[key?.toLowerCase()]?.priceUSD ||
     tokensPrice.current?.[key] ||
     tokensPrice.current?.[key?.toLowerCase()]
 
@@ -417,6 +398,7 @@ export default function Dashboard() {
                   </td>
                   <td className="px-0 text-right">
                     <ul>
+                      <li className="text-sm">${handleTokenPriceFactory(`${item?.symbol}_${item?.contract}`)}</li>
                       <li className="bg-clip-text text-transparent bg-create-gradient-004">
                         + {item.amount} {tokenItem?.symbol || item?.symbol}
                       </li>
@@ -424,10 +406,7 @@ export default function Dashboard() {
                         ≈
                         <span className="px-0.5">
                           {Number(
-                            (
-                              item.amount *
-                              (handleTokenPriceFactory(item?.symbol) || handleTokenPriceFactory(item?.contract))
-                            ).toFixed(3)
+                            (item.amount * handleTokenPriceFactory(`${item?.symbol}_${item?.contract}`)).toFixed(3)
                           )}
                         </span>
                         USD

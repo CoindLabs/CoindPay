@@ -43,7 +43,7 @@ import { createConfig, readContract, readContracts } from '@wagmi/core'
 import { erc20Abi, formatUnits, parseEther, parseUnits } from 'viem'
 import classNames from 'classnames'
 import { useDebounce, useDebounceFn } from 'ahooks'
-import { Avatar, Box, Button, Link } from '@mui/material'
+import { Avatar, Box, Button } from '@mui/material'
 import NmIcon from '@/components/nm-icon'
 import NmBorderCounter from '@/components/nm-border-counter'
 import NmTooltip from '@/components/nm-tooltip'
@@ -117,7 +117,7 @@ const PaymentCard = ({ ...props }) => {
   const [tokens, setTokenList] = useState({
     list: [],
     symbol: 'USDC',
-    address: pay.solana.mocks.usdc,
+    address: pay.solana.mocks.usdc.dev,
   })
 
   const [tokenPrice, setTokenPrice] = useState(1)
@@ -288,7 +288,7 @@ const PaymentCard = ({ ...props }) => {
     }
     // Solana Pay transfer params
     const solPaymentParams: TransferRequestURLFields =
-      pay.solana.mocks.sol == tokens.address
+      pay.solana.mocks.sol.mainnet == tokens.address
         ? defaultParams
         : {
             ...defaultParams,
@@ -394,7 +394,7 @@ const PaymentCard = ({ ...props }) => {
         {
           recipient,
           amount: paymentAmount,
-          splToken: pay.solana.mocks.sol == tokens.address ? undefined : splToken,
+          splToken: pay.solana.mocks.sol.mainnet == tokens.address ? undefined : splToken,
           reference,
         },
         { commitment: 'confirmed' }
@@ -637,7 +637,7 @@ const PaymentCard = ({ ...props }) => {
   useEffect(() => {
     if (!tokens?.list?.length) return
 
-    chainIndex ? getTokenPrice(tokens?.address) : getJupTokenPrice({ ids: tokens.symbol })
+    getTokenPrice()
 
     let interval
     if (paymentType !== 5) {
@@ -731,27 +731,13 @@ const PaymentCard = ({ ...props }) => {
     setTokenPriceLoading(false)
   }
 
-  const getLiFiTokenInfo = async (address = null) => {
+  const getTokenPrice = async (address = null) => {
     setTokenPriceLoading(true)
-    let res = await getToken(payChains[chainIndex]?.['chainIdProd'], address)
+    let res = await getToken(payChains[chainIndex]?.['chainIdProd'], address || tokens?.address)
     if (res?.priceUSD) {
       setTokenPrice(Number(res?.priceUSD))
     }
     setTokenPriceLoading(false)
-  }
-
-  const getTokenPrice = (address = null) => {
-    address = (typeof address == 'string' && address) || tokensItem?.symbol || tokens.address
-
-    switch (chainIndex) {
-      case 0:
-        if (tokens.address == pay.solana.mocks.usdc) return setTokenPrice(1)
-        getJupTokenPrice({ ids: address })
-        break
-      default:
-        getLiFiTokenInfo(address)
-        break
-    }
   }
 
   const { run: handleTokenListSearch } = useDebounceFn(
@@ -1010,7 +996,7 @@ const PaymentCard = ({ ...props }) => {
                       size="small"
                       variant="outlined"
                       className="rounded-md scale-80"
-                      onClick={() => (chainIndex ? getTokenPrice() : getJupTokenPrice({ ids: tokensItem?.symbol }))}
+                      onClick={() => getTokenPrice()}
                     >
                       Try
                     </Button>

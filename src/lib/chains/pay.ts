@@ -16,6 +16,8 @@ export const payChains = [
   {
     name: isProd ? 'Solana' : 'Solana Devnet',
     icon: 'https://cryptologos.cc/logos/thumbs/solana.png',
+    chainId: 1151111081099710, // 参考 https://docs.li.fi/list-chains-bridges-dex-aggregators-solvers#supported-chains
+    chainIdProd: 1151111081099710,
     ...pay?.solana,
   },
   {
@@ -76,6 +78,20 @@ export const payChains = [
     ...pay?.metis,
   },
   {
+    name: isProd ? 'Sei' : 'Sei Testnet',
+    icon: logoChains.sei,
+    chainId: 1329,
+    chainIdProd: 1329,
+    ...pay?.sei,
+  },
+  {
+    name: isProd ? 'Gnosis' : 'Gnosis Testnet',
+    icon: logoChains.gnosis,
+    chainId: isProd ? 100 : 10200,
+    chainIdProd: 100,
+    ...pay?.gnosis,
+  },
+  {
     name: isProd ? 'Fuse' : 'Fuse Sparknet',
     chainId: isProd ? 122 : 123,
     chainIdProd: 122,
@@ -88,12 +104,9 @@ export const payChains = [
     chainIdProd: 1313161554,
     ...pay?.aurora,
   },
+
   {
     name: 'Scroll',
-    disabled: true,
-  },
-  {
-    name: 'Sei',
     disabled: true,
   },
   {

@@ -3,11 +3,7 @@ import { logoChains } from './logo'
 
 let mainnet = env?.isProd
 
-let solTokens = {
-    sol: mainnet ? 'So11111111111111111111111111111111111111112' : '22fh2M7RX8cYiQt8vR4DvAtcqVkpVNofF51g3K8ZwvxH',
-    usdc: mainnet ? 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' : 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-  },
-  ethTokens = {
+let ethTokens = {
     usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
     eth: '0x0000000000000000000000000000000000000000',
     usdt: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
@@ -71,6 +67,18 @@ let solTokens = {
     usdt: '0xbB06DCA3AE6887fAbF931640f67cab3e3a16F4dC',
     dai: '0x4c078361FC9BbB78DF910800A991C7c3DD2F6ce0',
   },
+  seiTokens = {
+    sei: '0x0000000000000000000000000000000000000000',
+    usdc: '0x3894085Ef7Ff0f0aeDf52E2A2704928d1Ec074F1',
+    usdt: '0xB75D0B03c06A926e488e2659DF1A861F860bD3d1',
+    weth: '0x160345fC359604fC6e70E3c5fAcbdE5F7A9342d8',
+  },
+  gnosisTokens = {
+    xdai: '0x0000000000000000000000000000000000000000',
+    usdc: '0x4ECaBa5870353805a9F068101A40E0f32ed605C6',
+    usdt: '0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83',
+    weth: '0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1',
+  },
   zetaTokens = {
     zeta: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     usdc: '0x0cbe0df132a6c6b4a2974fa1b7fb953cf0cc798a',
@@ -93,6 +101,12 @@ let USDC = {
     name: 'Ethereum Coin',
     logoURI: 'https://static.optimism.io/data/ETH/logo.svg',
   },
+  WETH = {
+    symbol: 'WETH',
+    name: 'Wrapped Ether',
+    logoURI:
+      'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png',
+  },
   USDT = {
     symbol: 'USDT',
     name: 'Tether USD',
@@ -100,30 +114,26 @@ let USDC = {
   }
 
 let solana = {
-    mocks: solTokens,
+    mocks: {
+      sol: {
+        dev: '22fh2M7RX8cYiQt8vR4DvAtcqVkpVNofF51g3K8ZwvxH',
+        mainnet: '11111111111111111111111111111111',
+      },
+      usdc: {
+        dev: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+        mainnet: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+      },
+    },
     list: [
       {
         ...USDC,
-        address: solTokens.usdc,
-        chainId: 101,
-        decimals: 6,
-        tags: ['old-registry', 'solana-fm'],
-        extensions: {
-          coingeckoId: 'usd-coin',
-        },
+        address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
       },
       {
         symbol: 'SOL',
         name: 'Wrapped SOL',
-        logoURI:
-          'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
-        address: solTokens.sol,
-        chainId: 101,
-        decimals: 9,
-        tags: ['old-registry'],
-        extensions: {
-          coingeckoId: 'wrapped-solana',
-        },
+        logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png',
+        address: '11111111111111111111111111111111',
       },
     ],
   },
@@ -388,9 +398,7 @@ let solana = {
         native: true,
       },
       {
-        ...ETH,
-        symbol: 'WETH',
-        name: 'Wrapped Ethereum Coin',
+        ...WETH,
         address: fuseTokens.weth,
       },
     ],
@@ -481,8 +489,59 @@ let solana = {
       },
     ],
   },
-  // coming
-  scroll = {},
-  sei = {}
+  sei = {
+    mocks: {
+      ...seiTokens,
+      usdc: seiTokens.usdc,
+    },
+    list: [
+      {
+        symbol: 'Sei',
+        name: 'Sei Token',
+        address: seiTokens.sei,
+        logoURI: logoChains.sei,
+        native: true,
+      },
+      {
+        ...USDC,
+        address: seiTokens.usdc,
+      },
+      {
+        ...USDT,
+        address: seiTokens.usdt,
+      },
+      {
+        ...WETH,
+        address: seiTokens.weth,
+      },
+    ],
+  },
+  gnosis = {
+    mocks: {
+      ...gnosisTokens,
+      usdc: gnosisTokens.usdc,
+    },
+    list: [
+      {
+        ...DAI,
+        symbol: 'xDAI',
+        name: 'xDAI Native Token',
+        address: gnosisTokens.xdai,
+        native: true,
+      },
+      {
+        ...USDC,
+        address: gnosisTokens.usdc,
+      },
+      {
+        ...USDT,
+        address: gnosisTokens.usdt,
+      },
+      {
+        ...WETH,
+        address: gnosisTokens.weth,
+      },
+    ],
+  }
 
-export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis }
+export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis, sei, gnosis }

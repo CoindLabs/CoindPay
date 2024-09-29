@@ -42,6 +42,7 @@ import {
   arbitrumSepolia,
   bscTestnet,
   polygonAmoy,
+  gnosisChiado,
   zksyncSepoliaTestnet,
   berachainTestnetbArtio,
   auroraTestnet,
@@ -55,7 +56,7 @@ import config from '@/config'
 
 const { title } = config
 
-const { Xenea, xrpLedger, jocChain, Mint } = customChains
+const { Xenea, jocChain } = customChains
 
 let isProd = env?.isProd
 
@@ -85,7 +86,6 @@ let chains_tpl = [
   arbitrum,
   { ...metis, name: 'Metis', iconUrl: logoChains.metis },
   { ...fuse, name: 'Fuse', iconUrl: logoChains.fuse },
-
   { ...sei, iconUrl: logoChains.sei },
   { ...scroll, iconUrl: logoChains.scroll },
   { ...manta, name: 'Manta', iconUrl: logoChains.manta },
@@ -116,6 +116,7 @@ const chains = isProd
       optimismSepolia,
       arbitrumSepolia,
       bscTestnet,
+      gnosisChiado,
       { ...polygonAmoy, iconUrl: logoChains.polygon },
       { ...zksyncSepoliaTestnet, iconUrl: logoChains.zksync },
       { ...auroraTestnet, iconUrl: logoChains.aurora },
@@ -136,15 +137,17 @@ export const chainsTransports = {
   [arbitrumSepolia.id]: http(`https://arb-sepolia.g.alchemy.com/v2/${env.alchemyId}`),
   [polygon.id]: http(`https://polygon-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
   [polygonAmoy.id]: http(`https://polygon-amoy.g.alchemy.com/v2/${env.alchemyId}`),
-  [bsc.id]: http(`https://bsc-mainnet.blockvision.org/v1/${env.blockVisionBSCKey}`),
-  [bscTestnet.id]: http(`https://bsc-testnet.blockvision.org/v1/${env.blockVisionBSCKey}`),
+  [bsc.id]: http(`https://56.rpc.thirdweb.com/${env?.thirdwebKey}`),
+  [bscTestnet.id]: http(`https://97.rpc.thirdweb.com/${env?.thirdwebKey}`),
+  [sei.id]: http(`https://1329.rpc.thirdweb.com/${env?.thirdwebKey}`),
+  [gnosis.id]: http(`https://1rpc.io/${env.rpc1Key}/gnosis`),
   [aurora.id]: http(`https://1rpc.io/${env.rpc1Key}/aurora`),
   [auroraTestnet.id]: http(`https://1313161555.rpc.thirdweb.com/${env.thirdwebKey}`),
   [fuse.id]: http(`https://122.rpc.thirdweb.com/${env.thirdwebKey}`),
   [fuseSparknet.id]: http(`https://123.rpc.thirdweb.com/${env.thirdwebKey}`),
   [metis.id]: http(`https://1088.rpc.thirdweb.com/${env.thirdwebKey}`),
-  [zetachain.id]: http(`https://zetachain-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
-  [zetachainAthensTestnet.id]: http(`https://zetachain-testnet.g.alchemy.com/v2/${env.alchemyId}`),
+  [zetachain.id]: http(`https://7000.rpc.thirdweb.com/${env?.thirdwebKey}`),
+  [zetachainAthensTestnet.id]: http(`https://7001.rpc.thirdweb.com/${env?.thirdwebKey}`),
 }
 
 export const wagmiConfig = {

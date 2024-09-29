@@ -1,11 +1,11 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import classNames from 'classnames'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import StudioLayout from '@/components/layout/studio'
 import PaymentCard from '@/components/dapp/landing/base/pay'
 import LandingCard from '@/components/dapp/landing/base/card'
-import { Alert, Box, Button, SwipeableDrawer, Switch, useMediaQuery, useTheme } from '@mui/material'
+import { Alert, Box, Button, SwipeableDrawer, useMediaQuery, useTheme } from '@mui/material'
 import NmIcon from '@/components/nm-icon'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
 import { useSnackbar } from '@/components/context/snackbar'
@@ -17,20 +17,15 @@ import {
   useGlobalWalletConnect,
   useInitPayChainIndex,
   useLocation,
-  useMobile,
   usePayeeData,
   useUserData,
 } from '@/lib/hooks'
 import { _supportChains } from '@/lib/chains'
 
-const switchLabel = { inputProps: { 'aria-label': 'Switch' } }
-
 export default function Pay() {
   let iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
   const router = useRouter()
-
-  const chainIndex = useInitPayChainIndex()
 
   const theme = useTheme()
   const mdlScreen = useMediaQuery(theme.breakpoints.up('md'))
@@ -196,10 +191,9 @@ className="md:w-120 max-sm:min-h-[81vh]"
               <ul className="px-3.5 py-2.5 mb-4 rounded-lg border border-dashed border-stone-300/30 flex items-center justify-between">
                 <li>Account Info</li>
                 <li>
-                  <Switch
-                    {...switchLabel}
-                    color="success"
-                    disableRipple
+                  <input
+                    type="checkbox"
+                    className="checkbox checkbox-success checkbox-lg"
                     checked={payee?.accountInfo}
                     onChange={e => dispatch(setPayeeInfo({ accountInfo: e.target.checked }))}
                   />
@@ -209,10 +203,9 @@ className="md:w-120 max-sm:min-h-[81vh]"
               <ul className="px-3.5 py-2.5 mb-4 rounded-lg border border-dashed border-stone-300/30 flex items-center justify-between">
                 <li>Copyright（Powered By）</li>
                 <li>
-                  <Switch
-                    {...switchLabel}
-                    color="success"
-                    disableRipple
+                  <input
+                    type="checkbox"
+                    className="checkbox checkbox-success checkbox-lg"
                     checked={payee?.copyright}
                     onChange={e => dispatch(setPayeeInfo({ copyright: e.target.checked }))}
                   />
