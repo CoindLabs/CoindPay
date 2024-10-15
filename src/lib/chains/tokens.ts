@@ -73,6 +73,12 @@ let ethTokens = {
     usdt: '0xB75D0B03c06A926e488e2659DF1A861F860bD3d1',
     weth: '0x160345fC359604fC6e70E3c5fAcbdE5F7A9342d8',
   },
+  scrollTokens = {
+    usdc: '0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4',
+    eth: '0x0000000000000000000000000000000000000000',
+    usdt: '0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df',
+    dai: '0xcA77eB3fEFe3725Dc33bccB54eDEFc3D9f764f97',
+  },
   gnosisTokens = {
     xdai: '0x0000000000000000000000000000000000000000',
     usdc: '0x4ECaBa5870353805a9F068101A40E0f32ed605C6',
@@ -542,6 +548,47 @@ let solana = {
         address: gnosisTokens.weth,
       },
     ],
+  },
+  scroll = {
+    mocks: {
+      ...scrollTokens,
+      usdc: scrollTokens.usdc,
+    },
+    list: [
+      {
+        ...USDC,
+        address: scrollTokens.usdc,
+      },
+      {
+        ...ETH,
+        address: scrollTokens.eth,
+        native: true,
+      },
+      {
+        ...USDT,
+        address: scrollTokens.usdt,
+      },
+      {
+        ...DAI,
+        address: scrollTokens.dai,
+      },
+    ],
   }
 
-export { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis, sei, gnosis }
+export {
+  solana,
+  ethereum,
+  base,
+  optimism,
+  arbitrum,
+  bsc,
+  polygon,
+  zkSync,
+  aurora,
+  fuse,
+  zeta,
+  metis,
+  sei,
+  gnosis,
+  scroll,
+}

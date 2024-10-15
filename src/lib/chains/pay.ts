@@ -85,6 +85,12 @@ export const payChains = [
     ...pay?.sei,
   },
   {
+    name: isProd ? 'Scroll' : 'Scroll Sepolia',
+    chainId: isProd ? 534352 : 534351,
+    chainIdProd: 534352,
+    ...pay?.scroll,
+  },
+  {
     name: isProd ? 'Gnosis' : 'Gnosis Testnet',
     icon: logoChains.gnosis,
     chainId: isProd ? 100 : 10200,
@@ -103,11 +109,6 @@ export const payChains = [
     chainId: isProd ? 1313161554 : 1313161555,
     chainIdProd: 1313161554,
     ...pay?.aurora,
-  },
-
-  {
-    name: 'Scroll',
-    disabled: true,
   },
   {
     name: 'ICP',

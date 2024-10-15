@@ -33,7 +33,7 @@ const animateWords = ['Business', 'Invoice', 'Checkout', 'Recurring', 'Connect']
 
 const { domains } = config
 
-const { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis, sei } = pay
+const { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis, sei, scroll } = pay
 
 export default function Dashboard() {
   const isMobile = useMobile()
@@ -53,6 +53,7 @@ export default function Dashboard() {
     ...aurora.list,
     ...fuse.list,
     ...zeta.list,
+    ...scroll.list,
   ])
   const tokensPrice = useRef([])
   const [loading, setPaymentsLoading] = useState(false)

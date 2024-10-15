@@ -10,10 +10,6 @@ interface IAlchemy extends AlchemySettings {
   options?: GetNftsForOwnerOptions
 }
 
-interface INFTSan_GETALLNFT {
-  address: string
-}
-
 export function getAlchemySvc(data: IAlchemy) {
   return fetcher({
     url: 'api/common/alchemy',
@@ -22,13 +18,6 @@ export function getAlchemySvc(data: IAlchemy) {
   })
 }
 
-export function getNFTScanSvc(data: INFTSan_GETALLNFT) {
-  return fetcher({
-    url: 'api/common/nftscan',
-    method: 'post',
-    data,
-  })
-}
 export function getSimplehashSvc(data) {
   return fetcher({
     url: 'api/common/simplehash',
@@ -39,7 +28,6 @@ export function getSimplehashSvc(data) {
 
 export function getPoapSvc(data) {
   return fetcher({
-    // baseURL: getAPIsOrigin(),
     url: 'api/common/poap',
     params: data,
   })
