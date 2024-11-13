@@ -115,12 +115,8 @@ export const chainIdToNetWork = (chainId: number): Chain => {
       return polygonAmoy as any
     case 80084:
       return berachainTestnetbArtio
-    case 5555:
-      return customChains.Xenea as any
-    case 1440002:
-      return customChains.xrpLedger as any
-    case 81:
-      return customChains.jocChain as any
+    case 133:
+      return customChains.hashkey as any
     case 300:
       return zksyncSepoliaTestnet as any
     case 1313161555:

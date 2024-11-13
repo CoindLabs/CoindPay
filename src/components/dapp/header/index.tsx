@@ -10,7 +10,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Grid,
+  Grid2,
   IconButton,
   Paper,
   Slide,
@@ -34,6 +34,7 @@ import { logoChains } from '@/lib/chains'
 import { useAppDispatch, useGlobalWalletConnect, useSolAccount, useUserData } from '@/lib/hooks'
 
 import config from '@/config'
+import { isiOS } from '@/lib/utils'
 
 const { logo } = config
 
@@ -47,7 +48,6 @@ const Transition = forwardRef(function Transition(
 })
 
 const StudioHeader = () => {
-  let iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)
   const router = useRouter()
   const theme = useTheme()
   const mdlScreen = useMediaQuery(theme.breakpoints.up('md'))
@@ -150,7 +150,7 @@ const StudioHeader = () => {
           list.push({ chain: 'evm', value: account?.address })
         }
         if (solAddress) {
-          list.push({ chain: 'sol', value: solAddress })
+          list.push({ chain: 'svm', value: solAddress })
         }
         if (icpData?.accountId) {
           list.push({ chain: 'icp', value: icpData.accountId })
@@ -169,6 +169,7 @@ const StudioHeader = () => {
         return getActiveChain({ name: 'Ethereum' })?.icon
         break
       case 'sol':
+      case 'svm':
         return getActiveChain({ name: 'Solana' })?.icon
         break
       case 'icp':
@@ -213,8 +214,8 @@ const StudioHeader = () => {
         </li>
       </ul>
       <SwipeableDrawer
-        disableBackdropTransition={!iOS}
-        disableDiscovery={iOS}
+        disableBackdropTransition={!isiOS()}
+        disableDiscovery={isiOS()}
         anchor={mdlScreen ? 'right' : 'bottom'}
         open={accountCardShow}
         onClose={handleToggleDrawer(false)}
@@ -292,7 +293,7 @@ const StudioHeader = () => {
                         </Link>
                       </li>
                     </ul>
-                    <Grid>
+                    <Grid2>
                       {row?.addresses?.length &&
                         row?.addresses.map((item, aIndex) => (
                           <ul className="chat chat-end" key={`dialog-account-item-wallet-${aIndex}`}>
@@ -303,7 +304,7 @@ const StudioHeader = () => {
                             <li className="chat-bubble chat-bubble-accent break-all">{item?.value}</li>
                           </ul>
                         ))}
-                    </Grid>
+                    </Grid2>
                   </Card>
                 </li>
               ))}

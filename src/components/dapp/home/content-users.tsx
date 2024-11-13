@@ -7,8 +7,8 @@ import config from '@/config'
 const { domains } = config
 
 const ContentUsers = () => {
-  let mdScreen = useMediaQuery('(min-width:768px)')
-  let lgScreen = useMediaQuery('(min-width:1024px)')
+  let mdScreen = useMediaQuery('(min-width:768px)'),
+    lgScreen = useMediaQuery('(min-width:1024px)')
 
   return (
     <section className="relative">

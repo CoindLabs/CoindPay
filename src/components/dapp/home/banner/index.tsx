@@ -12,8 +12,8 @@ let animateWords = ['Payments', 'Compound', 'Liquidity', 'All-in-One']
 
 const Banner = () => {
   const [animateInit, setAnimateInit] = useState(true)
-  let lgScreen = useMediaQuery('(min-width:1024px)')
-  let xlScreen = useMediaQuery('(min-width:1280px)')
+  let lgScreen = useMediaQuery('(min-width:1024px)'),
+    xlScreen = useMediaQuery('(min-width:1280px)')
 
   useEffect(() => {
     setTimeout(_ => {
@@ -48,7 +48,7 @@ const Banner = () => {
           'w-38 md:w-64 lg:w-84 xl:w-100 2xl:w-120 3xl:w-136 absolute bottom-28 md:bottom-40 xl:bottom-36 left-0 xl:left-16 animate__animated',
           animateInit
             ? 'animate__fadeInBottomLeft animate__slow'
-            : 'animate__jello  animate__delay-1s animate__slower animate-duration-8 animate__infinite'
+            : 'animate__jello animate__delay-1s animate__slower animate-duration-8 animate__infinite'
         )}
         width={800}
         height={800}
@@ -61,7 +61,7 @@ const Banner = () => {
           'w-32 md:w-56 lg:w-72 xl:w-84 2xl:w-100 3xl:w-120 absolute bottom-16 right-2 lg:right-12 xl:right-28 animate__animated',
           animateInit
             ? 'animate__fadeInBottomRight animate__slow'
-            : 'animate__pulse  animate__delay-1s animate__slower animate-duration-6 animate__infinite'
+            : 'animate__pulse animate__delay-1s animate__slower animate-duration-6 animate__infinite'
         )}
         width={800}
         height={800}

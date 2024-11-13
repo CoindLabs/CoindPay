@@ -9,7 +9,7 @@ import { getActiveChain } from '@/lib/web3'
 
 import config from '@/config'
 
-const { title, domains } = config
+const { domains } = config
 
 let chainsPayments = [
   {
@@ -21,24 +21,25 @@ let chainsPayments = [
     iconClass: 'text-green-500',
   },
   {
-    name: 'ICP',
-    title: '+ 120 ICP',
+    name: 'SOON',
+    title: '+ 120 USDC',
     titleClass: 'text-rose-600 bg-rose-600/20',
+    avatarClass: 'bg-black',
     message: "Last month's salary from the Dev DAO community.",
     icon: 'salary',
     iconClass: 'text-rose-600',
   },
   {
-    name: 'Base',
-    title: '+ 0.25 ETH',
-    titleClass: 'text-blue-600 bg-blue-600/20',
-    message: 'Received a reward from 0x.... .9h8c a reward.',
+    name: 'Metis',
+    title: '+ 15 Metis',
+    titleClass: 'text-cyan-400 bg-cyan-400/20',
+    message: 'Received a reward from 0x...9h8c a reward.',
     icon: 'gift',
-    iconClass: 'text-blue-600 scale-90',
+    iconClass: 'text-cyan-400 scale-90',
   },
   {
     name: 'Optimism',
-    title: '+ 25 USDC',
+    title: '+ 25 OP',
     titleClass: 'text-violet-600 bg-violet-600/20',
     message: 'Received a donation grant from 7Th...vDw.',
     icon: 'donation',
@@ -93,7 +94,10 @@ const ContentEdge = () => {
                     innerClass="flex justify-between gap-4"
                   >
                     <Box className="flex gap-4">
-                      <Avatar src={item?.['avatar'] || getActiveChain({ name: item?.name })?.icon} />
+                      <Avatar
+                        src={item?.['avatar'] || getActiveChain({ name: item?.name })?.icon}
+                        className={classNames(item?.avatarClass)}
+                      />
                       <ul>
                         {item?.title && (
                           <li>

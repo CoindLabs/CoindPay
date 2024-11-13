@@ -2,7 +2,7 @@
 
 https://coindpay.xyz
 
-![CoindPay Banner](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/jaEaa2NWzCLEaL0D.png)
+![CoindPay Banner](https://cdn.coindpay.xyz/stream/brand/banner/brand_banner_default.jpg)
 
 ![CoindPay Portfolio_Y](https://cdn.coindpay.xyz/stream/brand/banner/dapp_cover_y.jpg)
 
@@ -17,7 +17,7 @@ For Creator、ForBrand、For Consumers、For Everyone.
 
 ## Values
 
-CoindPay is a Multichain（28+ EVM Chains、Solana、ICP etc.）DEXs、Payments and Compound Finance Infrastructure.
+CoindPay is a Multichain（28+ EVM Chains、Solana、SOON etc.）DEXs、Payments and Compound Finance Infrastructure.
 
 All Your Business, Invoice, Checkout, Recurring, Connect... Payments in One Place.
 
@@ -30,7 +30,7 @@ Make idle funds more available once and for all.
 ## Chains
 
 ✅ **EVM**
-Ethereum、Solana、Base、Optimism、Arbitrum、Metis、Sei、Scroll、Celo、Fuse、Aurora、Gnosis、BSC、Polygon、Polygon zkEVM、zkSync、Avalanche、Mantle、Linea、Manta、Blast、Mode、Fantom、Rootsock、Berachain、ZetaChain...and 28+ chains.
+Ethereum、Solana、Base、Optimism、Arbitrum、Metis、Sei、Scroll、Hashkey、Celo、Fuse、Aurora、Gnosis、BSC、Polygon、Polygon zkEVM、zkSync、Avalanche、Mantle、Linea、Manta、Blast、Mode、Fantom、Rootsock、Berachain、ZetaChain...and 28+ chains.
 
 ✅ **Solana**
 

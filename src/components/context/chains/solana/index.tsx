@@ -9,7 +9,7 @@ import {
   LedgerWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
-import { getSolanaRPCUrl } from '@/lib/web3'
+import { getSvmRpcUrl } from '@/lib/web3'
 import { env } from '@/lib/types/env'
 
 // Default styles that can be overridden by your app
@@ -23,7 +23,7 @@ export const WalletContextProvider: FC<{ children: ReactNode }> = ({ children })
 
   const network = mainnet ? WalletAdapterNetwork.Mainnet : WalletAdapterNetwork.Devnet
 
-  const endpoint = getSolanaRPCUrl()
+  const endpoint = getSvmRpcUrl()
 
   const wallets = useMemo(
     () => [

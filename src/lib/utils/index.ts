@@ -2,6 +2,7 @@ import { nftAvailableChains, chainIdToNetWork } from '../chains'
 import { env } from '../types/env'
 
 import config from '@/config'
+import { getSvmRpcUrl } from '../web3'
 
 const { host, domains } = config
 
@@ -486,25 +487,32 @@ export const getNFTOrScanUrl = ({
   let _item = nftAvailableChains.find(row => row.chain == chain?.toLowerCase()),
     _chainId = Number(chainId || _item?.id),
     _chainCurrency = _item?.['currency'],
-    _sol = chainType == 'sol' || chain?.toLowerCase()?.includes('sol'), // 兼容不同地方的solana数据
+    _svm = chainType == 'svm',
+    _sol = chainType == 'sol' || chain?.toLowerCase()?.startsWith('sol'),
+    _soon = chainType == 'soon' || chain?.toLowerCase()?.startsWith('soon'),
+    _svmExplorer = _soon
+      ? `?cluster=custom&customUrl=${getSvmRpcUrl({ chain: 'soon' })}`
+      : env?.isProd
+        ? ''
+        : '?cluster=devnet',
     _icp = chainType == 'icp'
 
   switch (type) {
-    case 'tx':
-      if (_sol) return `https://solscan.io/tx/${hash}${env?.isProd ? '' : '?cluster=devnet'}`
-      return `${chainIdToNetWork(_chainId).blockExplorers?.default?.url}/tx/${hash}`
-
     case 'scan':
-      if (_sol) return `https://solscan.io/account/${contractAddress || address}${env?.isProd ? '' : '?cluster=devnet'}`
+      if (_svm || _sol || _soon) return `https://solscan.io/account/${_svmExplorer}`
       return `${chainIdToNetWork(_chainId).blockExplorers?.default?.url}/nft/${contractAddress}/${tokenId}`
 
+    case 'tx':
+      if (_svm || _sol || _soon) return `https://solscan.io/tx/${hash}${_svmExplorer}`
+      return `${chainIdToNetWork(_chainId).blockExplorers?.default?.url}/tx/${hash}`
+
     case 'address':
-      if (_sol) return `https://solscan.io/account/${contractAddress || address}${env?.isProd ? '' : '?cluster=devnet'}`
+      if (_svm || _sol || _soon) return `https://solscan.io/account/${contractAddress || address}${_svmExplorer}`
       if (_icp) return `https://dashboard.internetcomputer.org/account/${address}`
       return `${chainIdToNetWork(_chainId).blockExplorers?.default?.url}/address/${address}`
 
     case 'nft':
-      if (_sol) return `https://magiceden.io/item-details/${contractAddress}`
+      if (_svm || _sol || _soon) return `https://magiceden.io/item-details/${contractAddress}`
       return `https://opensea.io/assets/${_chainCurrency || chain}/${contractAddress}/${tokenId}`
     default:
       return null
@@ -665,4 +673,10 @@ export function getRandomNumber(min, max) {
 export function capitalizeFirstLetter(str) {
   if (str?.length == 0) return str
   return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+export const isiOS = () => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)
+
+export function getCompareIgnoreCase(left: string, right: string): boolean {
+  return left?.toLowerCase() == right?.toLowerCase()
 }

@@ -183,7 +183,6 @@ const ICPModal = ({ connected }: { connected?: boolean }) => {
               fontSize: '0.875rem',
               borderRadius: '0.5rem',
               justifyContent: 'center',
-              backgroundImage: themes.backgroundImage['create-gradient-004'],
             }}
           >
             Connect ICP

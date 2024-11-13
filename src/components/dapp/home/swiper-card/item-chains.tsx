@@ -30,10 +30,11 @@ const ItemChainsSwiper = ({ data = [], ...props }) => {
             <Avatar
               src={item?.icon || getActiveChain({ name: item?.name })?.icon}
               className={classNames(
-                'bg-transparent shadow-sm size-12 hover:rotate-y-360 duration-1000 transition-all',
+                'shadow-sm size-12 hover:rotate-y-360 duration-1000 transition-all',
                 {
                   'opacity-40': item?.disabled,
                 },
+                item?.avatarClass,
                 props?.avatarClass
               )}
             />

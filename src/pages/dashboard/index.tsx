@@ -12,7 +12,7 @@ import NmIcon from '@/components/nm-icon'
 import NmTooltip from '@/components/nm-tooltip'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
 import { FlipWords } from '@/components/aceternity-ui/flip-words'
-import ItemChainsSwiper from '@/components/dapp/home/swiper-card/item-chains'
+import ItemCoinsSwiper from '@/components/dapp/home/swiper-card/item-coins'
 import {
   get1InchTokenSvc,
   getSushiTokenSvc,
@@ -22,7 +22,7 @@ import {
 } from '@/services/common'
 import { getPaymentOrderSvc } from '@/services/pay'
 import { useMobile, useUserData } from '@/lib/hooks'
-import { getNFTOrScanUrl, getShortenMidDots } from '@/lib/utils'
+import { getCompareIgnoreCase, getNFTOrScanUrl, getShortenMidDots } from '@/lib/utils'
 import { _supportChains, payChains } from '@/lib/chains'
 import { getActiveChain } from '@/lib/web3'
 import * as pay from '@/lib/chains/tokens'
@@ -33,7 +33,27 @@ const animateWords = ['Business', 'Invoice', 'Checkout', 'Recurring', 'Connect']
 
 const { domains } = config
 
-const { solana, ethereum, base, optimism, arbitrum, bsc, polygon, zkSync, aurora, fuse, zeta, metis, sei, scroll } = pay
+const {
+  solana,
+  soon,
+  ethereum,
+  base,
+  optimism,
+  arbitrum,
+  bsc,
+  polygon,
+  zkSync,
+  aurora,
+  fuse,
+  zeta,
+  metis,
+  sei,
+  scroll,
+  celo,
+  boba,
+  taiko,
+  hashkey,
+} = pay
 
 export default function Dashboard() {
   const isMobile = useMobile()
@@ -41,6 +61,7 @@ export default function Dashboard() {
   const router = useRouter()
   const tokensCache = useRef([
     ...solana.list,
+    ...soon.list,
     ...ethereum.list,
     ...base.list,
     ...optimism.list,
@@ -54,6 +75,10 @@ export default function Dashboard() {
     ...fuse.list,
     ...zeta.list,
     ...scroll.list,
+    ...celo.list,
+    ...boba.list,
+    ...taiko.list,
+    ...hashkey.list,
   ])
   const tokensPrice = useRef([])
   const [loading, setPaymentsLoading] = useState(false)
@@ -111,10 +136,15 @@ export default function Dashboard() {
 
       if (chainTokens?.tokens) {
         for (let item of paymentsData) {
+          let chainTokenItem = payChains
+            .find(row => row.name.includes(item?.chain))
+            ?.['list']?.find(zz => zz.address == item.contract)
           tokensPrice.current = Object.assign(tokensPrice.current, {
-            [`${item.symbol}_${item.contract}`]: chainTokens.tokens[chainIdProd(item?.chain)]?.find(
-              row => row.address == item.contract
-            )?.priceUSD,
+            [`${item.symbol}_${item.contract}`]:
+              chainTokenItem?.price ||
+              chainTokens.tokens[chainIdProd(item?.chain)]?.find(
+                row => row.address == item.contract || row.address == chainTokenItem?.address_price
+              )?.priceUSD,
           })
         }
       }
@@ -160,7 +190,8 @@ export default function Dashboard() {
     tokensPrice.current?.[key]?.priceUSD ||
     tokensPrice.current?.[key?.toLowerCase()]?.priceUSD ||
     tokensPrice.current?.[key] ||
-    tokensPrice.current?.[key?.toLowerCase()]
+    tokensPrice.current?.[key?.toLowerCase()] ||
+    0
 
   return (
     <StudioLayout>
@@ -174,7 +205,7 @@ export default function Dashboard() {
           A smart wallet portfolio that automatically invests (stakes, lps, etc.) and earns money.
         </p>
       </header>
-      <ItemChainsSwiper customClass="my-12" />
+      <ItemCoinsSwiper customClass="my-12" avatarClass="bg-black" />
       <ul className="p-6 max-sm:pl-4 my-8 rounded-lg border border-stone-100 hover:border-stone-200/80 flex flex-col relative overflow-hidden transition-all">
         <li className="flex justify-between items-center">
           <Box className="bg-clip-text text-transparent bg-create-gradient-004">
@@ -278,7 +309,7 @@ export default function Dashboard() {
                 {
                   'bg-black p-1.5': item?.name
                     .split(' ')
-                    .some(word => ['Solana', 'Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(word)),
+                    .some(word => ['Solana', 'SOON', 'Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(word)),
                 },
                 classes
               )}
@@ -326,7 +357,9 @@ export default function Dashboard() {
           <tbody>
             {payments.list?.map((item, index) => {
               let tokenItem = tokensCache.current.find(
-                row => row?.address == item?.contract && row.symbol?.toLowerCase() == item?.symbol?.toLowerCase()
+                row =>
+                  (row?.address == item?.contract || row?.['address_price'] == item?.contract) &&
+                  getCompareIgnoreCase(row.symbol, item?.symbol)
               )
               let chainIcon = ({ classes = null } = {}) => (
                 <Image
@@ -337,7 +370,13 @@ export default function Dashboard() {
                     _supportChains.find(row => item?.chain?.includes(row?.name))?.icon ||
                     getActiveChain({ name: item?.chain })?.icon
                   }
-                  className={classNames('rounded-full', classes)}
+                  className={classNames(
+                    'rounded-full',
+                    {
+                      'bg-black': item?.chain.includes('SOON'),
+                    },
+                    classes
+                  )}
                 />
               )
               return (
@@ -349,7 +388,6 @@ export default function Dashboard() {
                         {chainIcon({
                           classes: classNames('size-4 sm:size-5 border absolute top-0 right-0', {
                             'bg-white': ['Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(item?.chain),
-                            'bg-black': item?.chain == 'Solana',
                           }),
                         })}
                       </li>

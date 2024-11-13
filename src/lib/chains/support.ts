@@ -19,6 +19,7 @@ import {
   fuse,
   rootstock,
   boba,
+  taiko,
   aurora,
   moonbeam,
   moonriver,
@@ -31,10 +32,27 @@ import {
 import { logoChains } from './logo'
 import { customChains } from './custom'
 
+const { hashkey } = customChains
+
 export const supportChains = [
   {
+    type: 'SVM',
+    desc: 'Fast and low-cost SVM（Solana Virtual Machine）',
+    list: [
+      {
+        name: 'Solana',
+        icon: logoChains.solana_bg,
+      },
+      {
+        name: 'SOON',
+        icon: logoChains.soon_flat,
+        avatarClass: 'bg-black',
+      },
+    ],
+  },
+  {
     type: 'EVM',
-    desc: 'Blockchain network compatible with Ethereum Virtual Machine (EVM).',
+    desc: 'Blockchain network compatible with Ethereum Virtual Machine (EVM)',
     list: [
       {
         name: 'Ethereum',
@@ -81,13 +99,26 @@ export const supportChains = [
         chain: scroll,
       },
       {
-        name: 'Fuse',
-        chain: fuse,
+        name: 'Celo',
+        chain: celo,
       },
       {
         name: 'Gnosis',
         chain: gnosis,
         icon: logoChains.gnosis,
+      },
+      {
+        name: 'Fuse',
+        chain: fuse,
+      },
+      {
+        name: 'Boba',
+        chain: boba,
+        icon: logoChains.boba,
+      },
+      {
+        name: 'Taiko',
+        chain: taiko,
       },
       {
         name: 'Aurora',
@@ -131,11 +162,6 @@ export const supportChains = [
         icon: logoChains.rootstock,
       },
       {
-        name: 'Boba',
-        chain: boba,
-        icon: logoChains.boba,
-      },
-      {
         name: 'Moonbeam',
         chain: moonbeam,
         icon: logoChains.moonbeam,
@@ -146,10 +172,6 @@ export const supportChains = [
         icon: logoChains.moonriver,
       },
       {
-        name: 'Celo',
-        chain: celo,
-      },
-      {
         name: 'Fantom',
         chain: fantom,
         icon: logoChains.fantom,
@@ -157,6 +179,11 @@ export const supportChains = [
       {
         name: 'Polygon zkEVM',
         chain: polygonZkEvm,
+      },
+      {
+        name: 'Hashkey',
+        chain: hashkey,
+        icon: logoChains.hashkey,
       },
       {
         name: 'Zeta',
@@ -171,69 +198,9 @@ export const supportChains = [
     ],
   },
   {
-    type: 'Rollup',
-    desc: 'A layer two (L2) blockchain that processes transactions away from the main blockchain to reduce transaction costs and increase throughput on the main chain.',
+    type: 'Others',
+    desc: 'Non-EVM（SVM）Chains',
     list: [
-      {
-        name: 'Optimism',
-        icon: logoChains.optimism,
-        chain: optimism,
-      },
-      {
-        name: 'Base',
-        icon: logoChains.base,
-        chain: base,
-      },
-      {
-        name: 'Arbitrum',
-        icon: logoChains.arbitrum,
-        chain: arbitrum,
-      },
-      {
-        name: 'Metis',
-        icon: logoChains.metis,
-        chain: metis,
-      },
-      {
-        name: 'Scroll',
-        chain: scroll,
-      },
-      {
-        name: 'Mode',
-        chain: mode,
-      },
-      {
-        name: 'Mantle',
-        icon: logoChains.mantle,
-        chain: mantle,
-      },
-      {
-        name: 'Linea',
-        chain: linea,
-      },
-      {
-        name: 'Manta',
-        chain: manta,
-      },
-      {
-        name: 'Blast',
-        chain: blast,
-      },
-      {
-        name: 'zkSync',
-        chain: zksync,
-        icon: logoChains.zksync,
-      },
-    ],
-  },
-  {
-    type: 'Non-EVM',
-    desc: 'Fast and low-cost Non-EVM（Ethereum Virtual Machine） Chains.',
-    list: [
-      {
-        name: 'Solana',
-        icon: 'https://cryptofonts.com/img/icons/sol.svg',
-      },
       {
         name: 'ICP',
         icon: logoChains.icp,

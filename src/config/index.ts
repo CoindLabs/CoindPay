@@ -51,7 +51,7 @@ const config = {
     placeholder: 'https://picsum.photos/256/256/?blur=5',
     nft_placeholder: `${domains.cdn}/status/nft_placeholder.png`,
     banner: {
-      cover: `${domains.cdn}/stream/brand/banner/brand_banner_01.jpg`,
+      cover: `${domains.cdn}/stream/brand/banner/brand_banner_default.jpg`,
     },
   },
   footer: {
@@ -116,12 +116,13 @@ const config = {
         url: '//github.com/CoindLabs',
       },
       {
-        icon: 'discord',
-        name: 'Discord',
-      },
-      {
         icon: 'telegram',
         name: 'Telegram',
+        url: '//t.me/CoindPay',
+      },
+      {
+        icon: 'discord',
+        name: 'Discord',
       },
       {
         icon: 'email',

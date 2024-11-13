@@ -1,17 +1,17 @@
-import { env } from '@/lib/types/env'
 import { logoChains } from './logo'
-
-let mainnet = env?.isProd
 
 let ethTokens = {
     usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
     eth: '0x0000000000000000000000000000000000000000',
     usdt: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+    usdglo: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
     dai: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
   },
   baseTokens = {
     usdc: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
     eth: '0x0000000000000000000000000000000000000000',
+    usdt: '0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2',
+    usdglo: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
     dai: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
   },
   opTokens = {
@@ -19,13 +19,16 @@ let ethTokens = {
     eth: '0x0000000000000000000000000000000000000000',
     op: '0x4200000000000000000000000000000000000042',
     usdt: '0x94b008aa00579c1307b0ef2c499ad98a8ce58e58',
+    usdglo: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
     dai: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
+    weth: '0x4200000000000000000000000000000000000006',
   },
   arbTokens = {
     usdc: '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
     eth: '0x0000000000000000000000000000000000000000',
     arb: '0x912ce59144191c1204e64559fe8253a0e49e6548',
     usdt: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
+    usdglo: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
     dai: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
   },
   bscTokens = {
@@ -38,8 +41,9 @@ let ethTokens = {
   polygonTokens = {
     usdc: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',
     pol: '0x0000000000000000000000000000000000000000',
-    dai: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     usdt: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+    usdglo: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
+    dai: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
   },
   zkSyncTokens = {
     usdc: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
@@ -57,9 +61,9 @@ let ethTokens = {
   fuseTokens = {
     fuse: '0x0000000000000000000000000000000000000000',
     usdc: '0x620fd5fa44BE6af63715Ef4E65DDFA0387aD13F5',
-    weth: '0xa722c13135930332Eb3d749B2F0906559D2C5b99',
     usdt: '0xFaDbBF8Ce7D5b7041bE672561bbA99f79c532e10',
     dai: '0x94Ba7A27c7A95863d1bdC7645AC2951E0cca06bA',
+    weth: '0xa722c13135930332Eb3d749B2F0906559D2C5b99',
   },
   metisTokens = {
     metis: '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000',
@@ -84,6 +88,31 @@ let ethTokens = {
     usdc: '0x4ECaBa5870353805a9F068101A40E0f32ed605C6',
     usdt: '0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83',
     weth: '0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1',
+  },
+  celoTokens = {
+    usdc: '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
+    celo: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+    usdt: '0x617f3112bf5397D0467D315cC709EF968D9ba546',
+    usdglo: '0x4F604735c1cF31399C6E711D5962b2B3E0225AD3',
+    dai: '0x90Ca507a5D4458a4C6C6249d186b6dCb02a5BCCd',
+    weth: '0x122013fd7dF1C6F636a5bb8f03108E876548b455',
+  },
+  bobaTokens = {
+    usdc: '0x66a2A913e447d6b4BF33EFbec43aAeF87890FBbc',
+    boba: '0xa18bF3994C0Cc6E3b63ac420308E5383f53120D7',
+    eth: '0x0000000000000000000000000000000000000000',
+    usdt: '0x5DE1677344D3Cb0D7D465c10b72A8f60699C062d',
+    dai: '0xf74195Bb8a5cf652411867c5C2C5b8C2a402be35',
+  },
+  taikoTokens = {
+    usdc: '0x07d83526730c7438048D55A4fc0b850e2aaB6f0b',
+    taiko: '0xA9d23408b9bA935c230493c40C73824Df71A0975',
+    eth: '0x0000000000000000000000000000000000000000',
+    usdt: '0x2DEF195713CF4a606B49D07E520e22C17899a736',
+  },
+  hashkeyTokens = {
+    hsk: '0x31BdaC8E4B897E470B70eBe286F94245baa793C2',
+    weth: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
   },
   zetaTokens = {
     zeta: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -117,6 +146,17 @@ let USDC = {
     symbol: 'USDT',
     name: 'Tether USD',
     logoURI: 'https://cryptofonts.com/img/SVG/usdt.svg',
+  },
+  USDGLO = {
+    symbol: 'USDGLO',
+    name: 'Glo Dollar',
+    logoURI:
+      'https://static.debank.com/image/op_token/logo_url/0x4f604735c1cf31399c6e711d5962b2b3e0225ad3/14cda5c0e1e8671713583910a8a56cef.png',
+  },
+  SOL = {
+    symbol: 'SOL',
+    name: 'Solana',
+    logoURI: logoChains.solana_bg,
   }
 
 let solana = {
@@ -133,13 +173,35 @@ let solana = {
     list: [
       {
         ...USDC,
-        address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+        //
+        address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+        address_price: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
       },
       {
-        symbol: 'SOL',
-        name: 'Wrapped SOL',
-        logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png',
+        ...SOL,
         address: '11111111111111111111111111111111',
+      },
+    ],
+  },
+  soon = {
+    mocks: {
+      sol: {
+        dev: '11111111111111111111111111111111',
+        mainnet: '11111111111111111111111111111111',
+      },
+    },
+    list: [
+      {
+        ...SOL,
+        address: '11111111111111111111111111111111',
+        address_price: '11111111111111111111111111111111',
+      },
+      {
+        symbol: '$P',
+        name: '$P Token',
+        logoURI: 'https://bridge.devnet.soo.network/assets/_P-icon-BQN19dSx.png',
+        address: '6sRQN8MvjSagGhnJG6eK8FcEq9nwuF1nbBHbx5zGQsBo',
+        price: 1,
       },
     ],
   },
@@ -166,6 +228,10 @@ let solana = {
         address: ethTokens.usdt,
       },
       {
+        ...USDGLO,
+        address: ethTokens.usdglo,
+      },
+      {
         ...DAI,
         address: ethTokens.dai,
       },
@@ -185,13 +251,21 @@ let solana = {
         address: baseTokens.usdc,
       },
       {
-        ...DAI,
-        address: baseTokens.dai,
+        ...USDT,
+        address: baseTokens.usdt,
+      },
+      {
+        ...USDGLO,
+        address: baseTokens.usdglo,
       },
       {
         ...ETH,
         address: baseTokens.eth,
         native: true,
+      },
+      {
+        ...DAI,
+        address: baseTokens.dai,
       },
       {
         symbol: 'cbETH',
@@ -242,8 +316,12 @@ let solana = {
       {
         symbol: 'OP',
         name: 'Optimism',
-        logoURI: 'https://tokens-data.1inch.io/images/0x4200000000000000000000000000000000000042.png',
+        logoURI: logoChains.optimism,
         address: opTokens.op,
+      },
+      {
+        ...USDGLO,
+        address: opTokens.usdglo,
       },
       {
         ...USDT,
@@ -252,6 +330,10 @@ let solana = {
       {
         ...DAI,
         address: opTokens.dai,
+      },
+      {
+        ...WETH,
+        address: opTokens.weth,
       },
     ],
   },
@@ -278,6 +360,10 @@ let solana = {
         name: 'Arbitrum',
         logoURI: logoChains.arbitrum,
         address: arbTokens.arb,
+      },
+      {
+        ...USDGLO,
+        address: arbTokens.usdglo,
       },
       {
         ...USDT,
@@ -346,12 +432,16 @@ let solana = {
         native: true,
       },
       {
-        ...DAI,
-        address: polygonTokens.dai,
+        ...USDGLO,
+        address: polygonTokens.usdglo,
       },
       {
         ...USDT,
         address: polygonTokens.usdt,
+      },
+      {
+        ...DAI,
+        address: polygonTokens.dai,
       },
     ],
   },
@@ -573,10 +663,124 @@ let solana = {
         address: scrollTokens.dai,
       },
     ],
+  },
+  celo = {
+    mocks: {
+      ...celoTokens,
+      usdc: celoTokens.usdc,
+    },
+    list: [
+      {
+        ...USDC,
+        address: celoTokens.usdc,
+      },
+      {
+        symbol: 'Celo',
+        name: 'Celo Token',
+        address: celoTokens.celo,
+        logoURI: logoChains.celo,
+        native: true,
+      },
+      {
+        ...WETH,
+        address: celoTokens.weth,
+      },
+      {
+        ...USDGLO,
+        address: celoTokens.usdglo,
+      },
+      {
+        ...USDT,
+        address: celoTokens.usdt,
+      },
+      {
+        ...DAI,
+        address: celoTokens.dai,
+      },
+    ],
+  },
+  boba = {
+    mocks: {
+      ...bobaTokens,
+      usdc: bobaTokens.usdc,
+    },
+    list: [
+      {
+        ...USDC,
+        address: bobaTokens.usdc,
+      },
+      {
+        symbol: 'BOBA',
+        name: 'Boba Token',
+        address: bobaTokens.boba,
+        logoURI: logoChains.boba,
+      },
+      {
+        ...ETH,
+        address: bobaTokens.eth,
+        native: true,
+      },
+      {
+        ...USDT,
+        address: bobaTokens.usdt,
+      },
+      {
+        ...DAI,
+        address: bobaTokens.dai,
+      },
+    ],
+  },
+  taiko = {
+    mocks: {
+      ...taikoTokens,
+      usdc: taikoTokens.usdc,
+    },
+    list: [
+      {
+        ...USDC,
+        address: taikoTokens.usdc,
+      },
+      {
+        symbol: 'TAIKO',
+        name: 'Taiko Token',
+        address: taikoTokens.taiko,
+        logoURI: logoChains.taiko,
+      },
+      {
+        ...ETH,
+        address: taikoTokens.eth,
+        native: true,
+      },
+      {
+        ...USDT,
+        address: taikoTokens.usdt,
+      },
+    ],
+  },
+  hashkey = {
+    mocks: {
+      ...hashkeyTokens,
+      hsk: hashkeyTokens.hsk,
+    },
+    list: [
+      {
+        symbol: 'HSK',
+        name: 'Hashkey Token',
+        address: hashkeyTokens.hsk,
+        logoURI: logoChains.hashkey,
+        price: 1,
+      },
+      {
+        ...WETH,
+        address: hashkeyTokens.weth,
+        address_price: opTokens.eth,
+      },
+    ],
   }
 
 export {
   solana,
+  soon,
   ethereum,
   base,
   optimism,
@@ -591,4 +795,8 @@ export {
   sei,
   gnosis,
   scroll,
+  celo,
+  boba,
+  taiko,
+  hashkey,
 }

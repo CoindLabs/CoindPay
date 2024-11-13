@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { Box } from '@mui/material'
 import LandingCard from '@/components/dapp/landing/base/card'
 import { FlipWords } from '@/components/aceternity-ui/flip-words'
-import ItemChainsSwiper from './swiper-card/item-chains'
+import ItemCoinsSwiper from './swiper-card/item-coins'
 
 import config from '@/config'
 
@@ -43,8 +43,11 @@ const ContentChains = () => {
         alt=""
         draggable={false}
       />
-      <LandingCard customClass="-mt-0 sm:-mt-12 mx-4 border border-zinc-700/30" tpls={{ style: 'S001' }}>
-        <ItemChainsSwiper />
+      <LandingCard
+        customClass="-mt-0 sm:-mt-12 mx-4 border border-zinc-700/30"
+        tpls={{ style: 'S001' }}
+      >
+        <ItemCoinsSwiper />
       </LandingCard>
     </section>
   )

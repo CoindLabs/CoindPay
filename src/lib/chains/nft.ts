@@ -4,6 +4,16 @@
  */
 export const nftAvailableChains = [
   {
+    chain: 'abstract',
+    id: 2741,
+    is_testnet: false,
+  },
+  {
+    chain: 'abstract-testnet',
+    id: 11124,
+    is_testnet: true,
+  },
+  {
     chain: 'align-testnet',
     id: 472382,
     is_testnet: true,
@@ -11,6 +21,21 @@ export const nftAvailableChains = [
   {
     chain: 'anomaly-andromeda-testnet',
     id: 241120,
+    is_testnet: true,
+  },
+  {
+    chain: 'apechain',
+    id: 33139,
+    is_testnet: false,
+  },
+  {
+    chain: 'aptos',
+    id: null,
+    is_testnet: false,
+  },
+  {
+    chain: 'aptos-testnet',
+    id: null,
     is_testnet: true,
   },
   {
@@ -37,6 +62,11 @@ export const nftAvailableChains = [
     chain: 'avalanche-fuji',
     id: 43113,
     is_testnet: true,
+  },
+  {
+    chain: 'b3',
+    id: 8333,
+    is_testnet: false,
   },
   {
     chain: 'b3-sepolia',
@@ -84,6 +114,11 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
+    chain: 'camp-testnet-2',
+    id: 325000,
+    is_testnet: true,
+  },
+  {
     chain: 'canto',
     id: 7700,
     is_testnet: false,
@@ -91,6 +126,11 @@ export const nftAvailableChains = [
   {
     chain: 'celo',
     id: 42220,
+    is_testnet: false,
+  },
+  {
+    chain: 'cyber',
+    id: 7560,
     is_testnet: false,
   },
   {
@@ -116,6 +156,11 @@ export const nftAvailableChains = [
   {
     chain: 'flow',
     id: null,
+    is_testnet: false,
+  },
+  {
+    chain: 'flow-evm',
+    id: 747,
     is_testnet: false,
   },
   {
@@ -169,6 +214,11 @@ export const nftAvailableChains = [
     is_testnet: false,
   },
   {
+    chain: 'lisk',
+    id: 1135,
+    is_testnet: false,
+  },
+  {
     chain: 'loot',
     id: 5151706,
     is_testnet: false,
@@ -184,9 +234,19 @@ export const nftAvailableChains = [
     is_testnet: false,
   },
   {
+    chain: 'monad-devnet',
+    id: 41454,
+    is_testnet: true,
+  },
+  {
     chain: 'moonbeam',
     id: 1284,
     is_testnet: false,
+  },
+  {
+    chain: 'night-testnet',
+    id: 86868,
+    is_testnet: true,
   },
   {
     chain: 'opbnb',
@@ -282,6 +342,11 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
+    chain: 'shape',
+    id: 360,
+    is_testnet: false,
+  },
+  {
     chain: 'shape-sepolia',
     id: 11011,
     is_testnet: true,
@@ -289,6 +354,21 @@ export const nftAvailableChains = [
   {
     chain: 'shardeum-atomium',
     id: 8082,
+    is_testnet: true,
+  },
+  {
+    chain: 'soon',
+    id: null,
+    is_testnet: false,
+  },
+  {
+    chain: 'soon-devnet',
+    id: null,
+    is_testnet: true,
+  },
+  {
+    chain: 'soon-testnet',
+    id: null,
     is_testnet: true,
   },
   {
@@ -304,6 +384,11 @@ export const nftAvailableChains = [
   {
     chain: 'solana-testnet',
     id: null,
+    is_testnet: true,
+  },
+  {
+    chain: 'story-odyssey',
+    id: 1516,
     is_testnet: true,
   },
   {
@@ -327,9 +412,29 @@ export const nftAvailableChains = [
     is_testnet: true,
   },
   {
+    chain: 'treasure-topaz',
+    id: 978658,
+    is_testnet: true,
+  },
+  {
+    chain: 'unichain-sepolia',
+    id: 1301,
+    is_testnet: true,
+  },
+  {
     chain: 'utxo',
     id: null,
     is_testnet: false,
+  },
+  {
+    chain: 'worldchain',
+    id: 480,
+    is_testnet: false,
+  },
+  {
+    chain: 'worldchain-sepolia',
+    id: 4801,
+    is_testnet: true,
   },
   {
     chain: 'xai',
@@ -340,6 +445,11 @@ export const nftAvailableChains = [
     chain: 'xai-sepolia',
     id: 37714555429,
     is_testnet: true,
+  },
+  {
+    chain: 'zero',
+    id: 543210,
+    is_testnet: false,
   },
   {
     chain: 'zero-sepolia',

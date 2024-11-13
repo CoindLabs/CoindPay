@@ -70,7 +70,7 @@ const SideBar = ({ ...props }) => {
   const user = useUserData()
   const globalWalletConnect = useGlobalWalletConnect()
   const { setAccountCardShow } = useStudioContext()
-  let lgScreen = useMediaQuery(theme.breakpoints.up('lg')),
+  let lg2Screen = useMediaQuery(theme.breakpoints.up('lg')),
     smScreen = useMediaQuery(theme.breakpoints.up('sm'))
 
   const handleMenuClick = (row, e) => {
@@ -131,7 +131,7 @@ const SideBar = ({ ...props }) => {
                 onClick={e => handleMenuClick(row, e)}
               >
                 {row?.icon &&
-                  (lgScreen ? (
+                  (lg2Screen ? (
                     <Avatar
                       className={classNames(
                         'text-current bg-transparent group-hover:bg-create-gradient-004 group-hover:font-extrabold group-hover:transition-all',

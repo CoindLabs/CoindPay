@@ -42,7 +42,6 @@ import {
   arbitrumSepolia,
   bscTestnet,
   polygonAmoy,
-  gnosisChiado,
   zksyncSepoliaTestnet,
   berachainTestnetbArtio,
   auroraTestnet,
@@ -50,13 +49,14 @@ import {
   zetachainAthensTestnet,
 } from 'viem/chains'
 import { env } from '@/lib/types/env'
-import { customChains, logoChains } from '.'
+import { logoChains } from './logo'
+import { customChains } from './custom'
 
 import config from '@/config'
 
 const { title } = config
 
-const { Xenea, jocChain } = customChains
+const { hashkey } = customChains
 
 let isProd = env?.isProd
 
@@ -92,6 +92,7 @@ let chains_tpl = [
   { ...mantle, iconUrl: logoChains.mantle },
   { ...blast, iconUrl: logoChains.blast },
   { ...gnosis, iconUrl: logoChains.gnosis },
+  { ...hashkey, iconUrl: logoChains.hashkey },
   { ...linea, name: 'Linea', iconUrl: logoChains.linea },
   { ...zksync, iconUrl: logoChains.zksync },
   { ...mode, name: 'Mode', iconUrl: logoChains.mode },
@@ -116,7 +117,6 @@ const chains = isProd
       optimismSepolia,
       arbitrumSepolia,
       bscTestnet,
-      gnosisChiado,
       { ...polygonAmoy, iconUrl: logoChains.polygon },
       { ...zksyncSepoliaTestnet, iconUrl: logoChains.zksync },
       { ...auroraTestnet, iconUrl: logoChains.aurora },
@@ -148,6 +148,7 @@ export const chainsTransports = {
   [metis.id]: http(`https://1088.rpc.thirdweb.com/${env.thirdwebKey}`),
   [zetachain.id]: http(`https://7000.rpc.thirdweb.com/${env?.thirdwebKey}`),
   [zetachainAthensTestnet.id]: http(`https://7001.rpc.thirdweb.com/${env?.thirdwebKey}`),
+  [hashkey.id]: http('https://hashkeychain-testnet.alt.technology'),
 }
 
 export const wagmiConfig = {

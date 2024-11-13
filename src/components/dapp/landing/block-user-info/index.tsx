@@ -50,7 +50,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
   const scan_url = getNFTOrScanUrl({
     type: 'address',
     address: addressDefault?.value,
-    chainType: addressDefault?.chain,
+    chainType: addressDefault?.chain == 'sol' ? 'svm' : addressDefault?.chain
   })
 
   const handleEventAction = ({ type = 'address', address = null, label = null, event = null, toast = true }) => {
@@ -309,14 +309,14 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
                             href={getNFTOrScanUrl({
                               type: 'address',
                               address: row?.value,
-                              chainType: row?.chain,
+                              chainType: row?.chain == 'sol' ? 'svm' : row?.chain,
                             })}
                           >
                             {row?.chain == 'icp' ? (
                               <Image alt="" width={24} height={24} src={logoChains.icp} className="mr-0.5" />
                             ) : (
                               <NmIcon
-                                type={`icon-${(row?.chain == 'sol' && 'solana') || (row?.chain == 'evm' && 'evm') || 'antelope'}`}
+                                type={`icon-${(['sol', 'svm'].includes(row?.chain) && 'solana') || (row?.chain == 'evm' && 'evm') || 'more_colors'}`}
                                 className="leading-0 mr-1 text-1.5xl hover:scale-110 transition-all"
                               />
                             )}

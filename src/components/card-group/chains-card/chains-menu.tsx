@@ -12,8 +12,8 @@ const { domains, title } = config
 
 export const Rows = [
   {
-    images: ['coinbase.svg', 'grow.png', 'phantom.svg'],
-    type: 'Solana',
+    images: ['backpack.png', 'phantom.svg', 'grow.png'],
+    type: 'SVM',
   },
   {
     images: ['rainbow.svg', 'walletconnect.svg', 'metamask.svg'],
@@ -53,7 +53,7 @@ const ChainsMenu: FC<ChainsMenuProps> = ({ chainsExpand, disables = [], setChain
       case 'EVM':
         evmWalletConnect ? openAccountModal() : openConnectModal()
         break
-      case 'Solana':
+      case 'SVM':
         setVisible(true)
         break
       default:

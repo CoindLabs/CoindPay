@@ -105,9 +105,7 @@ export async function getSolTokenListSvc({ mode = 'strict' } = {}) {
     baseURL: `https://token.jup.ag/${mode}`,
   })
   // 默认strict模式，加载全部 all模式，prod拼接防止接口usdc和sol顺序变换
-  return env?.isProd
-    ? solana.list.concat(mainList.filter(row => ![solana.mocks.sol, solana.mocks.usdc].includes(row.address)))
-    : solana.list
+  return env?.isProd ? mainList : solana.list
 }
 /**
  * base token list

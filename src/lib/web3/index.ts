@@ -3,19 +3,16 @@ import { env } from '@/lib/types/env'
 
 let mainnet = env?.isProd
 
-export const getSolanaRPCUrl = ({ type = 'https' } = {}) => {
-  switch (type) {
-    case 'wss':
-      return mainnet
-        ? `wss://solana-mainnet.g.alchemy.com/v2/${env?.alchemyId}`
-        : `wss://solana-devnet.g.alchemy.com/v2/${env?.alchemyId}`
-
+export const getSvmRpcUrl = ({ chain = 'sol', type = 'https' } = {}) => {
+  switch (chain) {
+    case 'soon':
+      return mainnet ? 'https://rpc.testnet.soo.network/rpc' : 'https://rpc.devnet.soo.network/rpc'
       break
-    case 'https':
+    case 'sol':
     default:
       return mainnet
-        ? `https://solana-mainnet.g.alchemy.com/v2/${env?.alchemyId}`
-        : `https://solana-devnet.g.alchemy.com/v2/${env?.alchemyId}`
+        ? `${type}://solana-mainnet.g.alchemy.com/v2/${env?.alchemyId}`
+        : `${type}://solana-devnet.g.alchemy.com/v2/${env?.alchemyId}`
       break
   }
 }

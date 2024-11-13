@@ -28,7 +28,7 @@ const cache = createCache({
   prepend: true,
 })
 
-const rootElement = () => document.getElementById('__next')
+export const rootElement = () => document.getElementById('__next')
 
 const theme = createTheme({
   palette: {

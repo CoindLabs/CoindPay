@@ -21,10 +21,9 @@ import {
   useUserData,
 } from '@/lib/hooks'
 import { _supportChains } from '@/lib/chains'
+import { isiOS } from '@/lib/utils'
 
 export default function Pay() {
-  let iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)
-
   const router = useRouter()
 
   const theme = useTheme()
@@ -253,8 +252,8 @@ className="md:w-120 max-sm:min-h-[81vh]"
             </LandingCard>
           </ul>
           <SwipeableDrawer
-            disableBackdropTransition={!iOS}
-            disableDiscovery={iOS}
+            disableBackdropTransition={!isiOS()}
+            disableDiscovery={isiOS()}
             anchor={mdlScreen ? 'left' : 'bottom'}
             open={drawer.open}
             onClose={handleToggleDrawer(false)}

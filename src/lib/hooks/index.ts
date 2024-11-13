@@ -52,7 +52,7 @@ export const useNetworkType = (id?: number) => {
   let networks = useMemo(() => {
     if (sol) {
       return {
-        networkType: 'sol',
+        networkType: 'svm',
         scan: 'https://explorer.solana.com',
       }
     } else if (id) {
@@ -91,7 +91,7 @@ export const useChainConnect = () => {
   } else if (solAddress) {
     return {
       address: solAddress,
-      chainType: 'sol',
+      chainType: 'svm',
       sol: true,
     }
   } else if (icpData?.accountId) {
