@@ -3,20 +3,24 @@ import { nanoid } from 'nanoid'
 import prisma from '@/lib/prisma'
 
 export default async function payee(req: NextApiRequest, res: NextApiResponse) {
+  let { id, uuid, ...content } = req.body
+
+  uuid = req?.body?.uuid || req?.query?.uuid
+
+  if (!uuid) {
+    return res.status(400).json({ ok: false, message: 'User id is required ˙◠˙' })
+  }
+
   switch (req.method) {
     case 'POST':
-      const { uuid, id, createdAt, ...content } = req.body
-
-      if (!uuid) {
-        return res.status(400).json({ ok: false, message: 'User id required ˙◠˙' })
-      }
-
+    case 'PUT':
       try {
-        if (!content?.title) content['title'] = null
-
         const payee = await prisma.payee.upsert({
-          where: { uuid },
-          update: { ...content },
+          where: { id: id || '' },
+          update: {
+            ...content,
+            updatedAt: new Date(),
+          },
           create: {
             id: nanoid(),
             uuid,
@@ -32,17 +36,13 @@ export default async function payee(req: NextApiRequest, res: NextApiResponse) {
       break
 
     case 'GET':
-      if (!req?.query?.id) {
-        return res.status(400).json({ ok: false, message: 'User id is required ˙◠˙' })
-      }
-
       try {
-        const payee = await prisma.payee.findUnique({
-          where: { uuid: req?.query?.id as string },
+        const payee = await prisma.payee.findMany({
+          where: { uuid: uuid as string },
         })
 
         if (!payee) {
-          return res.status(404).json({ ok: false, message: 'Payee not found ˙◠˙' })
+          return res.status(404).json({ ok: false, message: 'Payment not found ˙◠˙' })
         }
 
         res.status(200).json({ ok: true, data: payee })
@@ -51,6 +51,19 @@ export default async function payee(req: NextApiRequest, res: NextApiResponse) {
         res.status(500).json({ ok: false, message: error.message || 'Server error ˙◠˙' })
       }
 
+      break
+
+    case 'DELETE':
+      try {
+        await prisma.payee.delete({
+          where: { id: id as string },
+        })
+
+        res.status(200).json({ ok: true, message: 'Payment deleted successfully ᵔ◡ᵔ' })
+      } catch (error) {
+        console.error(error)
+        res.status(500).json({ ok: false, message: error.message || 'Server error ˙◠˙' })
+      }
       break
 
     default:

@@ -6,12 +6,7 @@ import classNames from 'classnames'
 import { ChainType, getTokens } from '@lifi/sdk'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
 import { useMobile } from '@/lib/hooks'
-import { logoChains } from '@/lib/chains'
 import { isUrl } from '@/lib/utils'
-
-import config from '@/config'
-
-const { images } = config
 
 const ItemCoinsSwiper = ({ data = [], ...props }) => {
   const isMobile = useMobile()

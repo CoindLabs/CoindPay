@@ -29,7 +29,6 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
 
   const textAreaRef = useRef(null)
 
-  const { bg = {} } = Skus[`S00${payee?.style?.theme || 0}`]
   const { showSnackbar } = useSnackbar()
 
   let { data: ensName } = useEnsName({ address: user?.addressList?.find(row => row?.chain == 'evm')?.value }),
@@ -50,7 +49,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
   const scan_url = getNFTOrScanUrl({
     type: 'address',
     address: addressDefault?.value,
-    chainType: addressDefault?.chain == 'sol' ? 'svm' : addressDefault?.chain
+    chainType: addressDefault?.chain == 'sol' ? 'svm' : addressDefault?.chain,
   })
 
   const handleEventAction = ({ type = 'address', address = null, label = null, event = null, toast = true }) => {
@@ -269,7 +268,7 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
               copyClass,
               addressTextClass,
               {
-                'rotate-180': addressHub.open,
+                'rotate-90': addressHub.open,
               }
             )}
             onClick={event =>
@@ -279,7 +278,15 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
             }
           />
         </Box>
-        <Popper id="address-hub" open={addressHub.open} anchorEl={anchorEl} transition disablePortal placement="bottom">
+        <Popper
+          id="address-hub"
+          open={addressHub.open}
+          anchorEl={anchorEl}
+          transition
+          disablePortal
+          placement="right"
+          className="z-100"
+        >
           {({ TransitionProps, placement }) => {
             return (
               <Grow
@@ -289,13 +296,10 @@ const BlockUserInfo = ({ payee, user, ...props }) => {
                 }}
               >
                 <Paper
-                  className={classNames(
-                    'mt-1.5 rounded-xl backdrop-blur border border-neutral-600',
-                    bg?.blur?.includes('backdrop') ? 'bg-black/95' : 'bg-black/70'
-                  )}
+                  className={classNames('z-100 mt-1.5 rounded-xl backdrop-blur bg-black/70 border border-neutral-600')}
                 >
                   <ClickAwayListener onClickAway={() => setAddressHub({ open: false })}>
-                    <ul className="menu px-0">
+                    <ul className="menu px-0 z-100">
                       {user?.addressList.map(row => (
                         <li
                           className="flex flex-row flex-nowrap justify-between items-center leading-8"

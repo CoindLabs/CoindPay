@@ -175,7 +175,7 @@ let solana = {
         ...USDC,
         //
         address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-        address_price: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+        price_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
       },
       {
         ...SOL,
@@ -194,7 +194,7 @@ let solana = {
       {
         ...SOL,
         address: '11111111111111111111111111111111',
-        address_price: '11111111111111111111111111111111',
+        price_address: '11111111111111111111111111111111',
       },
       {
         symbol: '$P',
@@ -773,7 +773,7 @@ let solana = {
       {
         ...WETH,
         address: hashkeyTokens.weth,
-        address_price: opTokens.eth,
+        price_address: opTokens.eth,
       },
     ],
   }

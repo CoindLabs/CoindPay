@@ -40,13 +40,13 @@ export const supportChains = [
     desc: 'Fast and low-cost SVM（Solana Virtual Machine）',
     list: [
       {
-        name: 'Solana',
-        icon: logoChains.solana_bg,
-      },
-      {
         name: 'SOON',
         icon: logoChains.soon_flat,
         avatarClass: 'bg-black',
+      },
+      {
+        name: 'Solana',
+        icon: logoChains.solana_bg,
       },
     ],
   },
@@ -249,6 +249,7 @@ export const supportChains = [
   },
 ]
 
-export const _supportChains = supportChains.reduce((accumulator, { type, list }) => {
-  return list ? [...accumulator, ...list] : accumulator
-}, [])
+export const _supportChains = (chains = null) =>
+  (chains || supportChains).reduce((accumulator, { type, list }) => {
+    return list ? [...accumulator, ...list] : accumulator
+  }, [])

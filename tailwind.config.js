@@ -196,6 +196,7 @@ module.exports = {
         68: '17rem',
         84: '21rem',
         100: '25rem',
+        104: '26rem',
         108: '27rem',
         112: '28rem',
         114: '28.5rem',
@@ -220,6 +221,8 @@ module.exports = {
         'screen-2k': '2000px',
       },
       maxHeight: {
+        84: '21rem',
+        86: '21.5rem',
         120: '30rem',
       },
       padding: {

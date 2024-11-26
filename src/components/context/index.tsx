@@ -1,19 +1,19 @@
-import { ReactNode, FC } from 'react'
+import { ReactNode, FC, useState } from 'react'
 import { Provider } from 'react-redux'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
+import { WagmiProvider } from 'wagmi'
 import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, darkTheme, getDefaultConfig } from '@rainbow-me/rainbowkit'
-import { WagmiProvider } from 'wagmi'
 import { SolanaContextProvider } from '@/components/context/chains/solana'
 import { ICPContextProvider } from '@/components/context/chains/icp'
 import { StudioContextProvider } from '@/components/context/studio'
-import { TempContextProvider } from '@/components/context/temp'
-import { CacheRequestProvider } from '@/lib/api/cache'
+import { UtilsContextProvider } from '@/components/context/utils'
 import { SnackbarProvider } from '@/components/context/snackbar'
+import { CacheRequestProvider } from '@/lib/api/cache'
 import { wagmiConfig } from '@/lib/chains'
 import { store } from '@/lib/store'
 
@@ -109,17 +109,17 @@ const theme = createTheme({
   },
 })
 
-const walletConfig = getDefaultConfig(wagmiConfig)
-
 const queryClient = new QueryClient()
+
+const walletConfig = getDefaultConfig(wagmiConfig)
 
 export const GlobalContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <CacheProvider value={cache}>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
-          <QueryClientProvider client={queryClient}>
-            <WagmiProvider config={walletConfig}>
+          <WagmiProvider config={walletConfig}>
+            <QueryClientProvider client={queryClient}>
               <RainbowKitProvider
                 showRecentTransactions
                 theme={darkTheme({
@@ -133,20 +133,20 @@ export const GlobalContextProvider: FC<{ children: ReactNode }> = ({ children })
                   <ICPContextProvider>
                     <Provider store={store}>
                       <PersistGate loading={null} persistor={persistor}>
-                        <TempContextProvider>
+                        <UtilsContextProvider>
                           <CacheRequestProvider>
                             <StudioContextProvider>
                               <SnackbarProvider>{children}</SnackbarProvider>
                             </StudioContextProvider>
                           </CacheRequestProvider>
-                        </TempContextProvider>
+                        </UtilsContextProvider>
                       </PersistGate>
                     </Provider>
                   </ICPContextProvider>
                 </SolanaContextProvider>
               </RainbowKitProvider>
-            </WagmiProvider>
-          </QueryClientProvider>
+            </QueryClientProvider>
+          </WagmiProvider>
         </ThemeProvider>
       </StyledEngineProvider>
     </CacheProvider>

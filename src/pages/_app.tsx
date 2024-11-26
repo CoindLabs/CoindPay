@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Script from 'next/script'
-import MobileContent from '@/components/card-group/chains-card/mobile-content'
+import ChainsMobile from '@/components/card-group/chains-card/chains-mobile'
 import { GlobalContextProvider } from '@/components/context'
 import { Analytics } from '@vercel/analytics/react'
 import NmMetaHead from '@/components/nm-meta-head'
@@ -67,7 +67,7 @@ export default function App({ Component, pageProps }) {
       <GlobalContextProvider>
         <Component {...pageProps} />
         <Analytics />
-        <MobileContent />
+        <ChainsMobile />
       </GlobalContextProvider>
     </>
   )

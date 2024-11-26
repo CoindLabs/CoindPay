@@ -2,7 +2,19 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { Avatar, Box, Button, Drawer } from '@mui/material'
+import {
+  Avatar,
+  Box,
+  Button,
+  Drawer,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
 import { ChainId, ChainKey, ChainType, getTokens } from '@lifi/sdk'
@@ -13,13 +25,7 @@ import NmTooltip from '@/components/nm-tooltip'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
 import { FlipWords } from '@/components/aceternity-ui/flip-words'
 import ItemCoinsSwiper from '@/components/dapp/home/swiper-card/item-coins'
-import {
-  get1InchTokenSvc,
-  getSushiTokenSvc,
-  getMoralisTokenSvc,
-  getJupTokenPriceSvc,
-  getSolTokenListSvc,
-} from '@/services/common'
+import { get1InchTokenSvc, getSushiTokenSvc, getJupTokenPriceSvc, getSolTokenListSvc } from '@/services/common'
 import { getPaymentOrderSvc } from '@/services/pay'
 import { useMobile, useUserData } from '@/lib/hooks'
 import { getCompareIgnoreCase, getNFTOrScanUrl, getShortenMidDots } from '@/lib/utils'
@@ -143,7 +149,7 @@ export default function Dashboard() {
             [`${item.symbol}_${item.contract}`]:
               chainTokenItem?.price ||
               chainTokens.tokens[chainIdProd(item?.chain)]?.find(
-                row => row.address == item.contract || row.address == chainTokenItem?.address_price
+                row => row.address == item.contract || row.address == chainTokenItem?.price_address
               )?.priceUSD,
           })
         }
@@ -305,11 +311,11 @@ export default function Dashboard() {
             <Avatar
               src={item?.icon || getActiveChain({ name: item?.name })?.icon}
               className={classNames(
-                item?.disabled ? 'cursor-not-allowed opacity-20' : 'cursor-pointer',
+                item?.disabled ? 'cursor-not-allowed opacity-10' : 'cursor-pointer',
                 {
                   'bg-black p-1.5': item?.name
                     .split(' ')
-                    .some(word => ['Solana', 'SOON', 'Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(word)),
+                    .some(word => ['SOON', 'Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(word)),
                 },
                 classes
               )}
@@ -341,127 +347,169 @@ export default function Dashboard() {
           <NmSpinInfinity customClass="loading-lg scale-150" />
         </Box>
       ) : payments.list?.length > 0 ? (
-        <table className="table table-lg">
-          <thead className="text-neutral-400 text-base">
-            <tr>
-              {['From', 'Chain', 'Date', 'Amount'].map((row, index) => (
-                <th
-                  key={`table-head-${index + 1}`}
-                  className="font-normal px-0 text-center first:text-left [&:nth-child(2)]:text-left last:text-right"
-                >
-                  {row}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {payments.list?.map((item, index) => {
-              let tokenItem = tokensCache.current.find(
-                row =>
-                  (row?.address == item?.contract || row?.['address_price'] == item?.contract) &&
-                  getCompareIgnoreCase(row.symbol, item?.symbol)
-              )
-              let chainIcon = ({ classes = null } = {}) => (
-                <Image
-                  alt=""
-                  width={36}
-                  height={36}
-                  src={
-                    _supportChains.find(row => item?.chain?.includes(row?.name))?.icon ||
-                    getActiveChain({ name: item?.chain })?.icon
-                  }
-                  className={classNames(
-                    'rounded-full',
-                    {
-                      'bg-black': item?.chain.includes('SOON'),
-                    },
-                    classes
-                  )}
-                />
-              )
-              return (
-                <tr key={`table-body-row-${index + 1}`}>
-                  <td className="px-0 text-neutral-800 min-w-40">
-                    <ul className="flex gap-2">
-                      <li className="pt-1 relative">
-                        <Avatar src={tokenItem?.logoURI} className="max-sm:size-8" />
-                        {chainIcon({
-                          classes: classNames('size-4 sm:size-5 border absolute top-0 right-0', {
-                            'bg-white': ['Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(item?.chain),
-                          }),
-                        })}
-                      </li>
-                      <li className="max-sm:max-w-40 xl:max-w-2xl">
-                        <Link
-                          target="_blank"
-                          rel="noopener noreferrer nofollow"
-                          href={getNFTOrScanUrl({
-                            type: 'address',
-                            chain: item.chain?.replace(/\s/g, '-'),
-                            chainId: item?.chainId,
-                            address: item?.payer,
-                          })}
-                          className="block text-neutral-900 hover:text-theme-accent font-semibold text-md"
-                        >
-                          {getShortenMidDots(item.payer, isMobile ? 4 : 8)}
-                        </Link>
-                        <Link
-                          target="_blank"
-                          rel="noopener noreferrer nofollow"
-                          href={getNFTOrScanUrl({
-                            type: 'tx',
-                            chain: item.chain?.replace(/\s/g, '-'),
-                            chainId: item?.chainId,
-                            hash: item?.signature,
-                          })}
-                          className="text-neutral-800/50 hover:text-theme-accent/50 text-sm"
-                        >
-                          {getShortenMidDots(item.signature, isMobile ? 4 : 16)}
-                        </Link>
-                        {item?.message && (
-                          <Box className="text-neutral-800/40 text-sm sm:flex items-center">
-                            <NmTooltip title={item?.message}>
-                              <span className="badge badge-accent mr-1">Message</span>
-                            </NmTooltip>
-                            <p className="truncate">{item?.message}</p>
-                          </Box>
+        <TableContainer component={Paper} className="shadow-none overflow-y-hidden bg-transparent min-h-60">
+          <Table className="w-full">
+            <TableHead>
+              <TableRow>
+                {[
+                  {
+                    name: 'Customer',
+                    align: 'left',
+                  },
+                  {
+                    name: 'Transaction',
+                    align: 'left',
+                  },
+                  {
+                    name: 'Chain',
+                    align: 'left',
+                  },
+                  {
+                    name: 'Date',
+                    align: 'center',
+                  },
+                  {
+                    name: 'Amount',
+                    align: 'right',
+                  },
+                ].map((item, index) => (
+                  <TableCell
+                    key={`table-item-head-${index}`}
+                    // @ts-ignore
+                    align={item?.align || 'inherit'}
+                    className="font-semibold text-neutral-700"
+                  >
+                    {item.name}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {payments.list?.map((item, index) => {
+                let tokenItem = tokensCache.current.find(
+                    row =>
+                      (row?.address == item?.contract || row?.['price_address'] == item?.contract) &&
+                      getCompareIgnoreCase(row.symbol, item?.symbol)
+                  ),
+                  chainIcon = ({ classes = null } = {}) => (
+                    <Image
+                      alt=""
+                      width={36}
+                      height={36}
+                      src={
+                        _supportChains().find(row => item?.chain?.includes(row?.name))?.icon ||
+                        getActiveChain({ name: item?.chain })?.icon
+                      }
+                      className={classNames(
+                        'rounded-full',
+                        {
+                          'bg-black': item?.chain.includes('SOON'),
+                        },
+                        classes
+                      )}
+                    />
+                  ),
+                  payeeLink = (
+                    <Link
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      href={getNFTOrScanUrl({
+                        type: 'address',
+                        chain: item.chain?.replace(/\s/g, '-'),
+                        chainId: item?.chainId,
+                        address: item?.payer,
+                      })}
+                      className="block text-neutral-900 hover:text-theme-accent font-semibold text-md"
+                    >
+                      {getShortenMidDots(item.payer, isMobile ? 4 : 8)}
+                    </Link>
+                  )
+
+                return (
+                  <TableRow key={`table-item-body-${index}`} className="group">
+                    <TableCell>
+                      <ul className="flex items-center gap-2">
+                        <li className="max-lg:hidden">
+                          <Avatar className="size-9 bg-zinc-300" />
+                        </li>
+                        {item?.name ? (
+                          <li>
+                            <strong>{item?.name}</strong>
+                            <p className="text-neutral-800/40 text-sm">{item?.email}</p>
+                          </li>
+                        ) : (
+                          <li>{payeeLink}</li>
                         )}
-                      </li>
-                    </ul>
-                  </td>
-                  <td className="px-0 text-center">
-                    <NmTooltip title={item.chain}>{chainIcon({ classes: 'size-8' })}</NmTooltip>
-                  </td>
-                  <td className="px-0 text-center text-neutral-800/60 max-sm:text-sm">
-                    {dayjs(item?.createdAt).format('YYYY-MM-DD HH:mm')}
-                  </td>
-                  <td className="px-0 text-right">
-                    <ul>
-                      <li className="text-sm">${handleTokenPriceFactory(`${item?.symbol}_${item?.contract}`)}</li>
-                      <li className="bg-clip-text text-transparent bg-create-gradient-004">
-                        + {item.amount} {tokenItem?.symbol || item?.symbol}
-                      </li>
-                      <li className="text-neutral-800/50 text-sm">
-                        ≈
-                        <span className="px-0.5">
-                          {Number(
-                            (item.amount * handleTokenPriceFactory(`${item?.symbol}_${item?.contract}`)).toFixed(3)
+                      </ul>
+                    </TableCell>
+                    <TableCell>
+                      <ul className="flex items-center gap-2">
+                        <li className="pt-1 relative">
+                          <Avatar src={tokenItem?.logoURI} className="max-sm:size-8" />
+                          {chainIcon({
+                            classes: classNames('size-4 sm:size-5 border absolute top-0 right-0', {
+                              'bg-white': ['Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(item?.chain),
+                            }),
+                          })}
+                        </li>
+                        <li className="max-sm:max-w-40 xl:max-w-2xl">
+                          {item?.name && payeeLink}
+                          <Link
+                            target="_blank"
+                            rel="noopener noreferrer nofollow"
+                            href={getNFTOrScanUrl({
+                              type: 'tx',
+                              chain: item.chain?.replace(/\s/g, '-'),
+                              chainId: item?.chainId,
+                              hash: item?.signature,
+                            })}
+                            className="text-neutral-800/50 hover:text-theme-accent/50 text-sm"
+                          >
+                            {getShortenMidDots(item.signature, isMobile ? 4 : 16)}
+                          </Link>
+                          {item?.message && (
+                            <Box className="text-neutral-800/40 text-sm sm:flex items-center">
+                              <NmTooltip title={item?.message}>
+                                <span className="badge badge-accent mr-1">Message</span>
+                              </NmTooltip>
+                              <p className="truncate">{item?.message}</p>
+                            </Box>
                           )}
-                        </span>
-                        USD
-                      </li>
-                    </ul>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+                        </li>
+                      </ul>
+                    </TableCell>
+                    <TableCell>
+                      <NmTooltip title={item.chain}>{chainIcon({ classes: 'size-8' })}</NmTooltip>
+                    </TableCell>
+                    <TableCell align="center">{dayjs(item?.createdAt).format('YYYY-MM-DD HH:mm')}</TableCell>
+                    <TableCell align="right">
+                      <ul>
+                        <li className="text-sm">${handleTokenPriceFactory(`${item?.symbol}_${item?.contract}`)}</li>
+                        <li className="bg-clip-text text-transparent bg-create-gradient-004">
+                          + {item.amount} {tokenItem?.symbol || item?.symbol}
+                        </li>
+                        <li className="text-neutral-800/50 text-sm">
+                          ≈
+                          <span className="px-0.5">
+                            {Number(
+                              (item.amount * handleTokenPriceFactory(`${item?.symbol}_${item?.contract}`)).toFixed(3)
+                            )}
+                          </span>
+                          USD
+                        </li>
+                      </ul>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       ) : (
         <ul className="pt-4">
           <li className="flex gap-8 justify-center items-center">
             <h2 className="text-2xl md:text-3xl bg-clip-text text-transparent bg-create-gradient-004 font-righteous">
-              Now start your first crypto payment.
+              Now start your first Crypto Payments.
             </h2>
             <Avatar
               className="shadow-sm cursor-pointer bg-create-gradient-004 hover:scale-105 transition-all"

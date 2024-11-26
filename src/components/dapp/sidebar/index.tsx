@@ -87,13 +87,14 @@ const SideBar = ({ ...props }) => {
   }
 
   return (
-    <aside className="h-fit sticky z-1 top-0 left-0 bottom-4 w-full lg:top-[calc(84px+2.5rem)] order-last lg:w-auto lg:order-first xl:min-w-64">
+    <aside className="h-fit sticky z-1 top-0 left-0 bottom-4 w-full lg:top-[calc(84px+2.5rem)] order-last lg:w-auto lg:order-first xl:min-w-56 2xl:min-w-60">
       <ul className="flex justify-between gap-2 mx-auto max-w-sm sm:max-w-xl max-lg:items-center max-lg:rounded-full max-lg:border max-lg:border-gray-1 max-lg:bg-gray-100/80 backdrop-blur max-lg:px-2 lg:flex-col">
         {menus.map((row, index) => {
           let userMenu = row.name.toLowerCase().includes('profile'),
             routePaths = router?.asPath.split('/').filter(e => e),
             itemActive =
               (row?.path && router?.pathname == row?.path) ||
+              (row?.path && router?.pathname?.startsWith(row?.path)) ||
               (userMenu && router?.asPath.includes(user?.id)) ||
               (row?.['submenu'] && row?.['paths'] && routePaths.find(kk => row?.['paths'].includes(kk))),
             itemIcon = ({ activeClass = null } = {}) => (

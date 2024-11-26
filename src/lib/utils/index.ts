@@ -680,3 +680,7 @@ export const isiOS = () => typeof navigator !== 'undefined' && /iPad|iPhone|iPod
 export function getCompareIgnoreCase(left: string, right: string): boolean {
   return left?.toLowerCase() == right?.toLowerCase()
 }
+
+export function getIncludesIgnoreCase(left: string, right: string): boolean {
+  return left?.toLowerCase().includes(right?.toLowerCase())
+}

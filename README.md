@@ -8,7 +8,7 @@ https://coindpay.xyz
 
 ## Slogan
 
-Multichain DEXs、Payments and Compound Finance Infrastructure.
+Cross-chain DEXs、Payments and Compound Finance Infrastructure.
 
 ## Mission
 
@@ -29,10 +29,11 @@ Make idle funds more available once and for all.
 
 ## Chains
 
+✅ **SVM**
+SOON、Solana
+
 ✅ **EVM**
 Ethereum、Solana、Base、Optimism、Arbitrum、Metis、Sei、Scroll、Hashkey、Celo、Fuse、Aurora、Gnosis、BSC、Polygon、Polygon zkEVM、zkSync、Avalanche、Mantle、Linea、Manta、Blast、Mode、Fantom、Rootsock、Berachain、ZetaChain...and 28+ chains.
-
-✅ **Solana**
 
 ✅ **ICP**
 

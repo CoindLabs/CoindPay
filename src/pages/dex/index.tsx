@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
-import { useMemo, useState } from 'react'
-import { formControlClasses, inputBaseClasses, inputClasses, tabsClasses } from '@mui/material'
-import { Breakpoint, useTheme } from '@mui/material/styles'
-import { WidgetConfig, WidgetSkeleton } from '@lifi/widget'
+import { useMemo } from 'react'
+import { inputBaseClasses, tabsClasses } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
+import { WidgetConfig } from '@lifi/widget'
 import StudioLayout from '@/components/layout/studio'
 import { LiFiWidgetDynamic } from '@/components/dapp/lifi'
 import { useStudioContext } from '@/components/context/studio'
@@ -21,7 +21,7 @@ const Exchange: NextPage = () => {
       appearance: 'light',
       insurance: true,
       variant: 'wide',
-      subvariant: 'split',
+      buildUrl: true,
       hiddenUI: ['appearance', 'language', 'poweredBy', 'walletMenu'],
       theme: {
         container: {

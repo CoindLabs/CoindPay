@@ -7,11 +7,10 @@ import LandingLayout from '@/components/layout/landing'
 import { PayeeContext } from '@/components/context/payee'
 import NmSpinInfinity from '@/components/nm-spin/infinity'
 import StudioLayout from '@/components/layout/studio'
-import PaymentWidget from '@/components/dapp/landing/base/pay/widget'
 import prisma from '@/lib/prisma'
 import { bigintFactory } from '@/lib/prisma/common'
 import { useIsLoggedIn, useUserData } from '@/lib/hooks'
-import { getPayeeAccountSvc } from '@/services/pay'
+import { getPaymentPayeeSvc } from '@/services/pay'
 
 interface Params extends ParsedUrlQuery {
   uuid: string
@@ -46,7 +45,7 @@ export async function getStaticProps(context) {
 
     user = bigintFactory(user)
 
-    let payee = await prisma.payee.findUnique({
+    let payee = await prisma.payee.findMany({
       where: {
         uuid,
       },
@@ -72,7 +71,7 @@ export async function getStaticProps(context) {
   }
 }
 
-export default function RenderUser({ user: initialUser, payee: initialPayee }) {
+export default function Uuid({ user: initialUser, payee: initialPayee }) {
   const router = useRouter()
 
   const localUser = useUserData()
@@ -84,8 +83,6 @@ export default function RenderUser({ user: initialUser, payee: initialPayee }) {
   const [isInProfile, setInProfile] = useState(false)
 
   const [loading, setLoading] = useState(true)
-
-  const widgetMode = router.query?.mode == 'widget'
 
   useEffect(() => {
     setInProfile(isLoggedIn && localUser?.id == router?.query?.uuid)
@@ -105,9 +102,9 @@ export default function RenderUser({ user: initialUser, payee: initialPayee }) {
     let equal = isEqual(localUser, user)
     if (isInProfile && !equal) {
       setUser(localUser)
-      const getPayeeAccount = async () => {
+      const getPaymentPayee = async () => {
         try {
-          let res = await getPayeeAccountSvc({
+          let res = await getPaymentPayeeSvc({
             id: localUser?.id,
           })
           if (res?.ok && res?.data) {
@@ -117,7 +114,7 @@ export default function RenderUser({ user: initialUser, payee: initialPayee }) {
           console.error('Error fetching data:', error)
         }
       }
-      getPayeeAccount()
+      getPaymentPayee()
     }
   }, [localUser])
 
@@ -127,14 +124,12 @@ export default function RenderUser({ user: initialUser, payee: initialPayee }) {
 
   return (
     <PayeeContext.Provider value={{ user, payee }}>
-      {widgetMode && !payee?.accountInfo ? (
-        <PaymentWidget user={user} payee={payee} />
-      ) : !isInProfile || router.query?.newtab || widgetMode ? (
+      {!isInProfile || router.query?.newtab ? (
         <LandingLayout
           payee={payee}
           user={{
             ...user,
-            isInProfile: router.query?.newtab || widgetMode ? false : isInProfile,
+            isInProfile: false,
           }}
         />
       ) : (

@@ -34,6 +34,6 @@ export const useTempContext = () => {
   return React.useContext(TempStore)
 }
 
-export const TempContextProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+export const UtilsContextProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   return <TempStore.Provider value={context}>{children}</TempStore.Provider>
 }

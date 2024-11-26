@@ -1,6 +1,6 @@
 import { fetcher } from '@/lib/fetcher'
 
-export function getPayeeAccountSvc(data, method = 'get') {
+export function getPaymentPayeeSvc(data, method = 'get') {
   let query = method == 'get' ? { params: data } : { data }
   return fetcher({
     method,

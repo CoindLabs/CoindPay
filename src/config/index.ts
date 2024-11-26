@@ -7,7 +7,7 @@ let title = 'CoindPay',
     cdn_test: 'https://test-cdn.coindpay.xyz',
   }
 
-let mission = 'Multichain DEXs、Payments and Compound Finance Infrastructure'
+let mission = 'Cross-chain DEXs、Payments and Compound Finance Infrastructure'
 
 const config = {
   title,
@@ -48,7 +48,7 @@ const config = {
     pro_mix_colors_light: `${domains.cdn}/stream/brand/logo/pro_mix_colors_light.png`,
   },
   images: {
-    placeholder: 'https://picsum.photos/256/256/?blur=5',
+    placeholder: 'https://picsum.photos/256/256/?blur=4',
     nft_placeholder: `${domains.cdn}/status/nft_placeholder.png`,
     banner: {
       cover: `${domains.cdn}/stream/brand/banner/brand_banner_default.jpg`,

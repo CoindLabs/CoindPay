@@ -1,10 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/lib/prisma'
 
-export default async function account(req: NextApiRequest, res: NextApiResponse) {
+export default async function user(req: NextApiRequest, res: NextApiResponse) {
   let method = req.method.toUpperCase()
+
   if (method === 'PUT' || method === 'POST') {
-    const { id, nickname, bio } = req.body
+    let { id, createdAt, updatedAt, ...others } = req.body
 
     if (!id) {
       res.status(400).json({ ok: false, message: 'User id is required ˙◠˙' })
@@ -12,16 +13,20 @@ export default async function account(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-      const updatedUser = await prisma.user.update({
+      const upsertedStudio = await prisma.user.upsert({
         where: { id },
-        data: {
-          nickname,
-          bio,
+        update: {
+          ...others,
+          updatedAt: new Date(),
+        },
+        create: {
+          ...others,
         },
       })
 
-      res.status(200).json({ ok: true, data: updatedUser })
+      res.status(200).json({ ok: true, data: upsertedStudio })
     } catch (error) {
+      console.log(error)
       res.status(500).json({ ok: false, message: 'Failed to update user ˙◠˙' })
     }
   } else {

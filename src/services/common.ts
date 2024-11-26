@@ -18,83 +18,6 @@ export function getAlchemySvc(data: IAlchemy) {
   })
 }
 
-export function getSimplehashSvc(data) {
-  return fetcher({
-    url: 'api/common/simplehash',
-    method: 'post',
-    data,
-  })
-}
-
-export function getPoapSvc(data) {
-  return fetcher({
-    url: 'api/common/poap',
-    params: data,
-  })
-}
-
-export function getLightGalxeSvc(data) {
-  if (!data?.address) return
-  return fetcher({
-    baseURL: `https://lightcache.net/galaxy/${data?.address}`,
-  })
-}
-
-export function getGalxeCredentialSvc(data) {
-  if (!data?.address) return
-  return fetcher({
-    url: 'api/common/galxe',
-    params: data,
-  })
-}
-
-/**
- * https://docs.space.id/developer-guide/web3-name-sdk/sid-api
- * @param tld、address
- */
-export function getSpaceIDReverseNameSvc({ tld = 'bnb', address }) {
-  return fetcher({
-    url: 'api/common/spaceid',
-    params: { tld, address },
-  })
-}
-/**
- * 截屏服务
- */
-export function getSiteShotSvc({ path = '', uuid = '' }) {
-  return fetcher({
-    url: `api/common/siteshot?path=${path}&uuid=${uuid}`,
-  })
-}
-/**
- * Serper关键词查询图片
- * @param data
- * @returns
- */
-export function getSerperImageSvc(data) {
-  return fetcher({
-    url: 'api/dapp/serper_image',
-    params: data,
-  })
-}
-/**
- * iframely卡片服务
- * @param data
- * @returns
- */
-export function getIframelySvc(data) {
-  if (!data?.url) return
-  return fetcher({
-    baseURL: 'https://iframe.ly/api/iframely',
-    params: {
-      url: data.url,
-      api_key: env.iframelyKey,
-      iframe: 1,
-      omit_script: 1,
-      ...data?.params,
-    },
-  })
-}
 /**
  * solana token list
  * api https://station.jup.ag/docs/token-list/token-list-api
@@ -132,18 +55,6 @@ export function getJupTokenPriceSvc(data) {
       ids,
       vsToken,
     },
-  })
-}
-/** docs https://docs.moralis.io/web3-data-api
- * @Moralis {}
- * @param data token/nft/price
- */
-export function getMoralisTokenSvc(data, params = undefined) {
-  return fetcher({
-    url: 'api/common/moralis',
-    method: 'post',
-    data,
-    params,
   })
 }
 

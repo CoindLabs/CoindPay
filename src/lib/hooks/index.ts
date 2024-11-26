@@ -4,7 +4,7 @@
  * @version 0.1 | 2022-07-18 // Initial version.
  * @Date: 2022-07-16 12:33:20
  * @Last Modified by: 0x3Anthony
- * @Last Modified time: 2024-08-30 03:22:13
+ * @Last Modified time: 2024-11-24 20:12:00
  */
 import { RefObject, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
@@ -13,9 +13,9 @@ import { useAccount, useChains } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useRouter } from 'next/router'
 import { Network } from 'alchemy-sdk'
-import { getSpaceIDReverseNameSvc } from '@/services/common'
 import { icpInfo } from '@/store/slice/icp'
 import { chainIdToNetWork, payChains } from '@/lib/chains'
+import { getIncludesIgnoreCase } from '@/lib/utils'
 import type { AppDispatch, AppState } from '../store'
 
 import config from '@/config'
@@ -149,25 +149,6 @@ export const useSolAccount = () => {
   }
 }
 
-/**
- * 查询bnb账户
- * @param {address}
- * @returns bnb account
- */
-export const useBNBName = ({ address }) => {
-  const [bnbName, setBNBName] = useState(null)
-  useEffect(() => {
-    ;(async () => {
-      if (!address) return
-      let res = await getSpaceIDReverseNameSvc({ address })
-      if (res?.ok && res?.name) {
-        setBNBName(res?.name)
-      }
-    })()
-  }, [address])
-  return bnbName
-}
-
 function syncScroller(targets, tabIndex) {
   let nodes = Array.prototype.filter.call(targets, item => item instanceof HTMLElement)
 
@@ -227,13 +208,20 @@ export const useSyncScrollerEffect = (refs, tabIndex) => {
   }, [targets])
 }
 
-export const useRouteEndPath = () => {
+export const useRouteTitlePath = () => {
   const router = useRouter()
 
-  let paths = (router?.pathname && router?.pathname.split('/')) || [],
-    end = paths[paths.length - 1]
+  let paths =
+    (router?.pathname && router?.pathname.split('/'))?.filter(row => row && !['[uuid]', '[id]'].includes(row)) || []
 
-  return end && !end.includes('[uuid]') ? `${end.replace(end[0], end[0].toUpperCase())}` : ''
+  return paths
+    ? `${paths
+        .map(row => {
+          if (row == 'pay') row = 'payments'
+          return row.charAt(0).toUpperCase() + row.slice(1)
+        })
+        .join(' ')}`
+    : ''
 }
 
 interface Args extends IntersectionObserverInit {
@@ -332,22 +320,27 @@ export function useIsLoggedIn() {
  * payment chain switch
  */
 
-export const useInitPayChainIndex = () => {
+export const useInitPayChainIndex = (chains = []) => {
   const router = useRouter()
 
-  const getInitialChainIndex = () => {
+  const findChainIndexByName = (chainName, chainList) => {
+    if (!chainName) return -1
+    return chainList.findIndex(chain => getIncludesIgnoreCase(chain.name, chainName))
+  }
+
+  const getInitialChainIndex = useMemo(() => {
     let chainName = router.query.chain
 
     if (Array.isArray(chainName)) {
       chainName = chainName[0] // 如果是数组，取第一个元素
     }
 
-    chainName = chainName?.replace(/_/g, ' ').toLowerCase() // 将下划线替换为空格
+    chainName = chainName?.replace(/_/g, ' ').trim() // 替换下划线并去掉多余空格
 
-    const index = payChains.findIndex(chain => chain.name.toLowerCase() == chainName)
+    const index = findChainIndexByName(chainName, chains || payChains)
 
     return index !== -1 ? index : 0 // 如果找不到匹配的 chain，默认返回 0
-  }
+  }, [router.query.chain, chains])
 
-  return getInitialChainIndex()
+  return getInitialChainIndex
 }

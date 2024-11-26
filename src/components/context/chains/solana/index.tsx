@@ -8,6 +8,7 @@ import {
   SafePalWalletAdapter,
   LedgerWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
+import { BackpackWalletAdapter } from '@solana/wallet-adapter-backpack'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 import { getSvmRpcUrl } from '@/lib/web3'
 import { env } from '@/lib/types/env'
@@ -28,6 +29,7 @@ export const WalletContextProvider: FC<{ children: ReactNode }> = ({ children })
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
+      new BackpackWalletAdapter(),
       new SolflareWalletAdapter({ network }),
       new SafePalWalletAdapter(),
       new LedgerWalletAdapter(),

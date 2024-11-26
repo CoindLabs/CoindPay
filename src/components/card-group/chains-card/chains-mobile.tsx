@@ -5,13 +5,12 @@ import { useStudioContext } from '@/components/context/studio'
 import ChainsMenu from '@/components/card-group/chains-card/chains-menu'
 import { useMobile, useTailWindFade } from '@/lib/hooks'
 
-// interface MobileContentProps extends ChainsCardProps {}
-interface MobileContentProps {}
+interface ChainsMobileProps {}
 
 const leaveAnimate = 'scale-y-0 pointer-events-none opacity-0'
 const enterAnimate = 'scale-y-100'
 
-const MobileContent: FC<MobileContentProps> = () => {
+const ChainsMobile: FC<ChainsMobileProps> = () => {
   const { chainsExpand, setChainsExpand } = useStudioContext()
   const isMobile = useMobile()
   const { className, setOpen } = useTailWindFade({ open: true })
@@ -53,4 +52,4 @@ const MobileContent: FC<MobileContentProps> = () => {
   )
 }
 
-export default MobileContent
+export default ChainsMobile

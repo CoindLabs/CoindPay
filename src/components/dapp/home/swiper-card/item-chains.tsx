@@ -24,7 +24,7 @@ const ItemChainsSwiper = ({ data = [], ...props }) => {
       modules={[Autoplay]}
       className={classNames(props?.customClass)}
     >
-      {_supportChains.map((item, index) => {
+      {_supportChains().map((item, index) => {
         return (
           <SwiperSlide key={`chain-item-${item?.type || item?.name}-${index}`} className="!w-auto">
             <Avatar

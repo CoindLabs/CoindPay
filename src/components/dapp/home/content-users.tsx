@@ -30,7 +30,7 @@ const ContentUsers = () => {
           Build with us
           <NmIcon
             type="icon-arrow_right"
-            className=" hidden group-hover:inline absolute right-1 animate__animated animate__fadeInLeft animate__infinite animate__slow"
+            className="hidden group-hover:inline absolute right-1 animate__animated animate__fadeInLeft animate__infinite animate__slow"
           />
         </Button>
         <footer className="pt-28 max-sm:hidden">

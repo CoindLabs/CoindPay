@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/lib/prisma'
 
 export default async function landing(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    const { chain, chainId, amount, symbol, contract, payeeId, message, signature, payer } = req.body
+  if (req.method == 'POST') {
+    const { chain, chainId, amount, symbol, contract, payeeId, message, signature, payer, name, email } = req.body
 
     if (!chain || !amount || !contract || !payeeId || !signature || !payer) {
       res.status(502).json({
@@ -24,6 +24,8 @@ export default async function landing(req: NextApiRequest, res: NextApiResponse)
           payeeId,
           payer,
           signature,
+          name,
+          email,
         },
       })
 
@@ -39,7 +41,7 @@ export default async function landing(req: NextApiRequest, res: NextApiResponse)
         error: 'Failed to submit payment ˙◠˙',
       })
     }
-  } else if (req.method === 'GET') {
+  } else if (req.method == 'GET') {
     const { uuid } = req?.query
 
     if (!uuid) {

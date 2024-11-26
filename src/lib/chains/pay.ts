@@ -14,21 +14,21 @@ const isProd = env?.isProd
  */
 export const payChains = [
   {
-    name: isProd ? 'Solana' : 'Solana Devnet',
-    icon: logoChains.solana_bg,
-    chainId: 1151111081099710, // 参考 https://docs.li.fi/list-chains-bridges-dex-aggregators-solvers#supported-chains
-    chainIdProd: 1151111081099710,
-    type: 'SVM',
-    ...pay?.solana,
-  },
-  {
-    name: isProd ? 'SOON' : 'SOON Devnet',
+    name: isProd ? 'SOON Testnet' : 'SOON Devnet',
     icon: logoChains.soon_flat,
     avatarClass: 'bg-black',
     chainId: 1151111081099710,
     chainIdProd: 1151111081099710,
     type: 'SVM',
     ...pay?.soon,
+  },
+  {
+    name: isProd ? 'Solana' : 'Solana Devnet',
+    icon: logoChains.solana_bg,
+    chainId: 1151111081099710, // 参考 https://docs.li.fi/list-chains-bridges-dex-aggregators-solvers#supported-chains
+    chainIdProd: 1151111081099710,
+    type: 'SVM',
+    ...pay?.solana,
   },
   {
     name: isProd ? 'Ethereum' : 'Ethereum Sepolia',
@@ -64,6 +64,14 @@ export const payChains = [
     ...pay?.arbitrum,
   },
   {
+    name: isProd ? 'Metis' : 'Metis Sepolia',
+    icon: logoChains.metis,
+    chainId: isProd ? 1088 : 59902,
+    chainIdProd: 1088,
+    type: 'EVM',
+    ...pay?.metis,
+  },
+  {
     name: isProd ? 'BSC' : 'BSC Testnet',
     icon: 'https://cryptofonts.com/img/brands/binance.svg',
     chainId: isProd ? 56 : 97,
@@ -86,14 +94,6 @@ export const payChains = [
     chainIdProd: 324,
     type: 'EVM',
     ...pay?.zkSync,
-  },
-  {
-    name: isProd ? 'Metis' : 'Metis Sepolia',
-    icon: logoChains.metis,
-    chainId: isProd ? 1088 : 59902,
-    chainIdProd: 1088,
-    type: 'EVM',
-    ...pay?.metis,
   },
   {
     name: isProd ? 'Sei' : 'Sei Testnet',
@@ -166,11 +166,6 @@ export const payChains = [
     ...pay?.hashkey,
   },
   {
-    name: 'ICP',
-    type: 'Others',
-    disabled: true,
-  },
-  {
     name: 'Bitcoin',
     type: 'Others',
     disabled: true,
@@ -181,31 +176,6 @@ export const payChains = [
     disabled: true,
   },
   {
-    name: 'Blast',
-    type: 'Others',
-    disabled: true,
-  },
-  {
-    name: isProd ? 'Zeta' : 'Zeta Testnet',
-    icon: logoChains.zeta,
-    chainId: isProd ? 7000 : 7001,
-    chainIdProd: 7000,
-    type: 'EVM',
-    ...pay?.zeta,
-    disabled: true,
-  },
-  {
-    name: 'BeraChain',
-    icon: logoChains.berachain,
-    type: 'EVM',
-    disabled: true,
-  },
-  {
-    name: 'Linea',
-    type: 'EVM',
-    disabled: true,
-  },
-  {
     name: 'Aptos',
     type: 'Others',
     disabled: true,
@@ -213,6 +183,26 @@ export const payChains = [
   {
     name: 'Sui',
     type: 'Others',
+    disabled: true,
+  },
+  {
+    name: 'ICP',
+    type: 'Others',
+    disabled: true,
+  },
+  {
+    name: 'Near',
+    type: 'Others',
+    disabled: true,
+  },
+  {
+    name: 'Blast',
+    type: 'EVM',
+    disabled: true,
+  },
+  {
+    name: 'Linea',
+    type: 'EVM',
     disabled: true,
   },
   {
@@ -231,17 +221,28 @@ export const payChains = [
     disabled: true,
   },
   {
-    name: 'Near',
-    type: 'Others',
+    name: isProd ? 'Zeta' : 'Zeta Testnet',
+    icon: logoChains.zeta,
+    chainId: isProd ? 7000 : 7001,
+    chainIdProd: 7000,
+    type: 'EVM',
+    ...pay?.zeta,
+    disabled: true,
+  },
+  {
+    name: 'BeraChain',
+    icon: logoChains.berachain,
+    type: 'EVM',
     disabled: true,
   },
 ]
 
-export const _payChains = Object.values(
-  payChains.reduce((acc, chain) => {
-    let type = chain?.['type'] || 'Others'
-    acc[type] = acc[type] || { type, list: [] }
-    acc[type].list.push(chain)
-    return acc
-  }, {})
-)
+export const _payChains = (chains = null) =>
+  Object.values(
+    (chains || payChains).reduce((acc, chain) => {
+      let type = chain?.['type'] || 'Others'
+      acc[type] = acc[type] || { type, list: [] }
+      acc[type].list.push(chain)
+      return acc
+    }, {})
+  )

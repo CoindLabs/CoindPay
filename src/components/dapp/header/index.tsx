@@ -199,11 +199,11 @@ const StudioHeader = () => {
           <Button
             size="large"
             variant="contained"
-            className="px-8 py-2.5 shadow-none rounded-lg bg-create-gradient-004"
+            className="px-6 py-2.5 shadow-none rounded-lg bg-create-gradient-004"
             onClick={handleToggleDrawer(true)}
           >
             {(user?.id ? globalWalletConnect : globalWalletConnect && user?.id) ? (
-              <Box className="flex items-center gap-2">
+              <Box className="flex items-center gap-4">
                 Account Wallet
                 <NmIcon type="icon-user" className="text-lg leading-0" />
               </Box>

@@ -61,7 +61,7 @@ import {
   getJupTokenPriceSvc,
   getSolTokenListSvc,
 } from '@/services/common'
-import { getNFTOrScanUrl, getRandomNumber, getShortenMidDots, isiOS } from '@/lib/utils'
+import { getIncludesIgnoreCase, getNFTOrScanUrl, getRandomNumber, getShortenMidDots, isiOS } from '@/lib/utils'
 import {
   useChainConnect,
   useEVMWalletConnect,
@@ -70,10 +70,10 @@ import {
   useSolAccount,
   useUserData,
 } from '@/lib/hooks'
-import { payChains, _supportChains, wagmiCoreConfig, _payChains, logoChains } from '@/lib/chains'
+import * as pay from '@/lib/chains/tokens'
+import { payChains, _payChains, wagmiCoreConfig } from '@/lib/chains'
 import { getActiveChain, getSvmRpcUrl } from '@/lib/web3'
 import { env } from '@/lib/types/env'
-import * as pay from '@/lib/chains/tokens'
 
 import config from '@/config'
 
@@ -85,8 +85,8 @@ const useStyles = makeStyles({
   },
 })
 
-const PaymentCard = ({ ...props }) => {
-  let { payee = {} } = props
+const PaymentWidget = ({ ...props }) => {
+  let { payee = {}, widgetForm, customClass } = props
 
   let lgScreen = useMediaQuery('(min-width:1024px)')
 
@@ -105,11 +105,27 @@ const PaymentCard = ({ ...props }) => {
 
   const { showSnackbar } = useSnackbar()
 
+  const [chainsTab, setChainsTab] = useState(0)
+
   // 来自路由的 chain 次序
-  const payChainIndex = useInitPayChainIndex()
+  const payChainIndex = useInitPayChainIndex(payee?.chains)
   const [chainIndex, setChainIndex] = useState(payChainIndex)
 
-  const [chainsTab, setChainsTab] = useState(0)
+  const maxAmount = payee?.maxAmount || 100000
+
+  const chainList = useMemo(() => {
+    if (!payee?.chains?.length) return []
+    return payChains.filter(item => {
+      const isNameIncluded = payee?.chains.some(row => getIncludesIgnoreCase(item.name, row.name))
+      const isChainIdMatch = payee?.chains.some(row => item?.['chainId'] === row.id)
+      return !item.disabled && isNameIncluded && isChainIdMatch
+    })
+  }, [payee?.chains])
+
+  const chainListTabs = useMemo(() => _payChains(chainList), [chainList])
+
+  const chainItem = useMemo(() => chainList[chainIndex], [chainList, chainIndex])
+
   const [chainItemSwitch, setChainItemSwitch] = useState(false)
 
   const payBoxRef = useRef<HTMLDivElement>(null)
@@ -124,7 +140,10 @@ const PaymentCard = ({ ...props }) => {
   const [paymentType, setPaymentType] = useState(0)
   const [tokenSearch, setTokenSearch] = useState(false) // 代币搜索状态，默认为列表状态
 
-  const [payInputValue, setPayInputValue] = useState(getRandomNumber(0, 5))
+  const [payInputValue, setPayInputValue] = useState(
+    payee?.amountType != 2 ? payee?.price : getRandomNumber(0, payee?.maxAmount <= 10 ? payee?.maxAmount : 10)
+  )
+
   const [payNote, setPayNote] = useState('')
   const debouncedPayNote = useDebounce(payNote, { wait: 100 })
 
@@ -133,8 +152,8 @@ const PaymentCard = ({ ...props }) => {
 
   const [tokens, setTokenList] = useState({
     list: [],
-    symbol: 'USDC',
-    address: pay.solana.mocks.usdc.dev,
+    symbol: '',
+    address: '',
   })
 
   const [tokenPrice, setTokenPrice] = useState(1)
@@ -165,23 +184,23 @@ const PaymentCard = ({ ...props }) => {
   // 本地调试EVM Chain对USDC的特殊处理，查Token Price仍用主网合约，本地调试用测试网合约
   const tokensEvm = useMemo(
     () =>
-      !env?.isProd && tokens.address == payChains[chainIndex]?.['mocks']?.usdc?.mainnet
-        ? payChains[chainIndex]?.['mocks']?.usdc?.dev
+      !env?.isProd && tokens.address == chainItem?.['mocks']?.usdc?.mainnet
+        ? chainItem?.['mocks']?.usdc?.dev
         : tokens.address,
     [tokens.address]
   )
 
   const payInputContinue = useMemo(
     () =>
-      payInputValue && !String(payInputValue)?.endsWith('.') && !tokenPriceLoading && !payChains[chainIndex]?.disabled,
+      payee?.status == -1 || chainItem?.disabled ? false : !String(payInputValue)?.endsWith('.') && !tokenPriceLoading,
 
-    [payInputValue, tokenPriceLoading, chainIndex]
+    [payInputValue, tokenPriceLoading, chainItem, payee?.status]
   )
 
-  const payChainId = useMemo(() => chainIndex > 1 && (payChains[chainIndex]?.['chainId'] || chainId), [chainIndex])
+  const payChainId = useMemo(() => chainItem?.['chainId'] || chainId, [chainIndex])
 
   const disabledChains = useMemo(
-    () => [...new Set(payChains.filter(item => item?.type !== payChains[chainIndex]?.type)?.map(row => row?.type))],
+    () => [...new Set(chainList.filter(item => item?.type !== chainItem?.type)?.map(row => row?.type))],
     [chainIndex]
   )
 
@@ -198,7 +217,7 @@ const PaymentCard = ({ ...props }) => {
     address: chainType !== 'svm' && payAddress,
     chainId: payChainId,
     query: {
-      enabled: globalWalletConnect && chainType !== 'svm' && chainIndex > 1,
+      enabled: globalWalletConnect && chainType !== 'svm' && chainItem?.type == 'EVM',
       gcTime: 5000,
     },
   })
@@ -216,7 +235,7 @@ const PaymentCard = ({ ...props }) => {
   //   functionName: 'balanceOf',
   //   args: [tokensEvm],
   //   query: {
-  //     enabled: globalWalletConnect && chainType !== 'svm' && chainIndex > 1,
+  //     enabled: globalWalletConnect && chainType !== 'svm' && chainItem?.type == 'EVM',
   //     gcTime: 5000,
   //   },
   // })
@@ -284,7 +303,7 @@ const PaymentCard = ({ ...props }) => {
   let reference = Keypair.generate().publicKey
 
   const svmPay = () => {
-    if (chainIndex > 1) return
+    if (chainItem?.type != 'SVM') return
 
     let recipient = new PublicKey(solReceiptAccount),
       // 发送的Token代币合约地址
@@ -300,7 +319,7 @@ const PaymentCard = ({ ...props }) => {
       memo: `By ${title}`,
     }
 
-    // Solana Pay transfer params
+    // SVM Pay transfer params
     const solPaymentParams: TransferRequestURLFields =
       pay.solana.mocks.sol.mainnet == tokens.address
         ? defaultParams
@@ -309,8 +328,8 @@ const PaymentCard = ({ ...props }) => {
             splToken,
           }
 
-    // Get a connection to solana rpc
-    const endpoint = getSvmRpcUrl(chainIndex == 1 && { chain: 'soon' })
+    // Get a connection to SVM RPC
+    const endpoint = getSvmRpcUrl(getIncludesIgnoreCase(chainItem?.name, 'soon') && { chain: 'soon' })
     const connection = new Connection(endpoint)
 
     const solPaymentURL = encodeURL(solPaymentParams)
@@ -542,13 +561,13 @@ const PaymentCard = ({ ...props }) => {
   }
 
   useEffect(() => {
-    const sendCommon = () => (chainIndex > 1 ? evmPay()?.sendToken() : svmPay()?.sendCoin())
+    const sendCommon = () => (chainItem?.type == 'EVM' ? evmPay()?.sendToken() : svmPay()?.sendCoin())
     if (globalWalletConnect) {
       if (paymentType == 3) {
         sendCommon()
       }
       if (paymentType == 4) {
-        if ((chainIndex < 2 && chainType == 'svm') || (chainIndex > 1 && chainType !== 'svm')) {
+        if ((chainItem?.type == 'SVM' && chainType == 'svm') || (chainItem?.type == 'EVM' && chainType !== 'svm')) {
           setPaymentType(3)
           sendCommon()
         }
@@ -565,13 +584,13 @@ const PaymentCard = ({ ...props }) => {
     }
   }, [isConfirmed])
 
-  // Show the QR code
   useEffect(() => {
-    if (chainIndex > 1 || paymentType !== 3) return
+    if (chainItem?.type != 'SVM' || paymentType !== 3) return
+    // Show QrCode
     setQrLoading(true)
 
     const { solPaymentURL } = svmPay()
-    const qr = createQR(solPaymentURL, 200)
+    const qr = createQR(solPaymentURL, 180)
     if (qrRef.current && paymentAmount.isGreaterThan(0)) {
       qrRef.current.innerHTML = ''
       qr.append(qrRef.current)
@@ -579,11 +598,7 @@ const PaymentCard = ({ ...props }) => {
         setQrLoading(false)
       }, 888)
     }
-  }, [paymentType, paymentQr, paymentAmount])
-
-  // Check transaction is completed
-  useEffect(() => {
-    if (chainIndex > 1 || paymentType !== 3) return
+    // Check transaction completed
     let interval,
       i = 0
     let changed = false
@@ -640,7 +655,11 @@ const PaymentCard = ({ ...props }) => {
     if (!tokensCache?.current?.length) {
       getChainsTokenList()
     }
-  }, [tokens?.list, chainIndex])
+  }, [tokens?.list, chainIndex, chainList])
+
+  useEffect(() => {
+    handleChainsSelect(chainIndex)
+  }, [chainItem])
 
   useEffect(() => {
     if (!tokens?.list?.length) return
@@ -686,7 +705,7 @@ const PaymentCard = ({ ...props }) => {
       switch (chainType) {
         case 'evm':
         default:
-          if (chainIndex < 2) {
+          if (chainItem?.type == 'SVM') {
             setVisible(true)
             disconnect()
             return handleTransactionError('Please connect solana chain first.')
@@ -696,7 +715,7 @@ const PaymentCard = ({ ...props }) => {
           break
         case 'sol':
         case 'svm':
-          if (chainIndex > 1) {
+          if (chainItem?.type == 'EVM') {
             openConnectModal()
             return handleTransactionError('Please connect evm chain first.')
           }
@@ -710,15 +729,13 @@ const PaymentCard = ({ ...props }) => {
     let res = []
     setTokenListLoading(true)
 
-    switch (chainIndex) {
-      case 0:
-        res = await getSolTokenListSvc()
-        if (!res?.length) res = pay.solana.list
-        break
-      default:
-        res = payChains?.[chainIndex]?.['list']
-        break
+    if (getIncludesIgnoreCase(chainItem?.name, 'solana')) {
+      res = await getSolTokenListSvc()
+      if (!res?.length) res = pay.solana.list
+    } else {
+      res = chainItem?.['list']
     }
+
     if (res?.length) {
       tokensCache.current = res
 
@@ -735,7 +752,7 @@ const PaymentCard = ({ ...props }) => {
   const getTokenPrice = async (address = null) => {
     setTokenPriceLoading(true)
     address = address || tokens?.address
-    let chain_id = payChains[chainIndex]?.['chainIdProd'],
+    let chain_id = chainItem?.['chainIdProd'],
       tokens_item = tokens?.list?.find(row => row?.address == address)
 
     // mock testnet chain data
@@ -744,7 +761,7 @@ const PaymentCard = ({ ...props }) => {
       setTokenPriceLoading(false)
       return
     }
-    if (tokens_item?.address_price) address = tokens_item?.address_price
+    if (tokens_item?.price_address) address = tokens_item?.price_address
     //
     let res = await getToken(chain_id, address)
     if (res?.priceUSD) {
@@ -769,13 +786,15 @@ const PaymentCard = ({ ...props }) => {
 
   const { run: handlePayInputChange } = useDebounceFn(
     ({ val, type }) => {
+      if (payee?.amountType != 2) {
+      }
       if (/^\d*\.?\d*$/.test(val)) {
         // 如果输入值是数字或者带有小数点的数字
         let floatValue = type == 'add' ? payInputValue + val : val?.endsWith('.') ? val : parseFloat(val)
-        if (!isNaN(floatValue) && floatValue >= 0 && floatValue <= 10000) {
+        if (!isNaN(floatValue) && floatValue >= 0 && floatValue <= maxAmount) {
           setPayInputValue(floatValue)
-        } else if (floatValue > 10000) {
-          setPayInputValue(10000)
+        } else if (floatValue > maxAmount) {
+          setPayInputValue(maxAmount)
         } else {
           setPayInputValue(0)
         }
@@ -786,33 +805,31 @@ const PaymentCard = ({ ...props }) => {
     }
   )
 
-  const handleScrollChain = async (index, init = false) => {
-    const selectedChain = payChains[index]
+  const handleChainsSelect = async (index, type = null) => {
+    if (chainItem?.disabled) return
+    if (type == 'default') setChainIndex(index)
 
-    if (selectedChain?.disabled || index == chainIndex) return
-    setChainIndex(index)
-
-    if (init) {
-      const formattedChainName = selectedChain.name.replace(/\s+/g, '_')
-      // 构建新的 URL，确保不会重复添加链参数
-      const newQuery = { ...router.query, chain: formattedChainName }
-      router.replace(
-        {
-          pathname: router.pathname,
-          query: newQuery,
-        },
-        undefined,
-        { shallow: true } // 使用 shallow 避免页面完全重新加载
-      )
-    }
+    const formattedChainName = chainItem.name.replace(/\s+/g, '_')
+    // 构建新的 URL，确保不会重复添加链参数
+    const newQuery = { ...router.query, chain: formattedChainName }
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: newQuery,
+      },
+      undefined,
+      { shallow: true } // 使用 shallow 避免页面完全重新加载
+    )
 
     if (paymentType > 1) setPaymentType(0)
+
     tokensCache.current = []
+
     setTokenList({
       ...tokens,
       list: [],
-      symbol: selectedChain['list'][0]?.symbol,
-      address: selectedChain['list'][0]?.address,
+      symbol: chainItem['list'][0]?.symbol,
+      address: chainItem['list'][0]?.address,
     })
   }
 
@@ -868,7 +885,7 @@ const PaymentCard = ({ ...props }) => {
       paymentSubmitedRef.current = true // 设置状态为已提交
       // 只在第一次循环中进行支付结果提交
       let paymentOrderParams = {
-        chain: payChains[chainIndex]?.name,
+        chain: chainItem?.name,
         contract: tokens?.address,
         symbol: tokens?.symbol,
         amount: tokensAmount,
@@ -876,12 +893,13 @@ const PaymentCard = ({ ...props }) => {
         payer: data?.payer,
         payeeId: payee?.id,
       }
+      debugger
+      if (widgetForm && widgetForm?.name) paymentOrderParams = { ...paymentOrderParams, ...widgetForm }
       if (debouncedPayNote) paymentOrderParams = Object.assign(paymentOrderParams, { message: debouncedPayNote })
       if (payChainId) paymentOrderParams = { ...paymentOrderParams, ...{ chainId: payChainId } }
       let res = await getPaymentOrderSvc(paymentOrderParams, 'post')
       if (res?.ok) {
         paymentSubmitedRef.current = false
-        console.log('💎 Payment submit success.')
         showSnackbar({
           snackbar: {
             open: true,
@@ -896,21 +914,21 @@ const PaymentCard = ({ ...props }) => {
   const walletClass = 'w-full py-3 text-lg rounded-lg shadow-sm bg-create-gradient-004'
 
   const accountStatus = ({ children = null, type = 0, actions = true } = {}) => (
-    <section className={classNames('text-center')}>
+    <section className={classNames('text-center pt-8')}>
       {paymentType == 3 && paymentQr ? (
         <header className="flex justify-center my-2">
-          {qrLoading && <NmSpinInfinity absoluteYCenter customClass="scale-150 -mt-20" />}
+          {qrLoading && <NmSpinInfinity absoluteYCenter customClass="scale-150 -mt-32" />}
           <div ref={qrRef} className="rounded-2xl overflow-hidden" />
         </header>
       ) : (
         children
       )}
       <ul className="py-4 font-medium flex flex-col gap-2">
-        <li className="flex items-center justify-between text-lg rounded-lg h-13 px-4 bg-black/10 backdrop-blur">
+        <li className="flex items-center justify-between rounded-lg h-12 px-4 bg-black/10 backdrop-blur">
           <span>Amount</span>
-          <strong className="font-firasans text-1.5xl">{`$ ${payInputValue}`}</strong>
+          <strong className="font-firasans">{`$ ${payInputValue}`}</strong>
         </li>
-        <li className="group/item flex items-center justify-between text-lg rounded-lg h-13 px-4 bg-black/10 backdrop-blur">
+        <li className="group/item flex items-center justify-between rounded-lg h-12 px-4 bg-black/10 backdrop-blur">
           <p className="flex items-center">
             <span>Tax（Beta）</span>
             <Image
@@ -922,9 +940,9 @@ const PaymentCard = ({ ...props }) => {
               className="ml-2 animate-spin animate-duration-10 transition-all hidden group-hover/item:inline"
             />
           </p>
-          <strong className="font-firasans text-1.5xl flex items-center">{`$ 0`}</strong>
+          <strong className="font-firasans flex items-center">{`$ 0`}</strong>
         </li>
-        <li className="flex items-center justify-between rounded-lg h-13 px-4 bg-black/10 backdrop-blur">
+        <li className="flex items-center justify-between rounded-lg h-12 px-4 bg-black/10 backdrop-blur">
           <Avatar src={tokensItem?.logoURI || tokensItem?.icon_url} className="size-7" />
           <p className="font-normal text-sm">
             <strong>{tokensAmount}</strong>
@@ -986,17 +1004,18 @@ const PaymentCard = ({ ...props }) => {
     switch (type) {
       case 0:
         return (
-          <section className="text-center">
-            <ul className="my-16 font-firasans">
+          <Box className="text-center">
+            <ul className="pt-28 pb-20 font-firasans">
               <li className="relative text-7xl font-extrabold">
                 <strong className="-mt-0.5 -ml-4 absolute top-1/2 -translate-y-1/2">$</strong>
                 <input
+                  disabled={payee?.amountType != 2}
                   value={payInputValue}
                   onChange={e => handlePayInputChange({ val: e.target.value })}
-                  className="w-60 pl-7 text-7xl text-center bg-transparent border-gray-400/50 border-dashed border-0 border-b outline-0 focus:ring-0"
+                  className="w-68 pl-7 text-7xl text-center bg-transparent border-gray-400/50 border-dashed border-0 border-b outline-0 focus:ring-0"
                 />
               </li>
-              <li className="text-lg sm:text-xl p-1 truncate">
+              <li className="text-lg sm:text-xl pt-1 truncate">
                 {tokenPrice ? (
                   <p
                     className={classNames({
@@ -1020,18 +1039,19 @@ const PaymentCard = ({ ...props }) => {
                 )}
               </li>
             </ul>
-
-            <ul className="flex justify-center gap-4">
-              {[1, 5, 10, 25].map(row => (
-                <li
-                  key={`pay-number-add-${row}`}
-                  className="select-none font-firasans rounded-md py-1 sm:py-1.5 w-24 bg-transparent border border-gray-300/50 hover:border-gray-300 transition-all cursor-pointer"
-                  onClick={() => handlePayInputChange({ type: 'add', val: row })}
-                >
-                  + ${row}
-                </li>
-              ))}
-            </ul>
+            {payee?.amountType == 2 && (
+              <ul className="flex justify-center gap-4">
+                {[1, 5, 10, 25].map(row => (
+                  <li
+                    key={`pay-number-add-${row}`}
+                    className="select-none font-firasans rounded-md py-1 sm:py-1.5 w-24 bg-transparent border border-gray-300/50 hover:border-gray-300 transition-all cursor-pointer"
+                    onClick={() => handlePayInputChange({ type: 'add', val: row })}
+                  >
+                    + ${row}
+                  </li>
+                ))}
+              </ul>
+            )}
             <footer className="pt-6 flex justify-center">
               <NmBorderCounter
                 speed="smooth"
@@ -1042,25 +1062,30 @@ const PaymentCard = ({ ...props }) => {
                   }
                 )}
                 innerClass={classNames('border-1', { 'opacity-50': !payInputContinue })}
-                onClick={() => payInputContinue && setPaymentType(2)}
+                onClick={() => {
+                  if (payInputContinue) {
+                    if (!widgetForm) return setPaymentType(2)
+
+                    props?.onSubmitPay()
+                    if (widgetForm?.name) {
+                      setPaymentType(2)
+                    }
+                  }
+                }}
               >
                 Continue
               </NmBorderCounter>
             </footer>
-          </section>
+          </Box>
         )
         break
       case 1:
         return (
-          <section>
-            <header className="pb-2 flex justify-between items-center">
-              <h1 className="text-xl font-righteous">
-                {payChains[chainIndex]?.name}
-                {!tokenSearch && <span className="pl-1 max-sm:hidden">Chain</span>}
-              </h1>
+          <Box>
+            <header className="py-5">
               {tokenSearch ? (
-                <Box className="ml-3 flex-1 relative animate__animated animate__fadeIn">
-                  <NmIcon type="icon-search" className="text-lg absolute left-0 bottom-0" />
+                <Box className="relative animate__animated animate__fadeIn">
+                  <NmIcon type="icon-search" className="text-1.5xl absolute left-0 bottom-1" />
                   <input
                     autoFocus
                     placeholder="Search by token name"
@@ -1071,18 +1096,14 @@ const PaymentCard = ({ ...props }) => {
                     className="absolute right-0 bottom-0.5 px-2 py-0.5 rounded-md bg-black/10 backdrop-blur text-sm cursor-pointer"
                     onClick={handleTokenListReset}
                   >
-                    ESC
+                    Cancel
                   </span>
                 </Box>
               ) : (
-                <NmIcon
-                  type="icon-search"
-                  className="text-1.5xl leading-0 cursor-pointer"
-                  onClick={() => setTokenSearch(true)}
-                />
+                <NmIcon type="icon-search" className="text-1.5xl cursor-pointer" onClick={() => setTokenSearch(true)} />
               )}
             </header>
-            <ul className="scrollbar-hide overflow-y-auto h-88 flex flex-col gap-2">
+            <ul className="scrollbar-hide overflow-y-auto max-h-84 flex flex-col gap-2">
               {tokenListLoading ? (
                 <NmSpinInfinity customClass="mt-24 mx-auto text-lg scale-150" />
               ) : tokens?.list?.length > 0 ? (
@@ -1102,11 +1123,11 @@ const PaymentCard = ({ ...props }) => {
                     <Box className="relative">
                       <Avatar src={row?.logoURI || row?.icon_url} className="size-9 sm:size-10" />
                       <Avatar
-                        src={payChains[chainIndex]?.icon || getActiveChain({ name: payChains[chainIndex]?.name })?.icon}
+                        src={chainItem?.icon || getActiveChain({ name: chainItem?.name })?.icon}
                         className={classNames('size-4 border absolute bottom-0 right-0', {
-                          'bg-black': payChains[chainIndex]?.name
+                          'bg-black': chainItem?.name
                             .split(' ')
-                            .some(word => ['Solana', 'SOON', 'Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(word)),
+                            .some(word => ['SOON', 'Arbitrum', 'BSC', 'Polygon', 'Aurora'].includes(word)),
                         })}
                       />
                     </Box>
@@ -1127,7 +1148,9 @@ const PaymentCard = ({ ...props }) => {
                             href={getNFTOrScanUrl({
                               type: 'address',
                               address: row?.address,
-                              ...(chainIndex > 1 ? { chainId: payChainId } : { chainType: 'svm' }),
+                              ...((getIncludesIgnoreCase(chainItem?.name, 'soon') && { chain: 'soon' }) ||
+                                (getIncludesIgnoreCase(chainItem?.name, 'solana') && { chain: 'solana' }) ||
+                                (chainItem?.type == 'EVM' && { chainId: payChainId })),
                             })}
                             className="flex gap-1 items-center"
                           >
@@ -1163,12 +1186,12 @@ const PaymentCard = ({ ...props }) => {
                 </li>
               )}
             </ul>
-          </section>
+          </Box>
         )
         break
       case 2:
         return (
-          <section className="pt-4">
+          <Box className="pt-16">
             <textarea
               value={payNote}
               placeholder={`Leave a encrypted message for payment of $${payInputValue} and visible to you and the creator only.`}
@@ -1189,10 +1212,10 @@ const PaymentCard = ({ ...props }) => {
                       className="sm:mr-4 animate__animated animate__swing animate__infinite animate__slower"
                     />
                   }
-                  disabled={chainIndex > 1}
+                  disabled={chainItem?.type != 'SVM'}
                   onClick={getPaymentQrGo}
                 >
-                  QR code
+                  QR Code
                 </Button>
               </li>
               <li className="flex-1">
@@ -1210,7 +1233,7 @@ const PaymentCard = ({ ...props }) => {
                 </NmBorderCounter>
               </li>
             </ul>
-          </section>
+          </Box>
         )
         break
       case 3:
@@ -1266,9 +1289,9 @@ const PaymentCard = ({ ...props }) => {
                     href={getNFTOrScanUrl({
                       type: 'tx',
                       hash: txInfo?.signature,
-                      ...((!chainIndex && { chain: 'solana' }) ||
-                        (chainIndex == 1 && { chain: 'soon' }) ||
-                        (chainIndex > 1 && { chainId })),
+                      ...((getIncludesIgnoreCase(chainItem?.name, 'soon') && { chain: 'soon' }) ||
+                        (getIncludesIgnoreCase(chainItem?.name, 'solana') && { chain: 'solana' }) ||
+                        (chainItem?.type == 'EVM' && { chainId })),
                     })}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
@@ -1287,145 +1310,145 @@ const PaymentCard = ({ ...props }) => {
     }
   }
   return (
-    <article className="relative flex-1 animate__animated animate__fadeIn px-2" ref={payBoxRef}>
-      <section className="py-8 flex justify-between items-center">
-        <NmBorderCounter
-          speed="smooth"
-          customClass="rounded-md transition-all flex items-center gap-1.5 pl-1 px-2 cursor-pointer"
-          innerClass="border-1"
-          onClick={() => handleSwitchChain(!chainItemSwitch)}
-        >
-          <Avatar
-            src={payChains[chainIndex]?.icon || getActiveChain({ name: payChains[chainIndex]?.name })?.icon}
-            className={classNames(
-              'bg-transparent rounded-md p-1.5 size-9',
-              payChains[chainIndex]?.disabled ? 'opacity-30' : 'cursor-pointer'
+    <LandingCard
+      customClass={classNames('!my-0 h-fit overflow-x-auto overflow-y-hidden', customClass)}
+      tpls={{ style: `S00${payee?.theme || 0}` }}
+    >
+      <article className="relative pt-4 p-2 animate__animated animate__fadeIn" ref={payBoxRef}>
+        <section className="flex justify-between items-center">
+          <NmBorderCounter
+            speed="smooth"
+            customClass="rounded-md transition-all flex items-center gap-1.5 pl-1 pr-2 cursor-pointer"
+            innerClass="border-1"
+            onClick={() => payee?.chains?.length > 1 && handleSwitchChain(!chainItemSwitch)}
+          >
+            <Avatar
+              src={chainItem?.icon || getActiveChain({ name: chainItem?.name })?.icon}
+              className={classNames(
+                'bg-transparent rounded-md p-1.5 size-9',
+                chainItem?.disabled ? 'opacity-30' : 'cursor-pointer'
+              )}
+            />
+            <span className="font-righteous pr-[0.2rem]">{chainItem?.name}</span>
+            {payee?.chains?.length > 1 && <NmIcon type="icon-arrow_down" className="leading-0 mt-px" />}
+          </NmBorderCounter>
+          <NmBorderCounter
+            speed="smooth"
+            customClass="rounded-md transition-all flex items-center justify-center gap-1.5 py-[0.3rem] px-2 py-1 min-w-20 ml-3 cursor-pointer"
+            innerClass="border-1"
+            onClick={() => {
+              setPaymentType(!paymentType ? 1 : 0)
+              if (paymentType !== 1) handleTokenListReset()
+            }}
+          >
+            {!paymentType ? (
+              tokenListLoading ? (
+                <NmSpinInfinity />
+              ) : (
+                <>
+                  <Avatar src={tokensItem?.logoURI || tokensItem?.icon_url} className="size-4.5" />
+                  {tokensItem?.symbol}
+                  <NmIcon type="icon-arrow_down" className="leading-0 mt-px" />
+                </>
+              )
+            ) : (
+              'ESC'
             )}
-          />
-          <span className="font-righteous">{payChains[chainIndex]?.name}</span>
-          <NmIcon type="icon-arrow_down" className="leading-0 mt-px" />
-        </NmBorderCounter>
-        <NmBorderCounter
-          speed="smooth"
-          customClass="rounded-md transition-all flex items-center justify-center gap-1.5 py-[0.3rem] px-2 py-1 min-w-20 ml-3 cursor-pointer"
-          innerClass="border-1"
-          onClick={() => {
-            setPaymentType(!paymentType ? 1 : 0)
-            if (paymentType !== 1) handleTokenListReset()
+          </NmBorderCounter>
+        </section>
+        <section className="flex flex-col min-h-100">{payContent(paymentType)}</section>
+
+        {payee?.copyright && (
+          <footer className="flex justify-end mt-12 opacity-70 hover:opacity-100 transition-all">
+            <NextLink href={domains.master} target="_blank" rel="noopener noreferrer nofollow">
+              <Image
+                alt=""
+                width={140}
+                height={70}
+                draggable={false}
+                src={payee?.theme !== 5 ? logo.pro_mix_white : logo.pro_mix_black}
+              />
+            </NextLink>
+          </footer>
+        )}
+        <SwipeableDrawer
+          // container={lgScreen ? payBoxRef?.current : rootElement}
+          disableBackdropTransition={!isiOS()}
+          disableDiscovery={isiOS()}
+          anchor="bottom"
+          open={chainItemSwitch && payee?.chains?.length > 1}
+          onClose={() => handleSwitchChain(false)}
+          onOpen={() => handleSwitchChain}
+          classes={{
+            paper: classes.paper,
           }}
         >
-          {!paymentType ? (
-            tokenListLoading ? (
-              <NmSpinInfinity />
-            ) : (
-              <>
-                <Avatar src={tokensItem?.logoURI || tokensItem?.icon_url} className="size-4.5" />
-                {tokensItem?.symbol}
-                <NmIcon type="icon-arrow_down" className="leading-0 mt-px" />
-              </>
-            )
-          ) : (
-            'ESC'
-          )}
-        </NmBorderCounter>
-      </section>
-      {payContent(paymentType)}
-      {payee?.copyright && (
-        <footer className="flex justify-end pt-10 opacity-70 hover:opacity-100 transition-all">
-          <NextLink href={domains.master} target="_blank" rel="noopener noreferrer nofollow">
-            <Image
-              alt=""
-              width={120}
-              height={60}
-              draggable={false}
-              src={payee?.style?.theme !== 5 ? logo.pro_mix_white : logo.pro_mix_black}
-            />
-          </NextLink>
-        </footer>
-      )}
-      <SwipeableDrawer
-        container={lgScreen ? payBoxRef?.current : rootElement}
-        disableBackdropTransition={!isiOS()}
-        disableDiscovery={isiOS()}
-        anchor={lgScreen ? 'top' : 'bottom'}
-        open={chainItemSwitch}
-        onClose={() => handleSwitchChain(false)}
-        onOpen={() => handleSwitchChain}
-        classes={{
-          paper: classes.paper,
-        }}
-        ModalProps={{
-          BackdropProps: {
-            sx: {
-              borderRadius: '1rem',
-            },
-          },
-        }}
-      >
-        <LandingCard
-          component="article"
-          customClass="!my-0 min-h-114 lg:min-h-96 max-lg:rounded-b-none"
-          tpls={{ style: `S00${payee?.style?.theme || 0}` }}
-        >
-          <Tabs value={chainsTab} onChange={(e, val) => setChainsTab(val)} aria-label="Switch Chain Tab">
-            {_payChains.map((row, index) => (
-              <Tab
-                key={`chain-tab-${index}`}
-                label={row?.['type']}
-                id={`chain-tab-${index}`}
-                aria-controls={`chain-tabpanel-${index}`}
-                className={classNames('normal-case text-inherit', {
-                  'font-semibold text-base': chainsTab == index,
-                })}
-              />
-            ))}
-          </Tabs>
-          <ul className="flex flex-wrap items-center p-4 pt-8 gap-8">
-            {payChains.map((item, index) => {
-              let avatarBox = ({ classes = null } = {}) => (
-                <Avatar
-                  src={item?.icon || getActiveChain({ name: item?.name })?.icon}
-                  className={classNames(
-                    classes,
-                    item?.['avatarClass'],
-                    item?.disabled ? 'opacity-20' : 'cursor-pointer'
-                  )}
-                />
-              )
-              return (
-                <li
-                  key={`chain-tab-content-${index}`}
-                  className={classNames('relative', {
-                    hidden: item?.['type'] !== _payChains[chainsTab]?.['type'],
+          <LandingCard
+            component="article"
+            customClass="!my-0 min-h-80 lg:min-h-96 max-lg:rounded-b-none"
+            tpls={{ style: `S00${payee?.theme || 0}` }}
+          >
+            <Tabs value={chainsTab} onChange={(e, val) => setChainsTab(val)} aria-label="Switch Chain Tab">
+              {chainListTabs.map((row, index) => (
+                <Tab
+                  key={`chain-tab-${index}`}
+                  label={row?.['type']}
+                  id={`chain-tab-${index}`}
+                  aria-controls={`chain-tabpanel-${index}`}
+                  className={classNames('normal-case text-inherit', {
+                    'font-semibold text-base': chainsTab == index,
                   })}
-                  onClick={() => handleScrollChain(index, true)}
-                >
-                  <NmTooltip title={item?.disabled ? `${item?.name} Upcoming` : ''}>
-                    {index == chainIndex && !item?.disabled ? (
-                      <>
-                        <NmBorderCounter
-                          speed="smooth"
-                          customClass="rounded-full p-1 bg-black transition-all"
-                          innerClass="border-1"
-                        >
-                          {avatarBox({ classes: 'size-8' })}
-                        </NmBorderCounter>
-                        <Avatar className="size-5 scale-90 bg-black absolute -bottom-1 right-0">
-                          <NmIcon type="icon-tick" className="text-xs font-semibold" />
-                        </Avatar>
-                      </>
-                    ) : (
-                      avatarBox({ classes: 'size-10' })
+                />
+              ))}
+            </Tabs>
+            <ul className="flex flex-wrap items-center p-4 pt-8 gap-8">
+              {chainList.map((item, index) => {
+                let avatarBox = ({ classes = null } = {}) => (
+                  <Avatar
+                    src={item?.icon || getActiveChain({ name: item?.name })?.icon}
+                    className={classNames(
+                      classes,
+                      item?.['avatarClass'],
+                      item?.disabled ? 'opacity-20' : 'cursor-pointer'
                     )}
-                  </NmTooltip>
-                </li>
-              )
-            })}
-          </ul>
-        </LandingCard>
-      </SwipeableDrawer>
-    </article>
+                  />
+                )
+
+                return (
+                  <li
+                    key={`chain-tab-content-${index}`}
+                    className={classNames('relative', {
+                      hidden: item?.['type'] !== chainListTabs[chainsTab]?.['type'],
+                    })}
+                    onClick={() => handleChainsSelect(index, 'default')}
+                  >
+                    <NmTooltip title={item?.disabled ? `${item?.name} Upcoming` : ''}>
+                      {index == chainIndex && !item?.disabled ? (
+                        <>
+                          <NmBorderCounter
+                            speed="smooth"
+                            customClass="rounded-full p-1 bg-black transition-all"
+                            innerClass="border-1"
+                          >
+                            {avatarBox({ classes: 'size-9' })}
+                          </NmBorderCounter>
+                          <Avatar className="size-5 scale-90 bg-black absolute -bottom-1 right-0">
+                            <NmIcon type="icon-tick" className="text-xs font-semibold" />
+                          </Avatar>
+                        </>
+                      ) : (
+                        avatarBox({ classes: 'size-11' })
+                      )}
+                    </NmTooltip>
+                  </li>
+                )
+              })}
+            </ul>
+          </LandingCard>
+        </SwipeableDrawer>
+      </article>
+    </LandingCard>
   )
 }
 
-export default PaymentCard
+export default PaymentWidget
