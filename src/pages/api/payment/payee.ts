@@ -39,6 +39,9 @@ export default async function payee(req: NextApiRequest, res: NextApiResponse) {
       try {
         const payee = await prisma.payee.findMany({
           where: { uuid: uuid as string },
+          orderBy: {
+            updatedAt: 'desc', // Use 'asc' for ascending order
+          },
         })
 
         if (!payee) {

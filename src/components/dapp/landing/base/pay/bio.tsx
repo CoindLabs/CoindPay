@@ -31,7 +31,9 @@ const PaymentBio = ({ payee = null, user = null, classes = null } = {}) => {
               </figure>
               <Link className="card-body z-10 p-4" href={`pay/link/${row?.id}`} target="_blank">
                 <h2 className="text-2xl card-title line-clamp-2">{row?.title}</h2>
-                <p className="line-clamp-3 whitespace-pre-wrap text-neutral-400">{row?.desc}</p>
+                <p className="line-clamp-3 mb-3 whitespace-pre-wrap text-neutral-500 hover:text-neutral-400">
+                  {row?.desc}
+                </p>
                 <Box className="card-actions flex-nowrap items-center justify-between">
                   <Stack spacing={4}>
                     <AvatarGroup

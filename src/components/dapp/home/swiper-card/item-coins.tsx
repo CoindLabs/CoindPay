@@ -10,45 +10,47 @@ import { isUrl } from '@/lib/utils'
 
 const ItemCoinsSwiper = ({ data = [], ...props }) => {
   const isMobile = useMobile()
-
   const [loading, setLoading] = useState(false)
   const [tokens, setTokens] = useState([])
 
-  const getTokensList = async () => {
+  const getTokensList = async isMounted => {
     setLoading(true)
 
-    let chains = {
-        1: {
-          chain: 'Ethereum',
-          length: 10,
-        },
-        1151111081099710: {
-          chain: 'Solana',
-          length: 50,
-        },
-      },
-      lifiChainIds = Object.keys(chains).map(Number)
-
-    let res = await getTokens({
-      chains: lifiChainIds,
-      chainTypes: [ChainType.SVM, ChainType.EVM],
-    })
-
-    if (res?.tokens) {
-      const mergedTokens = Object.entries(chains).reduce((pre, [chainId, { length }]) => {
-        const tokensForChain = res.tokens[chainId] || []
-        const limitedTokens = tokensForChain.slice(0, length)
-        pre.unshift(...limitedTokens)
-        return pre
-      }, [])
-
-      setTokens(mergedTokens)
+    const chains = {
+      1: { chain: 'Ethereum', length: 10 },
+      1151111081099710: { chain: 'Solana', length: 50 },
     }
-    setLoading(false)
+    const lifiChainIds = Object.keys(chains).map(Number)
+
+    try {
+      const res = await getTokens({
+        chains: lifiChainIds,
+        chainTypes: [ChainType.SVM, ChainType.EVM],
+      })
+
+      if (isMounted && res?.tokens) {
+        const mergedTokens = Object.entries(chains).flatMap(([chainId, { length }]) => {
+          const tokensForChain = res.tokens[chainId] || []
+          return tokensForChain.slice(0, length)
+        })
+
+        setTokens(prevTokens =>
+          JSON.stringify(prevTokens) !== JSON.stringify(mergedTokens) ? mergedTokens : prevTokens
+        )
+      }
+    } catch (error) {
+      console.error('Failed to fetch tokens:', error)
+    } finally {
+      if (isMounted) setLoading(false)
+    }
   }
 
   useEffect(() => {
-    getTokensList()
+    let isMounted = true
+    getTokensList(isMounted)
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   return (
@@ -57,6 +59,7 @@ const ItemCoinsSwiper = ({ data = [], ...props }) => {
         <NmSpinInfinity customClass="text-lg scale-200" />
       ) : (
         <Swiper
+          key={tokens.length}
           grabCursor
           slidesPerView="auto"
           spaceBetween={isMobile ? 28 : 40}

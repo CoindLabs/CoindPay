@@ -22,7 +22,7 @@ const Banner = () => {
   }, [animateInit])
 
   return (
-    <section className="relative flex justify-center max-sm:mb-28">
+    <section className="relative flex justify-center max-sm:mb-28 min-h-120">
       <header className="absolute z-1 -bottom-36 sm:top-80 xl:top-56 font-righteous text-3xl sm:text-5.5xl lg:text-6.5xl text-white text-center">
         <Box className="text-3.5xl sm:text-5.5xl lg:text-6.5xl">
           <span>Crypto</span>

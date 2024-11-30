@@ -46,20 +46,20 @@ let chainsPayments = [
     iconClass: 'text-violet-600',
   },
   {
-    name: 'zkSync',
-    title: '+ 9 DAI',
-    titleClass: 'text-orange-600 bg-orange-600/20',
-    message: '0x...8c2m Buy you a cup of coffee.',
-    icon: 'buymeacoffee',
-    iconClass: 'text-orange-600',
-  },
-  {
     name: 'Arbitrum',
     title: '+ 5.6 ARB',
     titleClass: 'text-sky-600 bg-sky-600/20',
     message: 'Received a transfer (bounty) from 0x...k9.',
     icon: 'bank',
     iconClass: 'text-sky-600 scale-90',
+  },
+  {
+    name: 'zkSync',
+    title: '+ 9 DAI',
+    titleClass: 'text-orange-600 bg-orange-600/20',
+    message: '0x...8c2m Buy you a cup of coffee.',
+    icon: 'buymeacoffee',
+    iconClass: 'text-orange-600',
   },
 ]
 

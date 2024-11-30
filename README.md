@@ -8,16 +8,16 @@ https://coindpay.xyz
 
 ## Slogan
 
-Cross-chain DEXs、Payments and Compound Finance Infrastructure.
+Decentralized Privacy Cross-chain DEXs、Payments and Compound Finance Infrastructure.
 
 ## Mission
 
 Crypto payments and compounding funds like a stream of water in an endless stream.
-For Creator、ForBrand、For Consumers、For Everyone.
+For Creator、For Brand、For Consumers、For Everyone.
 
 ## Values
 
-CoindPay is a Multichain（28+ EVM Chains、Solana、SOON etc.）DEXs、Payments and Compound Finance Infrastructure.
+CoindPay is a Multichain（28+ EVM/SVM Chains etc.）DEXs、Payments and Compound Finance Infrastructure.
 
 All Your Business, Invoice, Checkout, Recurring, Connect... Payments in One Place.
 
@@ -25,7 +25,7 @@ We are committed to building decentralized PayPal Venmo + Compound Finance acros
 
 Make idle funds more available once and for all.
 
-![CoindPay Chains](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/eaj88POKvT64DVOm.jpg)
+![CoindPay Chains](https://cdn.coindpay.xyz/stream/brand/banner/dapp_account_chains.jpg)
 
 ## Chains
 
@@ -33,7 +33,7 @@ Make idle funds more available once and for all.
 SOON、Solana
 
 ✅ **EVM**
-Ethereum、Solana、Base、Optimism、Arbitrum、Metis、Sei、Scroll、Hashkey、Celo、Fuse、Aurora、Gnosis、BSC、Polygon、Polygon zkEVM、zkSync、Avalanche、Mantle、Linea、Manta、Blast、Mode、Fantom、Rootsock、Berachain、ZetaChain...and 28+ chains.
+Ethereum、Base、Optimism、Arbitrum、Metis、Sei、Scroll、Hashkey、Celo、Fuse、Aurora、Gnosis、BSC、Polygon、Polygon zkEVM、zkSync、Avalanche、Mantle、Linea、Manta、Blast、Mode、Fantom、Rootsock、Berachain、ZetaChain...and 28+ chains.
 
 ✅ **ICP**
 
@@ -45,9 +45,10 @@ Cross-chain Pay, get paid, grow a business, and more.
 
 More friendly receipts and payments from 28+ chains assets, more options for customers and friends.
 
-![CoindPay Payments_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/Wj1AZR1PMUEE1g6L.jpg)
-![CoindPay Payments_02](https://res.cloudinary.com/travary/image/upload/w_800/v1/prd-akindo-public/communities/description-images/QlPqqQrOrF3ZQjax.jpg)
-![CoindPay Payments_03](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/A8vnXMp9kHMo07ZKl.jpg)
+![CoindPay Payments_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/GLD2okRZ2i0GXgVJ.png)
+![CoindPay Payments_02](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/vjOlGJxx3HVMp2Kj.png)
+![CoindPay Payments_03](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/d8Ogw8vDrHJRqg0Wv.png)
+![CoindPay Payments_04](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/A8vnXMp9kHMo07ZKl.jpg)
 
 > Fast & Safe funds
 
@@ -65,7 +66,7 @@ All payments automatically flow into smart contracts like Compound and Lido, whi
 Audited and Verified. The most secure protocol for money.
 
 ![CoindPay Finance_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/d8QggvODzidrNq8V.jpg)
-![CoindPay Finance_02](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/JBKerRNJNS413KJB.png)
+![CoindPay Finance_02](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/0nq0LQWGmizozDmOO.png)
 
 > Ecosystem developers
 
@@ -73,15 +74,14 @@ No-code payment configuration, intelligent widgets. free to share with anyone.
 
 SDK support for embedded development.
 
-![CoindPay Profile_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/wK7XWQ1gkhVoaMjB.png)
-![CoindPay Profile_02](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/93RzzjMOPsGqVPqj.jpg)
-![CoindPay Profile_03](https://res.cloudinary.com/travary/image/upload/w_800/v1/prd-akindo-public/communities/description-images/7mG884ZBjtdN3La2v.jpg)
+![CoindPay Profile_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/QlPqqQrOrF3ZQjax.jpg)
+![CoindPay Profile_02](https://res.cloudinary.com/travary/image/upload/w_800/v1/prd-akindo-public/communities/description-images/7mG884ZBjtdN3La2v.jpg)
 
 ## Milestones
 
 > 2024 Q3
 
-Multi-chain DEXs and Payments are online, supporting mainstream EVM and Solana chains, etc.
+Multi-chain DEXs and Payments are online, supporting mainstream EVM and SVM chains, etc.
 
 > 2024 Q4
 
@@ -92,6 +92,8 @@ Multi-chain DEXs and Payments are online, supporting mainstream EVM and Solana c
 
 Online activities and merchant center, consumption rebate points and tokens, merchants can issue encrypted discount coupons, creators can open encrypted subscription benefits, users can receive more merchants and creators marketing and sharing of discounts in the Activity Center super benefits.
 
+![CoindPay Portfolio_X](https://cdn.coindpay.xyz/stream/brand/banner/dapp_cover_x.jpg)
+
 ---
 
 ## Social
@@ -101,6 +103,10 @@ Online activities and merchant center, consumption rebate points and tokens, mer
 _Meet CoindPay：Infrastructure for Crypto Finance_
 
 https://youtu.be/eOSplOfUaYo
+
+_CoindPay with SOON Chain_
+
+https://youtu.be/DOdlALx1f9c
 
 _CoindPay with Scroll Chain_
 

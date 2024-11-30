@@ -201,6 +201,7 @@ module.exports = {
         112: '28rem',
         114: '28.5rem',
         116: '29rem',
+        120: '30rem',
       },
       minWidth: {
         '1/2': '50%',
@@ -239,6 +240,9 @@ module.exports = {
         0: 0,
         12: '3rem',
         x3: 3,
+      },
+      grayscale: {
+        50: '50%',
       },
       opacity: {
         1: '0.01',

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useThrottleFn } from 'ahooks'
 import classNames from 'classnames'
 import Link from 'next/link'
@@ -22,6 +22,7 @@ const Copyright = (classes = null) => (
 )
 
 export default function PaymentLanding({ data, user, ...props }) {
+  const nameRef = useRef(null)
   const [loading, setLoading] = useState(true)
 
   const [paymentForm, setPaymentForm] = useState(Object)
@@ -50,6 +51,7 @@ export default function PaymentLanding({ data, user, ...props }) {
         ...paymentFormTips,
         name: true,
       })
+      nameRef.current.focus()
     }
   }
 
@@ -77,7 +79,7 @@ export default function PaymentLanding({ data, user, ...props }) {
             <h1 className="text-2.5xl lg:text-lg">
               {user?.nickname || user?.username || getShortenMidDots(data?.uuid, 6)}
             </h1>
-            {user?.bio && <p className="text-sm lg:text-xs text-stone-300 font-light line-clamp-2">{user?.bio}</p>}
+            {user?.bio && <p className="text-sm text-stone-300 font-light line-clamp-2">{user?.bio}</p>}
           </Link>
         </header>
         <section className="py-8 h-full flex flex-col justify-between">
@@ -112,9 +114,9 @@ export default function PaymentLanding({ data, user, ...props }) {
 
             {data?.amountType != 2 && (
               <li>
-                {data?.price > 0 && <span className="text-3xl pr-0.5 font-firasans font-bold">$</span>}
+                {data?.price > 0 && <span className="text-3.5xl pr-0.5 font-firasans font-bold">$</span>}
                 {data?.price > 0 ? (
-                  <span className="text-2.5xl font-semibold">{data?.price}</span>
+                  <span className="text-3xl font-semibold">{data?.price}</span>
                 ) : (
                   <Chip label="Free" color="secondary" className="px-2" />
                 )}
@@ -142,6 +144,7 @@ export default function PaymentLanding({ data, user, ...props }) {
               {paymentFormTips?.name && <span className="pl-1 text-theme-error">is required *</span>}
             </Box>
             <input
+              ref={nameRef}
               type="text"
               maxLength={256}
               className={classNames(

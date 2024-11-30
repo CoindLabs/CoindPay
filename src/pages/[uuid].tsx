@@ -75,11 +75,10 @@ export default function Uuid({ user: initialUser, payee: initialPayee }) {
   const router = useRouter()
 
   const localUser = useUserData()
+  const isLoggedIn = useIsLoggedIn()
 
   const [user, setUser] = useState(initialUser)
   const [payee, setPayee] = useState(initialPayee)
-
-  const isLoggedIn = useIsLoggedIn()
   const [isInProfile, setInProfile] = useState(false)
 
   const [loading, setLoading] = useState(true)
