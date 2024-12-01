@@ -8,7 +8,7 @@ https://coindpay.xyz
 
 ## Slogan
 
-Decentralized Privacy Cross-chain DEXs、Payments and Compound Finance Infrastructure.
+Decentralized and Privacy-Preserving Infrastructure for Cross-Chain Payments, DEXs, and Compound Finance.
 
 ## Mission
 
