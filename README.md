@@ -13,15 +13,16 @@ Decentralized and Privacy-Preserving Infrastructure for Cross-Chain Payments, DE
 ## Mission
 
 Crypto payments and compounding funds like a stream of water in an endless stream.
+
 For Creator、For Brand、For Consumers、For Everyone.
 
 ## Values
 
-CoindPay is a Multichain（28+ EVM/SVM Chains etc.）DEXs、Payments and Compound Finance Infrastructure.
+CoindPay is a Multichain（28+ EVM/SVM Chains etc.）Payments、DEXs and Compound Finance Infrastructure.
 
 All Your Business, Invoice, Checkout, Recurring, Connect... Payments in One Place.
 
-We are committed to building decentralized PayPal Venmo + Compound Finance across chains and protocols to make the movement of encrypted funds simpler and more efficient.
+We are committed to building decentralized Stripe + Venmo + Compound Finance across chains and protocols to make the movement of encrypted funds simpler and more efficient.
 
 Make idle funds more available once and for all.
 
@@ -30,9 +31,11 @@ Make idle funds more available once and for all.
 ## Chains
 
 ✅ **SVM**
+
 SOON、Solana
 
 ✅ **EVM**
+
 Ethereum、Base、Optimism、Arbitrum、Metis、Sei、Scroll、Hashkey、Celo、Fuse、Aurora、Gnosis、BSC、Polygon、Polygon zkEVM、zkSync、Avalanche、Mantle、Linea、Manta、Blast、Mode、Fantom、Rootsock、Berachain、ZetaChain...and 28+ chains.
 
 ✅ **ICP**
@@ -107,48 +110,6 @@ https://youtu.be/eOSplOfUaYo
 _CoindPay with SOON Chain_
 
 https://youtu.be/DOdlALx1f9c
-
-_CoindPay with Scroll Chain_
-
-https://x.com/CoindPay/status/1845765657159410033
-
-_CoindPay with Sei Chain_
-
-https://x.com/CoindPay/status/1839610175243812887
-
-https://youtu.be/inTbZ6jgP4o
-
-_CoindPay with Metis Chain_
-
-https://x.com/CoindPay/status/1831765851525320923
-
-https://youtu.be/pftgjbtvORM
-
-_CoindPay with Arbitrum Chain_
-
-https://x.com/CoindPay/status/1818948341050523794
-
-https://youtu.be/CMmBzLm8slk
-
-_CoindPay with Optimism Chain_
-
-https://x.com/CoindPay/status/1820364919734419960
-
-https://youtu.be/F0E8AVgxSx0
-
-_CoindPay with BNB Chain_
-
-https://youtu.be/rITsNd54o7A
-
-_CoindPay with Polygon Chain_
-
-https://x.com/CoindPay/status/1815822529694757098
-
-https://youtu.be/WjOi5ymgNUs
-
-_CoindPay on Fuse Chain_
-
-https://x.com/Fuse_network/status/1812842790268616835
 
 _CoindPay with OKX Wallet_
 
