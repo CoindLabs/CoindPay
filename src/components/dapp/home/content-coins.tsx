@@ -26,7 +26,6 @@ const ContentCoins = () => {
         <h1 className="leading-normal text-3xl lg:text-5xl 2xl:text-6xl font-poppins font-semibold">
           <strong>All Your</strong>
           <FlipWords words={animateWords} className="pl-2 font-poppins" />
-          <p className="leading-loose">Payments in One Place</p>
         </h1>
         <p className="text-neutral-500 pt-6 sm:max-w-sm lg:max-w-lg">
           Make the movement of encrypted funds simpler and more efficient.

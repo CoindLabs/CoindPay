@@ -181,14 +181,15 @@ const ContentEdge = () => {
           <ul className="h-full flex flex-col justify-end max-sm:pt-64">
             <li className="sm:max-xl:max-w-1/2 sm:max-xl:py-4">
               <h1>
-                <strong className="text-4xl 2xl:text-5xl font-poppins">Compound X</strong>
-                <span className="text-1.5xl 2xl:text-2xl pl-2">markets</span>
+                <strong className="text-4xl 2xl:text-5xl font-poppins">Exchange & Markets</strong>
+                <span className="text-1.5xl 2xl:text-2xl pl-2">2.0</span>
               </h1>
               <p className="text-neutral-500 pt-6">
-                All payments automatically flow into smart contracts like Compound and Lido, which continue to compound
-                and revitalize the pool of money for creators and merchants.
+                Built-in Li.Fi based cross-chain service to convert and trade your crypto assets in one stop.
                 <br />
-                Audited and Verified. The most secure protocol for money.
+                Optimize earnings through dynamic RWA yield and lending.
+                <br />
+                Connecting TradFi to PayFi Bank.
               </p>
             </li>
             <li className="py-2 pt-8">
@@ -218,12 +219,13 @@ const ContentEdge = () => {
             <li className="sm:max-w-1/2">
               <h1>
                 <strong className="text-4xl 2xl:text-5xl font-poppins">Ecosystem</strong>
-                <span className="text-1.5xl 2xl:text-2xl pl-2">developers</span>
+                <span className="text-1.5xl 2xl:text-2xl pl-2">integration</span>
               </h1>
               <p className="text-neutral-500 pt-6">
                 No-code payment configuration, intelligent widgets. free to share with anyone.
                 <br />
-                SDK support for embedded development.
+                Callback events after successful payment, such as sending messages, emails, etc. More APIs will be
+                opened.
               </p>
             </li>
             <li>

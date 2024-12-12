@@ -25,6 +25,11 @@ let partners = [
     pathId: 6,
   },
   {
+    name: 'Metis',
+    image: logoChains.metis_text,
+    class: 'px-5',
+  },
+  {
     name: 'BASE',
     pathId: 2,
   },
@@ -35,11 +40,6 @@ let partners = [
   {
     name: 'Arbitrum',
     pathId: 12,
-  },
-  {
-    name: 'Metis',
-    image: logoChains.metis_text,
-    class: 'px-5',
   },
   {
     name: 'zkSync',

@@ -286,7 +286,7 @@ export default function PaymentLink({ ...props }) {
                 <span className="text-neutral-400 text-sm">Optional</span>
               </Grid2>
               <textarea
-                maxLength={1024}
+                maxLength={10240}
                 className="resize-none whitespace-pre-wrap p-2 w-full min-h-32 rounded-md bg-neutral-100 border-transparent focus:border-neutral-500 focus:bg-transparent focus:ring-0"
                 placeholder="For more information"
                 value={paymentForm?.desc}
@@ -311,7 +311,7 @@ export default function PaymentLink({ ...props }) {
                 onRemoveFile={data => {
                   setPaymentForm(prev => ({
                     ...prev,
-                    images: paymentForm?.images.filter(file => file.name != data.name),
+                    images: paymentForm?.images?.filter(file => file.name != data.name),
                   }))
                 }}
                 customClass={classNames({

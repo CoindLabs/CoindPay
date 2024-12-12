@@ -60,6 +60,11 @@ export const supportChains = [
         chain: mainnet,
       },
       {
+        name: 'Metis',
+        chain: metis,
+        icon: logoChains.metis,
+      },
+      {
         name: 'Base',
         icon: logoChains.base,
         chain: base,
@@ -83,11 +88,6 @@ export const supportChains = [
         name: 'Polygon',
         chain: polygon,
         icon: logoChains.polygon,
-      },
-      {
-        name: 'Metis',
-        chain: metis,
-        icon: logoChains.metis,
       },
       {
         name: 'Sei',

@@ -39,6 +39,14 @@ export const payChains = [
     ...pay?.ethereum,
   },
   {
+    name: isProd ? 'Metis' : 'Metis Sepolia',
+    icon: logoChains.metis,
+    chainId: isProd ? 1088 : 59902,
+    chainIdProd: 1088,
+    type: 'EVM',
+    ...pay?.metis,
+  },
+  {
     name: isProd ? 'Base' : 'Base Sepolia',
     icon: logoChains.base,
     chainNamePrice: 'BASE',
@@ -62,14 +70,6 @@ export const payChains = [
     chainIdProd: 42161,
     type: 'EVM',
     ...pay?.arbitrum,
-  },
-  {
-    name: isProd ? 'Metis' : 'Metis Sepolia',
-    icon: logoChains.metis,
-    chainId: isProd ? 1088 : 59902,
-    chainIdProd: 1088,
-    type: 'EVM',
-    ...pay?.metis,
   },
   {
     name: isProd ? 'BSC' : 'BSC Testnet',

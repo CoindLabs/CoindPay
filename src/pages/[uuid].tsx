@@ -49,6 +49,9 @@ export async function getStaticProps(context) {
       where: {
         uuid,
       },
+      orderBy: {
+        createdAt: 'desc', // 或者 'asc'，以指定升序或降序排列
+      },
     })
 
     payee = bigintFactory(payee)

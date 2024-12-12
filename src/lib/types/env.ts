@@ -1,5 +1,4 @@
 export const env = {
-  moralisKey: process.env.MORALIS_KEY,
   alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_ID,
   serverAlchemyId: process.env.SERVER_ALCHEMY_ID,
   rpc1Key: process.env.NEXT_PUBLIC_1RPC_KEY,

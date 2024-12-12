@@ -7,7 +7,8 @@ let title = 'CoindPay',
     cdn_test: 'https://test-cdn.coindpay.xyz',
   }
 
-let mission = 'Decentralized and Privacy-Preserving Infrastructure for Cross-Chain Payments, DEXs, and Compound Finance'
+let mission =
+  'Decentralized and Privacy-Preserving Infrastructure for Cross-Chain Social Payments, DEXs, and Compound Finance'
 
 const config = {
   title,

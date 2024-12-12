@@ -8,7 +8,7 @@ import config from '@/config'
 
 const { domains } = config
 
-let animateWords = ['Payments', 'Compound', 'Liquidity', 'All-in-One']
+let animateWords = ['Payments', 'PayFi-Bank', 'Exchange', 'Compound', 'All-in-One']
 
 const Banner = () => {
   const [animateInit, setAnimateInit] = useState(true)

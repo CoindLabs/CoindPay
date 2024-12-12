@@ -50,6 +50,9 @@ const ContentMoments = () => {
         <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
         <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
       </Box>
+      <p className="text-xl sm:text-2xl pt-12 text-neutral-600 font-chillax">
+        Accelerating the Mass Adoption of Web3 Finance Payments to Consumers and Lifestyles.
+      </p>
     </section>
   )
 }

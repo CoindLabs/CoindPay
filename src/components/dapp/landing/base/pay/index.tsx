@@ -28,6 +28,8 @@ import {
   TransactionInstruction,
   sendAndConfirmTransaction,
 } from '@solana/web3.js'
+import { AnchorProvider, Program, Idl, web3 } from '@coral-xyz/anchor'
+import solanaIDL from '@/contracts/solana/target/idl/coindpay.json'
 import BigNumber from 'bignumber.js'
 import { getToken } from '@lifi/sdk'
 import {
@@ -95,9 +97,12 @@ const PaymentWidget = ({ ...props }) => {
   const router = useRouter()
   const { addressList } = props?.user || useUserData()
   const { solAddress } = useSolAccount()
-  const evmWalletConnect = useEVMWalletConnect()
-  const { address: payAddress, chainId, chainType } = useChainConnect()
+
   const globalWalletConnect = useGlobalWalletConnect()
+  const evmWalletConnect = useEVMWalletConnect()
+
+  const { address: payAddress, chainId, chainType } = useChainConnect()
+
   const { openConnectModal } = useConnectModal()
   const { disconnect } = useDisconnect()
   const { setVisible } = useWalletModal()
@@ -141,7 +146,7 @@ const PaymentWidget = ({ ...props }) => {
   const [tokenSearch, setTokenSearch] = useState(false) // 代币搜索状态，默认为列表状态
 
   const [payInputValue, setPayInputValue] = useState(
-    payee?.amountType != 2 ? payee?.price : getRandomNumber(0, payee?.maxAmount <= 10 ? payee?.maxAmount : 10)
+    payee?.amountType != 2 ? payee?.price : getRandomNumber(0, payee?.maxAmount > 10 ? payee?.maxAmount : 10)
   )
 
   const [payNote, setPayNote] = useState('')
@@ -222,24 +227,6 @@ const PaymentWidget = ({ ...props }) => {
     },
   })
 
-  //查询非原生代币 & EVM链 token余额
-  // const {
-  //   error: readContractError,
-  //   isSuccess: evmOthersBalanceSuccess,
-  //   data: evmOthersBalance,
-  // } = useReadContract({
-  //   abi: erc20Abi,
-  //   account: chainType !== 'svm' && payAddress,
-  //   address: tokensEvm,
-  //   chainId: payChainId,
-  //   functionName: 'balanceOf',
-  //   args: [tokensEvm],
-  //   query: {
-  //     enabled: globalWalletConnect && chainType !== 'svm' && chainItem?.type == 'EVM',
-  //     gcTime: 5000,
-  //   },
-  // })
-
   const { switchChain } = useSwitchChain({
     mutation: {
       onError: (err, variables, context) => {
@@ -300,15 +287,13 @@ const PaymentWidget = ({ ...props }) => {
   // 支付结果db状态（只能提交一次）
   const paymentSubmitedRef = useRef(false)
 
-  let reference = Keypair.generate().publicKey
-
   const svmPay = () => {
     if (chainItem?.type != 'SVM') return
 
-    let recipient = new PublicKey(solReceiptAccount),
-      // 发送的Token代币合约地址
-      splToken = new PublicKey(tokens.address)
-    // Unique address that we can listen for payments to
+    const reference = Keypair.generate().publicKey
+
+    let recipient = new PublicKey(solReceiptAccount), // 收款账户
+      splToken = new PublicKey(tokens.address) // 发送Token合约地址
 
     let defaultParams = {
       recipient,
@@ -330,7 +315,13 @@ const PaymentWidget = ({ ...props }) => {
 
     // Get a connection to SVM RPC
     const endpoint = getSvmRpcUrl(getIncludesIgnoreCase(chainItem?.name, 'soon') && { chain: 'soon' })
-    const connection = new Connection(endpoint)
+    const connection = new Connection(endpoint, 'processed')
+
+    const provider = new AnchorProvider(connection, window?.solana, {
+      preflightCommitment: 'processed',
+    })
+
+    const program = new Program(solanaIDL as Idl, provider)
 
     const solPaymentURL = encodeURL(solPaymentParams)
 
@@ -341,35 +332,57 @@ const PaymentWidget = ({ ...props }) => {
 
       if (!recipient || !amount || !reference) throw new Error('Invalid payment request link')
 
-      const tx = new Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: publicKey,
-          toPubkey: recipient,
-          lamports: amount.multipliedBy(LAMPORTS_PER_SOL).integerValue(BigNumber.ROUND_FLOOR).toNumber(),
-        })
-      )
+      // const tx = new Transaction().add(
+      //   SystemProgram.transfer({
+      //     fromPubkey: publicKey,
+      //     toPubkey: recipient,
+      //     lamports: amount.multipliedBy(LAMPORTS_PER_SOL).integerValue(BigNumber.ROUND_FLOOR).toNumber(),
+      //   })
+      // )
 
-      if (memo != null) {
-        tx.add(
-          new TransactionInstruction({
-            programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),
-            keys: [{ pubkey: publicKey, isSigner: true, isWritable: true }],
-            data: Buffer.from(memo, 'utf8'),
-          })
+      // if (memo != null) {
+      //   tx.add(
+      //     new TransactionInstruction({
+      //       programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),
+      //       keys: [{ pubkey: publicKey, isSigner: true, isWritable: true }],
+      //       data: Buffer.from(memo, 'utf8'),
+      //     })
+      //   )
+      // }
+
+      // const signature = await solSendTransaction(tx, connection)
+
+      // await connection.confirmTransaction(signature, 'processed')
+
+      // signature &&
+      //   (await handlePaymentOrder({
+      //     signature,
+      //     payer: publicKey,
+      //   }))
+
+      const tx = await program.methods
+        .paySol(
+          amount.multipliedBy(LAMPORTS_PER_SOL).integerValue(BigNumber.ROUND_FLOOR).toNumber(), // 将支付金额转换为 lamports
+          reference,
+          memo
         )
-      }
+        .accounts({
+          payer: publicKey, // 付款方地址
+          recipient, // 收款方地址
+          systemProgram: SystemProgram.programId, // 系统程序
+        })
+        .rpc() // 提交交易
 
-      const signature = await solSendTransaction(tx, connection)
+      console.log('SOL Transaction successful with signature:', tx)
 
-      await connection.confirmTransaction(signature, 'processed')
+      await connection.confirmTransaction(tx, 'processed')
 
-      signature &&
+      // 如果交易成功，处理支付订单
+      tx &&
         (await handlePaymentOrder({
-          signature,
+          signature: tx,
           payer: publicKey,
         }))
-
-      console.log('SOL Transaction successful with signature:', signature)
     }
 
     const sendToken = async () => {
@@ -385,37 +398,81 @@ const PaymentWidget = ({ ...props }) => {
 
       const tokenDestinationAddress = await getAssociatedTokenAddress(splToken, recipient)
 
-      const transaction = new Transaction().add(
-        createTransferCheckedInstruction(
-          tokenSourceAddress, // 发送方代币账户地址
-          splToken,
-          tokenDestinationAddress, // 接收方代币账户地址
-          publicKey,
-          tokensAmount * 10 ** tokenMint.decimals, // amount to transfer (in units of the token)
-          tokenMint.decimals // decimals of the  token
-        )
-      )
+      const transaction = await program.methods
+        .payToken(tokensAmount * 10 ** tokenMint.decimals, reference, memo)
+        .accounts({
+          payer: publicKey,
+          recipient,
+          tokenMint: splToken,
+          tokenSource: tokenSourceAddress,
+          tokenDestination: tokenDestinationAddress,
+          systemProgram: SystemProgram.programId, // 需要传入系统程序
+        })
+        .rpc()
 
-      if (memo != null) {
-        await transaction.add(
-          new TransactionInstruction({
-            programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),
-            keys: [{ pubkey: publicKey, isSigner: true, isWritable: true }],
-            data: Buffer.from(memo, 'utf8'),
-          })
-        )
-      }
+      await connection.confirmTransaction(transaction, 'processed')
 
-      const signature = await solSendTransaction(transaction, connection)
-      await connection.confirmTransaction(signature, 'processed')
-
-      console.log('USDC Transaction successful with signature:', signature)
-
-      signature &&
+      // 如果交易成功，处理支付订单
+      transaction &&
         (await handlePaymentOrder({
-          signature,
+          signature: transaction,
           payer: publicKey,
         }))
+
+      // const transaction = new Transaction().add(
+      //   createTransferCheckedInstruction(
+      //     tokenSourceAddress, // 发送方代币账户地址
+      //     splToken,
+      //     tokenDestinationAddress, // 接收方代币账户地址
+      //     publicKey,
+      //     tokensAmount * 10 ** tokenMint.decimals, // amount to transfer (in units of the token)
+      //     tokenMint.decimals // decimals of the  token
+      //   )
+      // )
+
+      // if (memo != null) {
+      //   await transaction.add(
+      //     new TransactionInstruction({
+      //       programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),
+      //       keys: [{ pubkey: publicKey, isSigner: true, isWritable: true }],
+      //       data: Buffer.from(memo, 'utf8'),
+      //     })
+      //   )
+      // }
+
+      // const signature = await solSendTransaction(transaction, connection)
+      // await connection.confirmTransaction(signature, 'processed')
+
+      // signature &&
+      //   (await handlePaymentOrder({
+      //     signature,
+      //     payer: publicKey,
+      //   }))
+
+      console.log('SPL Token Transaction successful with signature:', transaction)
+    }
+
+    const sendCoin = async () => {
+      try {
+        if (tokens.symbol === 'SOL') {
+          await sendSol()
+        } else {
+          await sendToken()
+        }
+      } catch (err) {
+        if (err instanceof WalletNotConnectedError) {
+          await delay(2000)
+          if (publicKey) {
+            if (tokens.symbol == 'SOL') {
+              await sendSol()
+            } else {
+              await sendToken()
+            }
+          }
+        } else {
+          return handleTransactionError(err)
+        }
+      }
     }
 
     const getSolPaymentVerifyTx = async () => {
@@ -446,37 +503,14 @@ const PaymentWidget = ({ ...props }) => {
       return transfers
     }
 
-    const sendCoin = async () => {
-      try {
-        if (tokens.symbol === 'SOL') {
-          await sendSol()
-        } else {
-          await sendToken()
-        }
-      } catch (err) {
-        if (err instanceof WalletNotConnectedError) {
-          await delay(2000)
-          if (publicKey) {
-            if (tokens.symbol == 'SOL') {
-              await sendSol()
-            } else {
-              await sendToken()
-            }
-          }
-        } else {
-          return handleTransactionError(err)
-        }
-      }
-    }
-
     // Encode the params into the format shown
     return {
       connection,
       solPaymentParams,
       solPaymentURL,
       getSolPaymentVerifyTx,
-      sendToken,
       sendSol,
+      sendToken,
       sendCoin,
     }
   }

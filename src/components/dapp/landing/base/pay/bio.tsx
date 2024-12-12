@@ -17,11 +17,11 @@ const PaymentBio = ({ payee = null, user = null, classes = null } = {}) => {
   const lgScreen = theme.breakpoints.up('lg')
 
   return (
-    <li className={classNames('flex flex-wrap gap-8', classes)}>
+    <li className={classNames('flex flex-wrap gap-8 w-full', classes)}>
       {payee?.length ? (
         payee.map((row, index) => (
           <li key={`payee-item-${index}`} className="flex-1">
-            <div className="card min-w-72 2xl:min-w-80 bg-base-100 image-full shadow-lg">
+            <div className="card min-w-72 2xl:min-w-80 bg-base-100 image-full shadow-lg overflow-hidden">
               <figure className="sm:h-64">
                 <img
                   src={row?.images?.[0]?.url || images.banner.cover}
@@ -29,7 +29,11 @@ const PaymentBio = ({ payee = null, user = null, classes = null } = {}) => {
                   className="w-full object-cover"
                 />
               </figure>
-              <Link className="card-body z-10 p-4" href={`pay/link/${row?.id}`} target="_blank">
+              <Link
+                className="card-body bg-black/20 backdrop-blur-sm hover:backdrop-blur-none z-10 p-4"
+                href={`pay/link/${row?.id}`}
+                target="_blank"
+              >
                 <h2 className="text-2xl card-title line-clamp-2">{row?.title}</h2>
                 <p className="line-clamp-3 mb-3 whitespace-pre-wrap text-neutral-500 hover:text-neutral-400">
                   {row?.desc}

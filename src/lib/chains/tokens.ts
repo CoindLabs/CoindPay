@@ -172,14 +172,14 @@ let solana = {
     },
     list: [
       {
+        ...SOL,
+        address: '11111111111111111111111111111111',
+      },
+      {
         ...USDC,
         //
         address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
         price_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-      },
-      {
-        ...SOL,
-        address: '11111111111111111111111111111111',
       },
     ],
   },
