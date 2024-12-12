@@ -50,9 +50,18 @@ artifacts
 /dist
 /build
 /public
+/scripts
+/src/config
 /src/components/nm*
 /src/components/l*
 /src/components/p*
+/src/components/c*
+/src/components/d*
+/src/contracts
+/src/lib/api
+/src/lib/aws
+/src/lib/mongodb
+/src/lib/prisma
 
 # lock
 yarn.lock
