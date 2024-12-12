@@ -41,8 +41,6 @@ SOON、Solana
 
 Ethereum、Metis、Base、Optimism、Arbitrum...and 28+ chains.
 
-✅ **ICP**
-
 ## Target
 
 > Multichain payments
