@@ -39,7 +39,7 @@ SOON、Solana
 
 ✅ **EVM**
 
-Ethereum、Metis、Base、Optimism、Arbitrum...and 28+ chains.
+Ethereum...and others chains.
 
 ## Target
 
