@@ -29,28 +29,38 @@ import {
   polygonZkEvm,
   berachainTestnetbArtio,
 } from 'viem/chains'
+import { getDomain } from '@/lib/utils/domain'
 import { logoChains } from './logo'
 import { customChains } from './custom'
 
+const isSOON = ['soon'].includes(getDomain())
+
 const { hashkey } = customChains
 
-export const supportChains = [
-  {
+let svm = {
     type: 'SVM',
     desc: 'Fast and low-cost SVM（Solana Virtual Machine）',
-    list: [
-      {
-        name: 'SOON',
-        icon: logoChains.soon_flat,
-        avatarClass: 'bg-black',
-      },
-      {
-        name: 'Solana',
-        icon: logoChains.solana_bg,
-      },
-    ],
+    list: isSOON
+      ? [
+          {
+            name: 'SOON',
+            icon: logoChains.soon_flat,
+            avatarClass: 'bg-black',
+          },
+        ]
+      : [
+          {
+            name: 'SOON',
+            icon: logoChains.soon_flat,
+            avatarClass: 'bg-black',
+          },
+          {
+            name: 'Solana',
+            icon: logoChains.solana_bg,
+          },
+        ],
   },
-  {
+  evm = {
     type: 'EVM',
     desc: 'Blockchain network compatible with Ethereum Virtual Machine (EVM)',
     list: [
@@ -197,7 +207,7 @@ export const supportChains = [
       },
     ],
   },
-  {
+  others = {
     type: 'Others',
     desc: 'Non-EVM（SVM）Chains',
     list: [
@@ -246,8 +256,11 @@ export const supportChains = [
         disabled: true,
       },
     ],
-  },
-]
+  }
+
+export const supportChains = (isSOON && [svm]) ||
+  (getDomain() == 'app' && [evm, svm]) ||
+  (getDomain() == 'master' && [svm, evm]) || [svm, evm, others]
 
 export const _supportChains = (chains = null) =>
   (chains || supportChains).reduce((accumulator, { type, list }) => {

@@ -11,8 +11,8 @@ const leaveAnimate = 'scale-y-0 pointer-events-none opacity-0'
 const enterAnimate = 'scale-y-100'
 
 const ChainsMobile: FC<ChainsMobileProps> = () => {
-  const { chainsExpand, setChainsExpand } = useStudioContext()
   const isMobile = useMobile()
+  const { chainsExpand, setChainsExpand } = useStudioContext()
   const { className, setOpen } = useTailWindFade({ open: true })
 
   useEffect(() => {

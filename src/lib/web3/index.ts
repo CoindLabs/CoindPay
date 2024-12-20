@@ -1,17 +1,16 @@
 import { _supportChains } from '@/lib/chains'
 import { getCompareIgnoreCase, getIncludesIgnoreCase } from '@/lib/utils'
 import { env } from '@/lib/types/env'
-
-let mainnet = env?.isProd
+import { Mainnet } from '@/lib/utils/env'
 
 export const getSvmRpcUrl = ({ chain = 'sol', type = 'https' } = {}) => {
   switch (chain) {
     case 'soon':
-      return mainnet ? 'https://rpc.testnet.soo.network/rpc' : 'https://rpc.devnet.soo.network/rpc'
+      return Mainnet ? 'https://rpc.testnet.soo.network/rpc' : 'https://rpc.devnet.soo.network/rpc'
       break
     case 'sol':
     default:
-      return mainnet
+      return Mainnet
         ? `${type}://solana-mainnet.g.alchemy.com/v2/${env?.alchemyId}`
         : `${type}://solana-devnet.g.alchemy.com/v2/${env?.alchemyId}`
       break

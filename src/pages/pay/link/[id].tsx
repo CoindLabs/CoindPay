@@ -43,5 +43,5 @@ export async function getStaticPaths() {
 }
 
 export default function PayLinkPageId({ data, user }) {
-  return <PaymentLanding data={data} user={user} />
+  return <PaymentLanding data={data} user={user} copyright2Class="hidden" />
 }

@@ -103,8 +103,8 @@
     "typewriter-effect": "^2.21.0",
     "use-count-up": "^3.0.1",
     "uuid": "^10.0.0",
-    "viem": "^2.21.45",
-    "wagmi": "^2.12.32",
+    "viem": "^2.21.55",
+    "wagmi": "^2.14.3",
     "web3": "^1.8.2"
   },
   "devDependencies": {

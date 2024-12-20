@@ -47,6 +47,7 @@ cache
 artifacts
 
 # production
+/docs
 /dist
 /build
 /public
@@ -58,6 +59,7 @@ artifacts
 /src/components/c*
 /src/components/d*
 /src/contracts
+/src/services
 /src/lib/api
 /src/lib/aws
 /src/lib/mongodb

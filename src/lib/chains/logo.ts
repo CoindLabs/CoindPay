@@ -6,7 +6,7 @@ const { domains } = config
  * 部分chains自定义logo
  */
 export const logoChains = {
-  btc: `${domains.cdn}/static/social/btc.svg`,
+  btc: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E/logo.png',
   base: `${domains.cdn}/static/social/base.svg`,
   berachain: 'https://docs.berachain.com/assets/BERA.png',
   zksync: `${domains.cdn}/static/social/zkSync.svg`,
@@ -57,4 +57,11 @@ export const logoChains = {
   tezos: 'https://cryptofonts.com/img/icons/xtz.svg',
   injective: 'https://cryptofonts.com/img/icons/inj.svg',
   doge: 'https://cryptologos.cc/logos/thumbs/dogecoin.png',
+}
+
+export const logoTokens = {
+  usdt: 'https://cryptofonts.com/img/SVG/usdt.svg',
+  usdc: 'https://bridge.base.org/icons/currency/usdc.svg',
+  eth: 'https://static.optimism.io/data/ETH/logo.svg',
+  dai: 'https://bridge.base.org/icons/currency/dai.svg',
 }

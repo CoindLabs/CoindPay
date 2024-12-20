@@ -29,8 +29,9 @@ import NmSpinInfinity from '@/components/nm-spin/infinity'
 import QrCode from '@/components/card-group/qr-code'
 import StudioLayout from '@/components/layout/studio'
 import { useSnackbar } from '@/components/context/snackbar'
+import { useStudioContext } from '@/components/context/studio'
 import { getPaymentPayeeSvc } from '@/services/pay'
-import { useLocation, useUserData } from '@/lib/hooks'
+import { useGlobalWalletConnect, useLocation, useUserData } from '@/lib/hooks'
 import { getActiveChain } from '@/lib/web3'
 
 let payTypes = [
@@ -75,6 +76,9 @@ export default function Pay() {
 
   const user = useUserData()
 
+  const { setAccountCardShow } = useStudioContext()
+  const globalWalletConnect = useGlobalWalletConnect()
+
   const origin = useLocation('origin')
 
   const { showSnackbar } = useSnackbar()
@@ -83,6 +87,10 @@ export default function Pay() {
   const [payeeInitLoading, setPayeeInitLoading] = useState(true)
 
   const [payeeStatusLoading, setPayeeStatusLoading] = useState(Object)
+
+  const handlePayeeItemClick = () => {
+    if (!user?.id || !globalWalletConnect) return setAccountCardShow(true)
+  }
 
   const handlePayeeLinkCopy = val => {
     navigator.clipboard.writeText(`${origin}/${val}`)
@@ -170,7 +178,11 @@ export default function Pay() {
       <header>
         <ul className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
           {payTypes.map((row, index) => (
-            <Link key={`pay-type-${index}`} href={!row?.disabled ? `/pay/${row?.path}` : ''}>
+            <Link
+              key={`pay-type-${index}`}
+              href={!row?.disabled ? `/pay/${row?.path}` : ''}
+              onClick={handlePayeeItemClick}
+            >
               <Card
                 component="li"
                 className={classNames(
@@ -262,7 +274,7 @@ export default function Pay() {
               <TableBody>
                 {payeeData?.map((row, index) => (
                   <TableRow key={`table-item-body-${index}`} className="group">
-                    <TableCell className="font-semibold text-base truncate max-w-72 2xl:max-w-96">
+                    <TableCell className="font-semibold text-base">
                       <Grid2 container alignItems="center" className="gap-2">
                         <NmTooltip
                           title={
@@ -284,7 +296,7 @@ export default function Pay() {
                         <Link
                           href={`/pay/link/${row?.id}`}
                           target="_blank"
-                          className="hover:bg-clip-text hover:text-transparent hover:bg-create-gradient-004 hover:transition-all"
+                          className="truncate max-w-72 2xl:max-w-96 hover:bg-clip-text hover:text-transparent hover:bg-create-gradient-004 hover:transition-all"
                           onClick={() => handlePayeeLinkCopy(`pay/link/${row?.id}`)}
                         >
                           {row?.title}

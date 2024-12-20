@@ -27,7 +27,7 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
       res.status(200).json({ ok: true, data: upsertedStudio })
     } catch (error) {
       console.log(error)
-      res.status(500).json({ ok: false, message: 'Failed to update user ˙◠˙' })
+      res.status(500).json({ ok: false, message: `Failed to ${id ? 'update' : 'create'} user ˙◠˙` })
     }
   } else {
     res.setHeader('Allow', ['PUT', 'POST'])

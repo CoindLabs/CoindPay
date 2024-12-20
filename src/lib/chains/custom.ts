@@ -3,7 +3,7 @@
  */
 export const customChains = {
   hashkey: {
-    id: 133,
+    id: 177,
     name: 'HashKey',
     icon: 'https://bafybeicyfcitfukfxqe5xtbtn2gb7y2ddyatc4es6skq4kemrqbjjrghkm.ipfs.w3s.link/hsk.png',
     nativeCurrency: {
@@ -12,14 +12,13 @@ export const customChains = {
       symbol: 'HSK',
     },
     rpcUrls: {
-      default: { http: ['https://hashkeychain-testnet.alt.technology'] },
+      default: { http: ['https://mainnet.hsk.xyz'] },
     },
     blockExplorers: {
       default: {
-        name: 'HashKey Chain Testnet',
-        url: 'https://hashkeychain-testnet-explorer.alt.technology',
+        name: 'Hashkey Chain',
+        url: 'https://explorer.hsk.xyz',
       },
     },
-    testnet: true,
   },
 }

@@ -47,8 +47,10 @@ import {
   auroraTestnet,
   fuseSparknet,
   zetachainAthensTestnet,
+  hashkeyTestnet,
 } from 'viem/chains'
 import { env } from '@/lib/types/env'
+import { Mainnet } from '@/lib/utils/env'
 import { logoChains } from './logo'
 import { customChains } from './custom'
 
@@ -57,8 +59,6 @@ import config from '@/config'
 const { title } = config
 
 const { hashkey } = customChains
-
-let isProd = env?.isProd
 
 let projectId = env.walletConnectId
 
@@ -108,7 +108,7 @@ let chains_tpl = [
   { ...polygonZkEvm, iconUrl: logoChains.polygonzkevm },
 ]
 
-const chains = isProd
+const chains = Mainnet
   ? chains_tpl
   : [
       ...chains_tpl,
@@ -148,7 +148,7 @@ export const chainsTransports = {
   [metis.id]: http(`https://1088.rpc.thirdweb.com/${env.thirdwebKey}`),
   [zetachain.id]: http(`https://7000.rpc.thirdweb.com/${env?.thirdwebKey}`),
   [zetachainAthensTestnet.id]: http(`https://7001.rpc.thirdweb.com/${env?.thirdwebKey}`),
-  [hashkey.id]: http('https://hashkeychain-testnet.alt.technology'),
+  [hashkey.id]: http('https://mainnet.hsk.xyz'),
 }
 
 export const wagmiConfig = {

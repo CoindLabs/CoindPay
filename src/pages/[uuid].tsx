@@ -101,22 +101,27 @@ export default function Uuid({ user: initialUser, payee: initialPayee }) {
       return
     }
 
-    let equal = isEqual(localUser, user)
-    if (isInProfile && !equal) {
-      setUser(localUser)
-      const getPaymentPayee = async () => {
-        try {
-          let res = await getPaymentPayeeSvc({
-            id: localUser?.id,
-          })
-          if (res?.ok && res?.data) {
-            setPayee(res?.data)
-          }
-        } catch (error) {
-          console.error('Error fetching data:', error)
-        }
+    let equalUser = isEqual(localUser, user),
+      equalId = isEqual(localUser?.id, user?.id)
+    if (isInProfile) {
+      if (!equalUser) {
+        setUser(localUser)
       }
-      getPaymentPayee()
+      if (!equalId) {
+        const getPaymentPayee = async () => {
+          try {
+            let res = await getPaymentPayeeSvc({
+              id: localUser?.id,
+            })
+            if (res?.ok && res?.data) {
+              setPayee(res?.data)
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error)
+          }
+        }
+        getPaymentPayee()
+      }
     }
   }, [localUser])
 

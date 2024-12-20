@@ -1,10 +1,8 @@
 import { nftAvailableChains, chainIdToNetWork } from '../chains'
-import { env } from '../types/env'
-
-import config from '@/config'
+import { Mainnet } from './env'
 import { getSvmRpcUrl } from '../web3'
 
-const { host, domains } = config
+import config from '@/config'
 
 export function getTransformNumber(value, type = 'string') {
   const newVal = value < 10 ? `0${value}` : value
@@ -77,11 +75,6 @@ export const getRandomIntNum = (minNum: number, maxNum: number) => {
   return randomNum
 }
 
-export function getAdditiveNum(start = 0, arr = []) {
-  let min = 0,
-    max = arr.length
-  return start + 1 < max ? start + 1 : min
-}
 /**
  * https://nextjs.org/docs/api-reference/next/image#blurdataurl
  * @param str
@@ -120,15 +113,6 @@ export const getShimmer = (w: number, h: number) => `
 export const getBlurDataURL = (w, h) =>
   `data:image/svg+xml;base64,${getBase64(getShimmer(w || window?.screen?.width, h || window?.screen?.height))}`
 
-export const blobToBase64 = async (blob: any) => {
-  let render = new FileReader()
-  await render.readAsDataURL(blob)
-  return new Promise((res, rej) => {
-    render.onload = e => {
-      res(render.result)
-    }
-  })
-}
 /**
  * @date 2022-07-13
  * @desc deeply copy object or arrays with nested attributes
@@ -150,52 +134,6 @@ export function deepClone(obj) {
   // }
   // return newObj
 }
-export function base64ToBlob({ b64data = '', contentType = '', sliceSize = 512 } = {}): Promise<BlobPart> {
-  return new Promise((resolve, reject) => {
-    // 使用 atob() 方法将数据解码
-    let byteCharacters = atob(b64data)
-    let byteArrays = []
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      let slice = byteCharacters.slice(offset, offset + sliceSize)
-      let byteNumbers = []
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers.push(slice.charCodeAt(i))
-      }
-      // 8 位无符号整数值的类型化数组。内容将初始化为 0。
-      // 如果无法分配请求数目的字节，则将引发异常。
-      byteArrays.push(new Uint8Array(byteNumbers))
-    }
-    let result: BlobPart = new Blob(byteArrays, {
-      type: contentType,
-    })
-    result = Object.assign(result, {
-      // 这里一定要处理一下 URL.createObjectURL
-      preview: URL.createObjectURL(result),
-      name: `title.png`,
-    })
-    resolve(result)
-  })
-}
-
-export const getCropSize = (aspectRatio: number) => {
-  if (aspectRatio == 1) {
-    return {
-      width: 400,
-      height: 400,
-    }
-  } else if (aspectRatio < 1) {
-    return {
-      width: 240,
-      height: 240 / aspectRatio,
-    }
-  } else {
-    return {
-      width: 450,
-      height: 450 / aspectRatio,
-    }
-  }
-}
-
 /**
  * @date 2022-10-20
  * @desc 防抖函数
@@ -310,41 +248,6 @@ export const getShortenMidDots = (str: string, length = 8) => {
   if (!str) return
   return `${str?.slice(0, length)}...${str?.slice(-length)}`
 }
-/**
- * 加工alchemy nft数据返回nft资源url及类型
- * @param val
- * @returns
- * @author jason@coindpay.xyz
- */
-export function getNFTSource(val) {
-  if (!val) return
-  return {
-    ...val,
-    name:
-      (val?.token_id && `${val?.contract?.name || val?.collection?.name} #${val?.token_id}`) ||
-      val?.name ||
-      'Empty NFT Title',
-    description: val?.description || 'No relevant data found',
-    scan: getNFTOrScanUrl({
-      type: 'nft',
-      chain: val?.chain,
-      contractAddress: val?.contract_address,
-      tokenId: val?.token_id || val?.nft_id,
-      options: val,
-    }),
-    source_url: val?.image_url || val?.video_url || val?.audio_url || val?.previews?.image_large_url,
-    source_type: /(mp4|mp3|avi|wmv|mpg|mpeg|mov|rm|ram|swf|flv|wma|mkv)$/g.test(val?.image_uri?.format)
-      ? 'video'
-      : 'image',
-  }
-}
-/**
- * 加工徽章OATs数据资产
- */
-export function getBadgeSource(val) {
-  if (!val) return
-  return /(mp4|mp3|avi|wmv|mpg|mpeg|mov|rm|ram|swf|flv|wma|mkv)$/g.test(val) ? 'video' : 'image'
-}
 
 /**
  * 获取手机端和pc端的不同动画效果
@@ -375,81 +278,6 @@ export const generateRandomString = (randomNum = 9) => {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
   return result
-}
-
-export function textEllipsis(context, text, x, y, maxWidth, lineHeight, maxLines) {
-  const words = text.split(' ')
-  let line = ''
-  const ellipsis = '...'
-  let lineCount = 0
-  for (let i = 0; i < words.length; i++) {
-    const testLine = line + words[i] + ' '
-    const metrics = context.measureText(testLine)
-
-    // 超过最大宽度，需要换行
-    if (metrics.width > maxWidth && i > 0) {
-      // 如果超过最大行数，直接输出省略号并返回
-      if (maxLines == 1) {
-        context.fillText(ellipsis, x, y)
-        return ellipsis
-      }
-      // 如果达到最大行数，输出省略号并返回
-      if (lineCount == maxLines - 1) {
-        context.fillText(line + ellipsis, x, y)
-        return line + ellipsis
-      }
-      // 如果未达到最大行数，输出该行并进行下一行处理
-      context.fillText(line, x, y)
-      line = words[i] + ' '
-      y += lineHeight
-      lineCount++
-    } else {
-      line = testLine
-    }
-
-    // 处理换行符和汉字展开
-    for (let j = 0; j < line.length; j++) {
-      const char = line.charAt(j)
-      const code = line.charCodeAt(j)
-
-      // 判断是否为汉字
-      if (code >= 0x4e00 && code <= 0x9fa5) {
-        const newLine = line.slice(0, j + 1)
-        const metrics = context.measureText(newLine)
-
-        // 处理汉字宽度超过最大宽度的情况
-        if (metrics.width > maxWidth) {
-          // 如果达到最大行数，输出省略号并返回
-          if (lineCount == maxLines - 1) {
-            context.fillText(line.slice(0, j) + ellipsis, x, y)
-            return line.slice(0, j) + ellipsis
-          }
-          // 如果未达到最大行数，输出该行并进行下一行处理
-          context.fillText(line.slice(0, j), x, y)
-          line = line.slice(j)
-          j = -1
-          y += lineHeight
-          lineCount++
-        }
-      } else if (char === '\n') {
-        // 处理换行符
-        // 如果达到最大行数，输出省略号并返回
-        if (lineCount == maxLines - 1) {
-          context.fillText(line.slice(0, j) + ellipsis, x, y)
-          return line.slice(0, j) + ellipsis
-        }
-        // 如果未达到最大行数，输出该行并进行下一行处理
-        context.fillText(line.slice(0, j), x, y)
-        line = line.slice(j + 1)
-        j = -1
-        y += lineHeight
-        lineCount++
-      }
-    }
-  }
-
-  // 处理最后一行
-  context.fillText(line, x, y)
 }
 
 /**
@@ -492,7 +320,7 @@ export const getNFTOrScanUrl = ({
     _soon = chainType == 'soon' || chain?.toLowerCase()?.startsWith('soon'),
     _svmExplorer = _soon
       ? `?cluster=custom&customUrl=${getSvmRpcUrl({ chain: 'soon' })}`
-      : env?.isProd
+      : Mainnet
         ? ''
         : '?cluster=devnet',
     _icp = chainType == 'icp'
@@ -518,75 +346,15 @@ export const getNFTOrScanUrl = ({
       return null
   }
 }
-/**
- *
- *
- * @param key 域名唯一key
- * @param origin 默认origin
- * @returns
- */
-export function getAPIsOrigin(key = 'api', origin) {
-  let client = typeof window !== 'undefined'
-  origin = (process?.env?.NODE_ENV === 'development' ? domains.dev : origin).replace(host, `${key}.${host}`)
-  return process?.env?.NODE_ENV === 'development' || !client
-    ? origin
-    : window.location.origin.replace(host, `${key}.${host}`)
-}
-
-export const getDefaultAvatarUrl = (avatarID: string | number): string => domains.cdn + '/avatars/' + avatarID + '.jpg'
-
-export const processTime = (time: any) => {
-  if (typeof time === 'object' && time && time['$date']) {
-    const _time = time['$date']
-    return `${_time?.split('T')[0] || ''}`
-  } else {
-    const ymd = time?.split('T')[0]
-    const hms = time?.split('T')[1]
-    return `${ymd || ''}` //`${ymd} ${hms.split('.')[0]}`
-  }
-}
-
-export const formatObjToArray = <T>(obj: T | Array<T>): Array<T> => {
-  if (obj instanceof Array) {
-    return obj
-  } else if (!obj) {
-    return []
-  } else {
-    return [obj]
-  }
-}
-
-/**
- * 模糊搜索
- * @param queryString 搜索的字符串
- * @param allMsg
- * @param formatFN 数据过滤方法
- */
-
-export const fuzzySearch = (queryString: string, allMsg: string[], formatFN = str => str) => {
-  let queryStringArr = queryString.split('')
-  let str = '(.*?)'
-  let filterMsg = []
-  let regStr = str + queryStringArr.join(str) + str
-  let reg = RegExp(regStr, 'i')
-  allMsg.map(item => {
-    if (reg.test(formatFN(item))) {
-      filterMsg.push(item)
-    }
-  })
-  return filterMsg
-}
-
-export const formatAlchemyNFTValue = nftObj => {
-  return nftObj?.name || ''
-}
 
 export function isAndroid() {
   return typeof navigator !== 'undefined' && /android/i.test(navigator.userAgent)
 }
-export function isIOS() {
-  return typeof navigator !== 'undefined' && /(iPhone|iPad|iPod|iOS|iPhone OS|Mac OS)/i.test(navigator.userAgent)
-}
+export const isAppleOS = () =>
+  typeof navigator !== 'undefined' && /(iPhone|iPad|iPod|iOS|iPhone OS|Mac OS)/i.test(navigator.userAgent)
+
+export const isiOS = () => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)
+
 export function getEnvSplit(val) {
   if (!val) return
   let names = val?.split(/[(\r\n)\r\n]+/)
@@ -674,8 +442,6 @@ export function capitalizeFirstLetter(str) {
   if (str?.length == 0) return str
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
-
-export const isiOS = () => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
 export function getCompareIgnoreCase(left: string, right: string): boolean {
   return left?.toLowerCase() == right?.toLowerCase()

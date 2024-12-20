@@ -293,7 +293,7 @@ export default function Dashboard() {
           Not limited to collections, bounties, sales shares, content shares, etc.
         </p>
       </section>
-      <ul className="carousel gap-6 py-8 w-full items-center">
+      {/* <ul className="carousel gap-6 py-8 w-full items-center">
         <li className="carousel-item">
           <Button
             size="large"
@@ -341,7 +341,7 @@ export default function Dashboard() {
             </li>
           )
         })}
-      </ul>
+      </ul> */}
       {loading ? (
         <Box className="mt-16 mx-auto text-center">
           <NmSpinInfinity customClass="loading-lg scale-150" />

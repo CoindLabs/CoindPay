@@ -1,4 +1,4 @@
-import { logoChains } from './logo'
+import { logoChains, logoTokens } from './logo'
 
 let ethTokens = {
     usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
@@ -111,8 +111,8 @@ let ethTokens = {
     usdt: '0x2DEF195713CF4a606B49D07E520e22C17899a736',
   },
   hashkeyTokens = {
-    hsk: '0x31BdaC8E4B897E470B70eBe286F94245baa793C2',
-    weth: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
+    hsk: '0x0000000000000000000000000000000000000000',
+    weth: '0xefd4bC9afD210517803f293ABABd701CaeeCdfd0',
   },
   zetaTokens = {
     zeta: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -124,17 +124,17 @@ let ethTokens = {
 let USDC = {
     symbol: 'USDC',
     name: 'USD Coin',
-    logoURI: 'https://bridge.base.org/icons/currency/usdc.svg',
+    logoURI: logoTokens.usdc,
   },
   DAI = {
     symbol: 'DAI',
     name: 'Dai Stablecoin',
-    logoURI: 'https://bridge.base.org/icons/currency/dai.svg',
+    logoURI: logoTokens.dai,
   },
   ETH = {
     symbol: 'ETH',
     name: 'Ethereum Coin',
-    logoURI: 'https://static.optimism.io/data/ETH/logo.svg',
+    logoURI: logoTokens.eth,
   },
   WETH = {
     symbol: 'WETH',
@@ -145,7 +145,7 @@ let USDC = {
   USDT = {
     symbol: 'USDT',
     name: 'Tether USD',
-    logoURI: 'https://cryptofonts.com/img/SVG/usdt.svg',
+    logoURI: logoTokens.usdt,
   },
   USDGLO = {
     symbol: 'USDGLO',
