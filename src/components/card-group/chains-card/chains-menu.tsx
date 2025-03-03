@@ -7,12 +7,13 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useEVMWalletConnect } from '@/lib/hooks'
 
 import config from '@/config'
+import { getCompareIgnoreCase } from '@/lib/utils'
 
 const { domains, title } = config
 
 export const Rows = [
   {
-    images: ['backpack.png', 'phantom.svg', 'grow.png'],
+    images: ['okx.svg', 'backpack.png', 'phantom.svg'],
     type: 'SVM',
   },
   {
@@ -24,11 +25,11 @@ export const Rows = [
     type: 'BTC',
     disabled: true,
   },
-  {
-    images: ['bitfinity.webp', 'plug.svg', 'icp.svg'],
-    type: 'ICP',
-    disabled: true,
-  },
+  // {
+  //   images: ['bitfinity.webp', 'plug.svg', 'icp.svg'],
+  //   type: 'ICP',
+  //   disabled: true,
+  // },
   {
     images: ['tonkeeper.svg', 'openmask.svg', 'ton.svg'],
     type: 'TON',
@@ -38,12 +39,12 @@ export const Rows = [
 
 interface ChainsMenuProps {
   chainsExpand: boolean
-  disables?: string[] // custom configs
+  walletChains?: string[] // custom chains
   setChainsExpand: React.Dispatch<React.SetStateAction<boolean>>
   onClose?: (e: Event | React.SyntheticEvent) => void
 }
 
-const ChainsMenu: FC<ChainsMenuProps> = ({ chainsExpand, disables = [], setChainsExpand, onClose, ...props }) => {
+const ChainsMenu: FC<ChainsMenuProps> = ({ chainsExpand, walletChains = [], setChainsExpand, onClose, ...props }) => {
   const evmWalletConnect = useEVMWalletConnect()
   const { openConnectModal } = useConnectModal()
   const { openAccountModal } = useAccountModal()
@@ -80,32 +81,35 @@ const ChainsMenu: FC<ChainsMenuProps> = ({ chainsExpand, disables = [], setChain
       className="mt-0.5 sm:border sm:border-gray-100 py-3 menu z-100 bg-white shadow-sm rounded-t-3xl sm:rounded-xl w-screen sm:w-fit sm:min-w-64"
     >
       <h2 className="pt-6 pb-10 font-righteous text-center text-2.5xl sm:hidden">{`Connect to ${title}`}</h2>
-      {Rows.map((row, i) => (
-        <MenuItem
-          key={i}
-          className={classNames('p-0 my-1.5 sm:my-0.5 flex items-center flex-row w-full', {
-            'cursor-not-allowed': disables?.includes(row?.type) || row?.disabled,
-          })}
-          onClick={() => handleClick(row.type)}
-          disabled={disables?.includes(row?.type) || row?.disabled}
-        >
-          <div className="flex items-center relative w-full">
-            <div className="-space-x-2 flex hover:scale-105 transition-all">
-              {row.images.map((image, v) => (
-                <Image
-                  key={`${i}-${v}`}
-                  alt=""
-                  width="40"
-                  height="40"
-                  src={`${domains.cdn}/static/social/${image}`}
-                  className="size-10 xl:w-9 xl:h-9 p-0.5 rounded-full bg-white"
-                />
-              ))}
+      {Rows.map((row, i) => {
+        let disableItem = Boolean(walletChains?.find(item => !getCompareIgnoreCase(item, row?.type))) || row?.disabled
+        return (
+          <MenuItem
+            key={i}
+            className={classNames('p-0 my-1.5 sm:my-0.5 flex items-center flex-row w-full', {
+              'cursor-not-allowed': disableItem,
+            })}
+            onClick={() => handleClick(row.type)}
+            disabled={disableItem}
+          >
+            <div className="flex items-center relative w-full">
+              <div className="-space-x-2 flex hover:scale-105 transition-all">
+                {row.images.map((image, v) => (
+                  <Image
+                    key={`${i}-${v}`}
+                    alt=""
+                    width="40"
+                    height="40"
+                    src={`${domains.cdn}/static/social/${image}`}
+                    className="size-10 xl:w-9 xl:h-9 p-0.5 rounded-full bg-white"
+                  />
+                ))}
+              </div>
+              <h2 className="text-lg font-semibold pl-2">{row.type}</h2>
             </div>
-            <h2 className="text-lg font-semibold pl-2">{row.type}</h2>
-          </div>
-        </MenuItem>
-      ))}
+          </MenuItem>
+        )
+      })}
     </MenuList>
   )
 }

@@ -56,12 +56,18 @@ export const logoChains = {
   eos: 'https://cryptofonts.com/img/icons/eos.svg',
   tezos: 'https://cryptofonts.com/img/icons/xtz.svg',
   injective: 'https://cryptofonts.com/img/icons/inj.svg',
-  doge: 'https://cryptologos.cc/logos/thumbs/dogecoin.png',
 }
 
 export const logoTokens = {
   usdt: 'https://cryptofonts.com/img/SVG/usdt.svg',
   usdc: 'https://bridge.base.org/icons/currency/usdc.svg',
-  eth: 'https://static.optimism.io/data/ETH/logo.svg',
+  eth: 'https://bridge.base.org/icons/currency/eth.svg',
   dai: 'https://bridge.base.org/icons/currency/dai.svg',
+  doge: 'https://cryptologos.cc/logos/thumbs/dogecoin.png',
+  jupiter: 'https://cryptologos.cc/logos/jupiter-ag-jup-logo.svg',
+  lifi: 'https://li.fi/logo192.png',
+  lido: `${domains.cdn}/static/social/lido.png`,
+  compound: `${domains.cdn}/static/social/compound.png`,
+  aave: `${domains.cdn}/static/social/aave.png`,
+  maker: `${domains.cdn}/static/social/maker.png`,
 }

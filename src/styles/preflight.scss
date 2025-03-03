@@ -360,6 +360,19 @@ select:focus {
   box-shadow: none;
   background-color: transparent;
 }
+
+/* 隐藏 Chrome 和 Edge 浏览器的加减按钮 */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 隐藏 Firefox 的加减按钮 */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
 /*
 Set the default cursor for buttons.
 */

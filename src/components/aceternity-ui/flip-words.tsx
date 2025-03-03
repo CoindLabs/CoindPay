@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, LayoutGroup } from 'framer-motion'
+import React, { useCallback, useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/aceternity'
 
 export const FlipWords = ({
@@ -14,18 +14,20 @@ export const FlipWords = ({
   const [currentWord, setCurrentWord] = useState(words[0])
   const [isAnimating, setIsAnimating] = useState<boolean>(false)
 
-  // thanks for the fix Julian - https://github.com/Julian-AT
   const startAnimation = useCallback(() => {
-    const word = words[words.indexOf(currentWord) + 1] || words[0]
-    setCurrentWord(word)
+    const nextIndex = (words.indexOf(currentWord) + 1) % words.length
+    setCurrentWord(words[nextIndex])
     setIsAnimating(true)
   }, [currentWord, words])
 
   useEffect(() => {
-    if (!isAnimating)
-      setTimeout(() => {
+    if (!isAnimating) {
+      const timeout = setTimeout(() => {
         startAnimation()
       }, duration)
+
+      return () => clearTimeout(timeout)
+    }
   }, [isAnimating, duration, startAnimation])
 
   return (
@@ -68,7 +70,7 @@ export const FlipWords = ({
             }}
             className="inline-block"
           >
-            {letter}
+            {letter === ' ' ? '\u00A0' : letter}
           </motion.span>
         ))}
       </motion.div>

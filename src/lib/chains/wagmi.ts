@@ -47,18 +47,15 @@ import {
   auroraTestnet,
   fuseSparknet,
   zetachainAthensTestnet,
-  hashkeyTestnet,
 } from 'viem/chains'
 import { env } from '@/lib/types/env'
-import { Mainnet } from '@/lib/utils/env'
+import { isDevnet } from '@/lib/utils/env'
 import { logoChains } from './logo'
 import { customChains } from './custom'
 
 import config from '@/config'
 
 const { title } = config
-
-const { hashkey } = customChains
 
 let projectId = env.walletConnectId
 
@@ -92,7 +89,6 @@ let chains_tpl = [
   { ...mantle, iconUrl: logoChains.mantle },
   { ...blast, iconUrl: logoChains.blast },
   { ...gnosis, iconUrl: logoChains.gnosis },
-  { ...hashkey, iconUrl: logoChains.hashkey },
   { ...linea, name: 'Linea', iconUrl: logoChains.linea },
   { ...zksync, iconUrl: logoChains.zksync },
   { ...mode, name: 'Mode', iconUrl: logoChains.mode },
@@ -108,9 +104,8 @@ let chains_tpl = [
   { ...polygonZkEvm, iconUrl: logoChains.polygonzkevm },
 ]
 
-const chains = Mainnet
-  ? chains_tpl
-  : [
+const chains = isDevnet
+  ? [
       ...chains_tpl,
       sepolia,
       baseSepolia,
@@ -121,8 +116,8 @@ const chains = Mainnet
       { ...zksyncSepoliaTestnet, iconUrl: logoChains.zksync },
       { ...auroraTestnet, iconUrl: logoChains.aurora },
       { ...fuseSparknet, iconUrl: logoChains.fuse },
-      zetachainAthensTestnet,
     ]
+  : chains_tpl
 
 export const chainsTransports = {
   [mainnet.id]: http(`https://eth-mainnet.g.alchemy.com/v2/${env.alchemyId}`),
@@ -146,9 +141,6 @@ export const chainsTransports = {
   [fuse.id]: http(`https://122.rpc.thirdweb.com/${env.thirdwebKey}`),
   [fuseSparknet.id]: http(`https://123.rpc.thirdweb.com/${env.thirdwebKey}`),
   [metis.id]: http(`https://1088.rpc.thirdweb.com/${env.thirdwebKey}`),
-  [zetachain.id]: http(`https://7000.rpc.thirdweb.com/${env?.thirdwebKey}`),
-  [zetachainAthensTestnet.id]: http(`https://7001.rpc.thirdweb.com/${env?.thirdwebKey}`),
-  [hashkey.id]: http('https://mainnet.hsk.xyz'),
 }
 
 export const wagmiConfig = {
@@ -158,9 +150,11 @@ export const wagmiConfig = {
   transports: chainsTransports,
   wallets,
   ssr: true,
+  autoConnect: false,
 }
 
-export const wagmiCoreConfig = {
+export const wagmiDynamicConfig = {
   chains: chains as any,
+  multiInjectedProviderDiscovery: false,
   transports: chainsTransports,
 }

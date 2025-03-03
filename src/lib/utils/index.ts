@@ -1,9 +1,3 @@
-import { nftAvailableChains, chainIdToNetWork } from '../chains'
-import { Mainnet } from './env'
-import { getSvmRpcUrl } from '../web3'
-
-import config from '@/config'
-
 export function getTransformNumber(value, type = 'string') {
   const newVal = value < 10 ? `0${value}` : value
   return !type || type === 'string' ? String(newVal) : Number(newVal)
@@ -69,10 +63,17 @@ export function getRandomItem(arr = []) {
 /**
  * @param {minNum} number 随机数最小值
  * @param {maxNum} number 随机数最大值
+ * @param {decimal} number 小数位数
  */
-export const getRandomIntNum = (minNum: number, maxNum: number) => {
-  let randomNum = Math.floor(Math.random() * (maxNum - minNum) + minNum)
-  return randomNum
+export const getRandomNum = (minNum: number, maxNum: number, decimal?: number): number => {
+  let randomNum = Math.random() * (maxNum - minNum) + minNum
+  if (decimal !== undefined) {
+    // 指定小数位数
+    return parseFloat(randomNum.toFixed(decimal))
+  } else {
+    // 整数
+    return Math.floor(randomNum)
+  }
 }
 
 /**
@@ -180,45 +181,6 @@ export function getHexToRgba(hex, opacity) {
 }
 
 /**
- * 校验http、https url & email
- * @param url
- * @returns
- */
-export function isUrl(url: string) {
-  if (!url) return
-  return /(?:https?|ftp):\/\/[\w-]+(?:\.[\w-]+)+[\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-]|\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g.test(
-    url
-  )
-}
-/**
- * 仅匹配链接 http、https url
- */
-export function isLink(url: string) {
-  if (!url) return
-  return url.match(/https?:\/\/(?:[\w-]+\.)+[a-zA-Z]{2,}(?:\/\S*)?/g)
-}
-/**
- * 匹配不带前缀的url
- */
-export function isUrlDomain(url: string) {
-  if (!url) return
-  return url.match(/(?:[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/\S*)?/g)
-}
-/**
- * 匹配email（非mailto格式开头）
- */
-export function isEmail(url: string) {
-  if (!url) return
-  return url.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g)
-}
-/**
- * 匹配email（mailto格式开头）
- */
-export function isEmailMailto(url: string) {
-  if (!url) return
-  return url.match(/mailto:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)
-}
-/**
  * studio blocks url & email格式加工
  */
 export function getBlocksUrlFactory(url: string) {
@@ -281,70 +243,50 @@ export const generateRandomString = (randomNum = 9) => {
 }
 
 /**
- *
- * @param type * nft（nft详情页）scan（浏览器主页）address（账户页）
- * @param chainId * 请求链id 参考 wagmi/chains
- * @param contractAddress * 合约地址
- * @param tokenId * 当前nft数据
- * @param hash * 当请求为测试网的数据时，需要获取交易哈希
- * @returns string 返回opensea或者是etherscan地址 如果是测试网，则etherscan不能查看详情页，只能查看交易数据
+ * 判断是否为mongodb uuid规范
+ * @param val
+ * @returns
  */
-interface INFTOrScanUrlProps {
-  type?: 'nft' | 'scan' | 'address' | 'tx'
-  chain?: string
-  chainId?: number
-  chainType?: string
-  address?: string
-  contractAddress?: string
-  tokenId?: string | number
-  hash?: string
-  options?: object
+export const isUuid = val => /^[0-9a-fA-F]{24}$/.test(val)
+
+/**
+ * 校验http、https url & email
+ * @param url
+ * @returns
+ */
+export function isUrl(url: string) {
+  if (!url) return
+  return /(?:https?|ftp):\/\/[\w-]+(?:\.[\w-]+)+[\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-]|\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g.test(
+    url
+  )
 }
-
-export const getNFTOrScanUrl = ({
-  type = 'nft',
-  chain = 'ethereum',
-  chainId,
-  chainType = 'evm', // 参考 useChainConnect 返回值
-  address = '',
-  contractAddress,
-  tokenId,
-  hash = '',
-  ...options
-}: INFTOrScanUrlProps): string => {
-  let _item = nftAvailableChains.find(row => row.chain == chain?.toLowerCase()),
-    _chainId = Number(chainId || _item?.id),
-    _chainCurrency = _item?.['currency'],
-    _svm = chainType == 'svm',
-    _sol = chainType == 'sol' || chain?.toLowerCase()?.startsWith('sol'),
-    _soon = chainType == 'soon' || chain?.toLowerCase()?.startsWith('soon'),
-    _svmExplorer = _soon
-      ? `?cluster=custom&customUrl=${getSvmRpcUrl({ chain: 'soon' })}`
-      : Mainnet
-        ? ''
-        : '?cluster=devnet',
-    _icp = chainType == 'icp'
-
-  switch (type) {
-    case 'scan':
-      if (_svm || _sol || _soon) return `https://solscan.io/account/${_svmExplorer}`
-      return `${chainIdToNetWork(_chainId).blockExplorers?.default?.url}/nft/${contractAddress}/${tokenId}`
-
-    case 'tx':
-      if (_svm || _sol || _soon) return `https://solscan.io/tx/${hash}${_svmExplorer}`
-      return `${chainIdToNetWork(_chainId).blockExplorers?.default?.url}/tx/${hash}`
-
-    case 'address':
-      if (_svm || _sol || _soon) return `https://solscan.io/account/${contractAddress || address}${_svmExplorer}`
-      if (_icp) return `https://dashboard.internetcomputer.org/account/${address}`
-      return `${chainIdToNetWork(_chainId).blockExplorers?.default?.url}/address/${address}`
-
-    case 'nft':
-      if (_svm || _sol || _soon) return `https://magiceden.io/item-details/${contractAddress}`
-      return `https://opensea.io/assets/${_chainCurrency || chain}/${contractAddress}/${tokenId}`
-    default:
-      return null
-  }
+/**
+ * 仅匹配链接 http、https url
+ */
+export function isLink(url: string) {
+  if (!url) return
+  return url.match(/https?:\/\/(?:[\w-]+\.)+[a-zA-Z]{2,}(?:\/\S*)?/g)
+}
+/**
+ * 匹配不带前缀的url
+ */
+export function isUrlDomain(url: string) {
+  if (!url) return
+  return url.match(/(?:[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/\S*)?/g)
+}
+/**
+ * 匹配email（非mailto格式开头）
+ */
+export function isEmail(url: string) {
+  if (!url) return
+  return url.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g)
+}
+/**
+ * 匹配email（mailto格式开头）
+ */
+export function isEmailMailto(url: string) {
+  if (!url) return
+  return url.match(/mailto:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g)
 }
 
 export function isAndroid() {
@@ -354,6 +296,8 @@ export const isAppleOS = () =>
   typeof navigator !== 'undefined' && /(iPhone|iPad|iPod|iOS|iPhone OS|Mac OS)/i.test(navigator.userAgent)
 
 export const isiOS = () => typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)
+
+export const isNumber = val => typeof val === 'number' && !isNaN(val)
 
 export function getEnvSplit(val) {
   if (!val) return
@@ -422,25 +366,18 @@ export const shuffle = (array = []) => {
   }
   return array
 }
-/**
- * 在两个数之间取带两位小数的随机数
- * @param min
- * @param max
- * @returns
- */
-export function getRandomNumber(min, max) {
-  let randomNumber = (Math.random() * (max - min) + min).toFixed(2)
-  return Number(randomNumber)
-}
 
 /**
  * 首字母大写
  * @param str
  * @returns
  */
-export function capitalizeFirstLetter(str) {
-  if (str?.length == 0) return str
-  return str.charAt(0).toUpperCase() + str.slice(1)
+export function getCapitalizeWord(str) {
+  if (!str?.length) return str
+  return str
+    .toLowerCase()
+    .replace(/_/g, ' ')
+    .replace(/(^|\s)\S/g, match => match.toUpperCase())
 }
 
 export function getCompareIgnoreCase(left: string, right: string): boolean {
@@ -449,4 +386,11 @@ export function getCompareIgnoreCase(left: string, right: string): boolean {
 
 export function getIncludesIgnoreCase(left: string, right: string): boolean {
   return left?.toLowerCase().includes(right?.toLowerCase())
+}
+
+export function getDecimalFormatValue({ val, decimal = 3 }) {
+  if (val == null || val == undefined) return '' // 如果值为空，返回空字符串
+  const num = parseFloat(val)
+  if (isNaN(num)) return val // 如果值不是数字，返回原始值
+  return num.toFixed(decimal).replace(/\.?0+$/, '') // 格式化显示值
 }

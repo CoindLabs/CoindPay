@@ -9,6 +9,7 @@
 @import 'mui';
 @import 'swiper';
 @import 'reset';
+@import 'wallet';
 @import 'plyr';
 @import 'iframely';
 
@@ -19,13 +20,6 @@
   }
 }
 @layer utilities {
-  // text-gradient
-  .text-gradient {
-    display: inline-block;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
   // animate
   .animate-duration-sm {
     animation-duration: 1.5s;
@@ -57,22 +51,10 @@
   .break-anywhere {
     overflow-wrap: anywhere;
   }
-  .break-word {
-    word-break: break-word;
-  }
 }
 
 .wallet-adapter-modal {
   z-index: 99999;
-}
-
-.btn-loading {
-  .hidden {
-    display: flex !important;
-  }
-  .flex {
-    display: none !important;
-  }
 }
 
 @keyframes animate-blur {

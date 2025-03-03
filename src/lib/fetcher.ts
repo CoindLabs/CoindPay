@@ -4,11 +4,12 @@
  * @author jason@coindpay.xyz
  */
 import axios from 'axios'
+import { onLogout } from './db/storage'
 
 export function fetcher(options) {
   let client = typeof window !== 'undefined'
   const config = {
-    baseURL: options?.baseURL || (client ? window.location.origin : process.env.NEXTAUTH_URL || process.env.VERCEL_URL),
+    baseURL: options?.baseURL || (client ? window?.location?.origin : process.env.VERCEL_URL),
     method: options.method || 'get',
     url: options.url,
     data: options.data,
@@ -16,6 +17,7 @@ export function fetcher(options) {
     withCredentials: options.withCredentials || false, // 是否允许携带cookie
     ...options,
   }
+
   if (options?.headers) {
     config['headers'] = options.headers
   }
@@ -28,6 +30,9 @@ export function fetcher(options) {
       return res.data
     })
     .catch(err => {
+      if (err?.status == 401) {
+        onLogout()
+      }
       console.error(err)
       if (err.response) {
         if (options.fail) {

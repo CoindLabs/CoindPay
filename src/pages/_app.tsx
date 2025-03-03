@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }) {
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Courgette&family=Poppins&family=Righteous&family=Satisfy&family=Chillax&family=Lato&family=Fira+Sans&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Courgette&family=Poppins&family=Righteous&family=Satisfy&family=Chillax&family=Arimo&family=Lato&family=Fira+Sans&display=swap"
       />
 
       <Script

@@ -29,13 +29,8 @@ import {
   polygonZkEvm,
   berachainTestnetbArtio,
 } from 'viem/chains'
-import { getDomain } from '@/lib/utils/domain'
-import { logoChains } from './logo'
-import { customChains } from './custom'
-
-const isSOON = ['soon'].includes(getDomain())
-
-const { hashkey } = customChains
+import { isApp, isSOON } from '@/lib/utils/env'
+import { logoChains, logoTokens } from './logo'
 
 let svm = {
     type: 'SVM',
@@ -191,11 +186,6 @@ let svm = {
         chain: polygonZkEvm,
       },
       {
-        name: 'Hashkey',
-        chain: hashkey,
-        icon: logoChains.hashkey,
-      },
-      {
         name: 'Zeta',
         chain: zetachain,
         icon: logoChains.zeta,
@@ -211,10 +201,6 @@ let svm = {
     type: 'Others',
     desc: 'Non-EVM（SVM）Chains',
     list: [
-      {
-        name: 'ICP',
-        icon: logoChains.icp,
-      },
       {
         name: 'Bitcoin',
         icon: logoChains.btc,
@@ -256,13 +242,41 @@ let svm = {
         disabled: true,
       },
     ],
-  }
+  },
+  markets = [
+    {
+      name: 'USDC',
+      avatar: logoTokens.usdc,
+    },
+    {
+      name: 'USDT',
+      avatar: logoTokens.usdt,
+    },
+    {
+      name: 'ETH',
+      avatar: logoTokens.eth,
+    },
+    ...(isApp
+      ? [
+          {
+            name: 'compound',
+            avatar: logoTokens.compound,
+          },
+        ]
+      : [
+          {
+            name: 'Markets',
+            avatar: logoChains.soon,
+            avatarClass: 'bg-black p-0.5',
+          },
+        ]),
+  ]
 
-export const supportChains = (isSOON && [svm]) ||
-  (getDomain() == 'app' && [evm, svm]) ||
-  (getDomain() == 'master' && [svm, evm]) || [svm, evm, others]
+export const supportChains = (isSOON && [svm]) || [svm, evm]
 
 export const _supportChains = (chains = null) =>
   (chains || supportChains).reduce((accumulator, { type, list }) => {
     return list ? [...accumulator, ...list] : accumulator
   }, [])
+
+export const marketsProtocols = markets

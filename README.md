@@ -8,8 +8,8 @@ https://coindpay.xyz
 
 ## Slogan
 
-Send, Receive, Swap, and Invest in Crypto.
-Infrastructure for Social Payments, DEXs, and PayFi.
+Send, Receive, Swap, and Invest in Consumer Crypto.
+Infrastructure for Social Payments, Wallet, and PayFi.
 
 ## Mission
 
@@ -19,11 +19,11 @@ For Creator、For Brand、For Consumers、For Everyone.
 
 ## Values
 
-CoindPay: The Infrastructure for Web3 Payments, DEXs, and PayFi.
+CoindPay: The Infrastructure for Web3 Payments, Wallet, and PayFi.
 
-Bringing All Your Business, Invoices, Checkout, and Recurring Payments into One Place.
+Bringing All Your Business Payments, Invoices, Checkout, and Crypto Wallet Portfolios，Exchange and Markets into One Place.
 
-We’re building a decentralized solution—combining the power of Stripe, Venmo, and Compound Finance—across chains and protocols to simplify and streamline the flow of encrypted funds.
+We’re building a decentralized solution—combining the power of Stripe and Compound Finance—across chains and protocols to simplify and streamline the flow of encrypted funds.
 
 Unlock the potential of idle funds, making them accessible and efficient, once and for all.
 
@@ -41,7 +41,9 @@ Whether it's Crypto Coins or Credit Cards, Apple Pay, or Google Pay you can spen
 
 ![CoindPay Payments_01](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/Dr6EorEZjTZRrdvwZ.png)
 ![CoindPay Payments_02](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/vjOlGJxx3HVMp2Kj.png)
+
 ![CoindPay Payments_03](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/d8Ogw8vDrHJRqg0Wv.png)
+
 ![CoindPay Payments_04](https://res.cloudinary.com/travary/image/upload/w_2000/v1/prd-akindo-public/communities/description-images/A8vnXMp9kHMo07ZKl.jpg)
 
 We have partners from service providers like Coinbase Pay, Solana Pay, and others, with strong wallet security and KYC technology to avoid witch attacks and malicious transfers.
@@ -50,11 +52,9 @@ Efficiently manage your crypto and DeFi assets in one place.
 Non-custodial.
 ![CoindPay Payments_05](https://cdn.coindpay.xyz/stream/static/home/content/edge_icons_01.png)
 
-> Exchange X Markets 2.0
+> Wallet/Exchange & Markets 2.0
 
-Built-in Li.Fi based cross-chain service to convert and trade your crypto assets in one stop.
-
-Best price execution for any swap/bridge.
+Maximize your liquidity with asset portfolios from SVM to All VM, integrated with Exchange and Markets.
 
 Connecting TradFi to PayFi Bank.
 
@@ -115,10 +115,6 @@ DEX and Payments are live on the mainnet.
 _CoindPay on SOON_
 
 https://youtu.be/MlA7-UZv1r4
-
-_Strategic cooperation with LiFi_
-
-https://x.com/CoindPay/status/1809216610689044691
 
 _Docs_
 

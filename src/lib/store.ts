@@ -3,15 +3,11 @@ import { combineReducers } from 'redux'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import userReducer from '@/store/slice/user'
-import payeeReducer from '@/store/slice/payee'
-import icpReducer from '@/store/slice/icp'
 
 import config from '@/config'
 
 const reducers = combineReducers({
   user: userReducer,
-  payee: payeeReducer,
-  icp: icpReducer,
 })
 
 const persistConfig = {

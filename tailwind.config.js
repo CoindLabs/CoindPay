@@ -64,6 +64,7 @@ module.exports = {
         chillax: ['Chillax', 'mono'],
         lato: ['Lato', 'sans-serif'],
         firasans: ['Fira Sans', 'serif'],
+        arimo: ['Arimo', 'sans-serif'],
       },
       fontSize: {
         xxs: '0.5rem',
@@ -193,6 +194,8 @@ module.exports = {
         54: '13.5rem',
       },
       minHeight: {
+        22: '5.5rem',
+        30: '7.5rem',
         68: '17rem',
         84: '21rem',
         100: '25rem',
@@ -215,18 +218,21 @@ module.exports = {
         50: '12.5rem',
         60: '15rem',
         100: '25rem',
+        120: '30rem',
+        '2.5xl': '45rem',
         '1/2': '50%',
         '3/5': '60%',
         '2/3': '66.67%',
         '4/5': '80%',
         '9/10': '90%',
-        '2.5xl': '45rem',
         'screen-2k': '2000px',
       },
       maxHeight: {
         84: '21rem',
         86: '21.5rem',
+        100: '25rem',
         120: '30rem',
+        140: '35rem',
       },
       padding: {
         4.5: '1.125rem',
@@ -285,7 +291,7 @@ module.exports = {
         inherit: 'inherit',
         lighty: '#F9FFB8',
         pale: '#51EEC7',
-        'theme-primary': '#00D395',
+        'theme-primary': '#570DF8',
         'theme-success': '#09bf4b',
         'theme-accent': '#570DF8',
         'theme-warning': '#f37e00',
@@ -331,11 +337,20 @@ module.exports = {
             transform: 'rotateY(360deg)',
           },
         },
+        meteor: {
+          '0%': { transform: 'rotate(215deg) translateX(0)', opacity: '1' },
+          '70%': { opacity: '1' },
+          '100%': {
+            transform: 'rotate(215deg) translateX(-500px)',
+            opacity: '0',
+          },
+        },
       },
       animation: {
         aurora: 'aurora 60s linear infinite',
         rotateY: 'rotateY 12s 0s linear infinite',
         'skew-scroll': 'skew-scroll 20s 0s ease-in-out infinite forwards',
+        'meteor-effect': 'meteor 5s linear infinite',
       },
       transitionProperty: {
         animation: 'animation',
@@ -374,7 +389,7 @@ module.exports = {
     themes: [
       {
         mytheme: {
-          primary: '#00D395',
+          primary: '#570DF8',
           'primary-content': '#fff',
           success: '#72db5a',
           'success-content': '#fff',

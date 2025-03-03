@@ -4,6 +4,7 @@ import { Box } from '@mui/material'
 import { QRCodeCanvas } from 'qrcode.react'
 import classNames from 'classnames'
 import { useLocation } from '@/lib/hooks'
+import { env } from '@/lib/types/env'
 
 import config from '@/config'
 
@@ -16,13 +17,15 @@ export default function QrCode({
   size = 120,
   bgColor = '#fff',
   fgColor = '#000',
-  path,
+  url = '',
+  path = '',
   propsId = 'QrCode',
   ...props
 }) {
-  if (!path) return
+  if (!(path || url)) return
   const origin = useLocation('origin')
-  let url = process.env.NODE_ENV === 'development' ? domains.dev : origin
+
+  let domain = env?.isDev ? domains.dev : origin
 
   return (
     <Box className={classNames('size-fit', customClass)} onClick={props?.onQrClick}>
@@ -32,7 +35,7 @@ export default function QrCode({
         size={size}
         bgColor={bgColor}
         fgColor={fgColor}
-        value={`${url}/${path}`}
+        value={url || (path && `${domain}/${path}`)}
       />
       {imageConfig?.src && (
         <Box

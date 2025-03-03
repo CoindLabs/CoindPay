@@ -1,4 +1,6 @@
 import { logoChains, logoTokens } from './logo'
+import { env } from '@/lib/types/env'
+import { isDevnet, isMaster } from '@/lib/utils/env'
 
 let ethTokens = {
     usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
@@ -157,13 +159,18 @@ let USDC = {
     symbol: 'SOL',
     name: 'Solana',
     logoURI: logoChains.solana_bg,
+  },
+  BTC = {
+    symbol: 'BTC',
+    name: 'BTC',
+    logoURI: logoChains.btc,
   }
 
 let solana = {
     mocks: {
-      sol: {
+      native: {
         dev: '22fh2M7RX8cYiQt8vR4DvAtcqVkpVNofF51g3K8ZwvxH',
-        mainnet: '11111111111111111111111111111111',
+        mainnet: 'So11111111111111111111111111111111111111112',
       },
       usdc: {
         dev: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
@@ -173,37 +180,77 @@ let solana = {
     list: [
       {
         ...SOL,
-        address: '11111111111111111111111111111111',
+        address: 'So11111111111111111111111111111111111111112',
+        native: true,
       },
       {
         ...USDC,
         //
-        address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+        address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', // dev
         price_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
       },
     ],
   },
   soon = {
     mocks: {
-      sol: {
-        dev: '11111111111111111111111111111111',
+      native: {
         mainnet: '11111111111111111111111111111111',
       },
     },
-    list: [
-      {
-        ...SOL,
-        address: '11111111111111111111111111111111',
-        price_address: '11111111111111111111111111111111',
-      },
-      {
-        symbol: '$P',
-        name: '$P Token',
-        logoURI: 'https://bridge.devnet.soo.network/assets/_P-icon-BQN19dSx.png',
-        address: '6sRQN8MvjSagGhnJG6eK8FcEq9nwuF1nbBHbx5zGQsBo',
-        price: 1,
-      },
-    ],
+    list: isMaster
+      ? [
+          {
+            ...ETH,
+            name: 'SOON_ETH',
+            address: '11111111111111111111111111111111',
+            price_address: '7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs',
+            native: true,
+          },
+          {
+            ...USDC,
+            address: 'ExYxyorY2x3h8gLcuypnHFQV3F36rmMkQVn7HHV8KjtA',
+            price_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+          },
+          {
+            ...USDT,
+            address: '742wcXVzkhNuEePAot7L3GvPseh93pvYFPgyHLX8mUy9',
+            price_address: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+          },
+          {
+            ...DAI,
+            address: '9ZqSLnPMAUnuegB1WTp1k17JgwFGKc925f8VqD2SC9K7',
+            price_address: 'EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o',
+          },
+          {
+            ...SOL,
+            name: 'Wrapped SOL',
+            address: 'ERFzpDteGNo8LTDKW1WwVGrkRMmA2y9WZHXNHxMA6BSV',
+            price_address: 'So11111111111111111111111111111111111111112',
+          },
+          {
+            ...BTC,
+            name: 'WBTC',
+            address: '5YMPvTWDoZ7T7rNEsUR2EDFgZ96A96KrvEP2ia3Ph96h',
+            price_address: '3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh',
+          },
+        ]
+      : [
+          {
+            ...ETH,
+            address: '11111111111111111111111111111111',
+            price_address: '7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs',
+            native: true,
+          },
+          {
+            symbol: '$P',
+            name: '$P Token',
+            logoURI: 'https://bridge.devnet.soo.network/assets/_P-icon-BQN19dSx.png',
+            address: isDevnet
+              ? '6sRQN8MvjSagGhnJG6eK8FcEq9nwuF1nbBHbx5zGQsBo'
+              : 'A3S3HRGjZQ18HXV8eRci75uSXJTpvNA53N5NN6dmWAC4',
+            price: 1,
+          },
+        ],
   },
   ethereum = {
     mocks: {

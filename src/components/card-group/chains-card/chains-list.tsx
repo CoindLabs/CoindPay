@@ -3,14 +3,14 @@ import { Paper, Popper, ClickAwayListener, Grow } from '@mui/material'
 import ChainsMenu from '@/components/card-group/chains-card/chains-menu'
 
 interface ChainsListProps {
-  disables?: string[]
+  walletChains?: string[]
   chainsExpand: boolean
   onClose: (e: Event | React.SyntheticEvent) => void
   anchorEl: React.MutableRefObject<HTMLButtonElement>
   setChainsExpand: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ChainsList: FC<ChainsListProps> = ({ onClose, disables, chainsExpand, anchorEl, setChainsExpand }) => {
+const ChainsList: FC<ChainsListProps> = ({ onClose, walletChains, chainsExpand, anchorEl, setChainsExpand }) => {
   return (
     <Popper
       open={chainsExpand}
@@ -32,7 +32,11 @@ const ChainsList: FC<ChainsListProps> = ({ onClose, disables, chainsExpand, anch
             <Paper className="z-100 rounded-box">
               <ClickAwayListener onClickAway={onClose}>
                 <div>
-                  <ChainsMenu chainsExpand={chainsExpand} setChainsExpand={setChainsExpand} disables={disables} />
+                  <ChainsMenu
+                    chainsExpand={chainsExpand}
+                    setChainsExpand={setChainsExpand}
+                    walletChains={walletChains}
+                  />
                 </div>
               </ClickAwayListener>
             </Paper>
